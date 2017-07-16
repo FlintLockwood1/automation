@@ -31,9 +31,7 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
-
-        </activity>
+            android:label="@string/title_activity_maps"></activity>
         <activity android:name=".AddActivity" />
         <activity
             android:name=".MainActivity"
@@ -45,6 +43,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SplashScreen"></activity>
     </application>
 
 </manifest>
