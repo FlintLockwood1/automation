@@ -7,7 +7,8 @@ package com.example.axysu.automate6.Objects;
 public class Triggers {
 
     int battery;
-    int time;
+    String time;
+    String date;
 
 
 }
