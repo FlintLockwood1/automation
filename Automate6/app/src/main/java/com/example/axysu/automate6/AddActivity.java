@@ -13,7 +13,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.axysu.automate6.Fragments.EventFragment;
+import com.example.axysu.automate6.Fragments.SaveDialogueFragment;
 import com.example.axysu.automate6.Fragments.SaveFragment;
+import com.example.axysu.automate6.Fragments.TriggerDateDialogueFragment;
 import com.example.axysu.automate6.Fragments.TriggerFragment;
 
 public class AddActivity extends AppCompatActivity {
@@ -33,13 +35,12 @@ public class AddActivity extends AppCompatActivity {
         handleCallingIntent();
         initializeAndLoadTriggerFragment();
         handleFAB();
-        intent1 = new Intent(this, MainActivity.class);
     }
 
     private void setAnimation() {
 
         Fade fade = new Fade();
-        fade.setDuration(1000);
+        fade.setDuration(2000);
         getWindow().setEnterTransition(fade);
 
     }
@@ -62,10 +63,8 @@ public class AddActivity extends AppCompatActivity {
                 }
                 if (fragmentManager.findFragmentByTag("EventFragment")!=null)
                 {
-                    fab.setVisibility(View.INVISIBLE);
-                    transaction.remove(fragmentManager.findFragmentByTag("EventFragment"));
-                    transaction.add(R.id.addActivityRootLayout, saveFragment, "SaveFragment");
-                    transaction.addToBackStack("forFinalSave");
+                    SaveDialogueFragment activityAlert5 = new SaveDialogueFragment();
+                    activityAlert5.show(getSupportFragmentManager(),"DateAlert");
                 }
                 transaction.commit();
             }
@@ -73,11 +72,6 @@ public class AddActivity extends AppCompatActivity {
 
     }
 
-    public void save(View view){
-
-        startActivity(intent1);
-
-    }
 
     public void handleCallingIntent(){
 

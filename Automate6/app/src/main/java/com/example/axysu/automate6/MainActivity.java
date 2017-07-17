@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity
         TransitionInflater inflater = TransitionInflater.from(this);
         Transition transition = inflater.inflateTransition(R.transition.transition_from_main_to_add);
         getWindow().setExitTransition(transition);
+        getWindow().setEnterTransition(transition);
     }
 
     public void handlePager(){
