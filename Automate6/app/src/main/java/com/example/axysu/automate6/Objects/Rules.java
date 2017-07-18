@@ -7,6 +7,7 @@ package com.example.axysu.automate6.Objects;
 public class Rules {
 
     public int icon_id;
+    public String name;
 
     public String title;
     public int battery;
