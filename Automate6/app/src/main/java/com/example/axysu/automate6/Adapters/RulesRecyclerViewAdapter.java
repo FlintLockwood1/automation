@@ -92,10 +92,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             public void onClick(View v) {
 
                 Intent intent = new Intent(context,AddActivity.class);
-                intent.putExtra("battery",current.battery);
-                intent.putExtra("activity",current.activity);
-                intent.putExtra("date",current.date);
-                intent.putExtra("time",current.time);
+                intent.putExtra("id",current.id);
                 context.startActivity(intent);
             }
         });

@@ -8,8 +8,11 @@ public class Rules {
 
     public int icon_id;
     public String name;
+    public int id;
 
     public String title;
+
+
     public int battery;
     public String activity;
     public String time;

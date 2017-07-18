@@ -17,6 +17,7 @@ import com.example.axysu.automate6.Fragments.SaveDialogueFragment;
 import com.example.axysu.automate6.Fragments.SaveFragment;
 import com.example.axysu.automate6.Fragments.TriggerDateDialogueFragment;
 import com.example.axysu.automate6.Fragments.TriggerFragment;
+import com.example.axysu.automate6.Objects.Rules;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -26,6 +27,7 @@ public class AddActivity extends AppCompatActivity {
     int batteryStatus;
     String activityStatus;
     Bundle bundle ;
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,14 +82,10 @@ public class AddActivity extends AppCompatActivity {
         bundle = new Bundle();
         if (intent.getExtras()!=null )
         {
-            bundle.putInt("battery",intent.getExtras().getInt("battery"));
-            Toast.makeText(this,intent.getExtras().getInt("battery") +"", Toast.LENGTH_SHORT).show();
-            bundle.putString("activity",intent.getExtras().getString("activity"));
-            Toast.makeText(this,intent.getExtras().getString("activity"), Toast.LENGTH_SHORT).show();
-            bundle.putString("date",intent.getExtras().getString("date"));
-            Toast.makeText(this,intent.getExtras().getString("date"), Toast.LENGTH_SHORT).show();
-            bundle.putString("time",intent.getExtras().getString("time"));
-            Toast.makeText(this,intent.getExtras().getString("time"), Toast.LENGTH_SHORT).show();
+            id = intent.getExtras().getInt("id");
+            bundle.putInt("battery",id);
+            Toast.makeText(this,id +"", Toast.LENGTH_SHORT).show();
+
         }
         else
         {

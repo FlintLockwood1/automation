@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.axysu.automate6.MapsActivity;
+import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
 
 /**
@@ -29,6 +30,7 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
     String date;
     String time;
     int battery;
+    Rules rules;
 
 
     public TriggerFragment() {
@@ -41,8 +43,9 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         layout = inflater.inflate(R.layout.fragment_trigger, container, false);
+        rules = new Rules();
         initializeTriggerValue();
-        initializeAndhandleListView();
+        initializeAndhandleListView();//yet to be coded;
         return layout;
     }
 
@@ -56,11 +59,25 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
 
     private void initializeTriggerValue() {
 
-        activity = getArguments().getString("activity");
-        battery = getArguments().getInt("battery");
-        date = getArguments().getString("date");
-        time = getArguments().getString("time");
-        activity = getArguments().getString("activity");
+        rules.id = getArguments().getInt("id");
+        if (rules.id==-1 || true){
+            rules.battery = 50;
+            rules.mobileData = false;
+            rules.airplaneMode = false;
+            rules.notification = "DEFAULT";
+            rules.time = "DEFAULT";
+            rules.activity = "DEFAULT";
+            rules.alarm = "DEFAULT";
+            rules.date = "DEFAULT";
+            rules.location = "DEFAULT";
+            rules.music = false;
+            rules.silent = false;
+            rules.phonecall = "DEFAULT";
+            rules.wifi = false;
+        }
+        else {
+            getRuleFromDataBasebyID(rules.id);
+        }
     }
 
     @Override
@@ -72,14 +89,14 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
             case "BATTERY":
                 TriggerBatteryDialogueFragment activityAlert1 = new TriggerBatteryDialogueFragment();
                 bundle = new Bundle();
-                bundle.putInt("battery",battery);
+                bundle.putInt("battery",rules.battery);
                 activityAlert1.setArguments(bundle);
                 activityAlert1.show(getActivity().getSupportFragmentManager(),"BatteryAlert");
                 break;
             case "TIME":
                 TriggerTImeDialogueFragment activityAlert2 = new TriggerTImeDialogueFragment();
                 bundle = new Bundle();
-                bundle.putString("time",time);
+                bundle.putString("time",rules.time);
                 activityAlert2.setArguments(bundle);
                 activityAlert2.show(getActivity().getSupportFragmentManager(),"TimeAlert");
                 break;
@@ -90,14 +107,14 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
             case "ACTIVITY":
                 TriggerActivityDialogueFragment activityAlert4 = new TriggerActivityDialogueFragment();
                 bundle = new Bundle();
-                bundle.putString("activity",activity);
+                bundle.putString("activity",rules.activity);
                 activityAlert4.setArguments(bundle);
                 activityAlert4.show(getActivity().getSupportFragmentManager(),"ActivityAlert");
                 break;
             case "DATE":
                 TriggerDateDialogueFragment activityAlert5 = new TriggerDateDialogueFragment();
                 bundle = new Bundle();
-                bundle.putString("date",date);
+                bundle.putString("date",rules.date);
                 activityAlert5.setArguments(bundle);
                 activityAlert5.show(getActivity().getSupportFragmentManager(),"DateAlert");
                 break;
@@ -106,4 +123,10 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
         }
 
     }
+
+    private void getRuleFromDataBasebyID(int id) {
+
+    }
+
+
 }

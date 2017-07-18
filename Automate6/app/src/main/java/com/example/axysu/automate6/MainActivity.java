@@ -70,13 +70,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Rules rules =new Rules();
-                rules.date = "DEFAULT";
-                rules.time = "DEFAULT";
-                rules.activity = "DEFAULT";
-                rules.battery = -1;
-                rules.location = "DEFAULT";
-                exitMainActivity(rules);
+                int id = -1;
+                exitMainActivity(id);
             }
         });
 
@@ -160,16 +155,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void exitMainActivity(Rules current){
+    public void exitMainActivity(int id){
 
         ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(this,null);
 
         Intent intent = new Intent(this,AddActivity.class);
-        intent.putExtra("current",current.battery);
-        intent.putExtra("activity",current.activity);
-        intent.putExtra("date",current.date);
-        intent.putExtra("time",current.time);
-        intent.putExtra("location",current.location);
+        intent.putExtra("id",id);
+
         startActivity(intent,compat.toBundle());
     }
 
