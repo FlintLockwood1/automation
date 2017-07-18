@@ -73,8 +73,9 @@ public class MainActivity extends AppCompatActivity
                 Rules rules =new Rules();
                 rules.date = "DEFAULT";
                 rules.time = "DEFAULT";
-                rules.activity = "Walking";
-                rules.battery = 50;
+                rules.activity = "DEFAULT";
+                rules.battery = -1;
+                rules.location = "DEFAULT";
                 exitMainActivity(rules);
             }
         });
@@ -164,10 +165,11 @@ public class MainActivity extends AppCompatActivity
         ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(this,null);
 
         Intent intent = new Intent(this,AddActivity.class);
-        intent.putExtra("battery",current.battery);
+        intent.putExtra("current",current.battery);
         intent.putExtra("activity",current.activity);
         intent.putExtra("date",current.date);
         intent.putExtra("time",current.time);
+        intent.putExtra("location",current.location);
         startActivity(intent,compat.toBundle());
     }
 

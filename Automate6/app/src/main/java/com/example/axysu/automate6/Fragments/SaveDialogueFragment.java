@@ -35,6 +35,7 @@ public class SaveDialogueFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
 
                         Intent intent = new Intent(getActivity(), MainActivity.class);
+
                         startActivity(intent);
 
                     }

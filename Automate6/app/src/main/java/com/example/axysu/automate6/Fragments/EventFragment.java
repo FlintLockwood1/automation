@@ -22,7 +22,7 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
 
     ListView listView;
     View layout;
-    String[] events = {"MUSIC","SILENT","WIFI","PHONE-DATA","NOTIFICATION","PHONE-CALL","ALARM"};
+    String[] events = {"AIRPLANEMODE","WIFI","MOBILEDATA","SILENT","ALARM","ALARMMESSAGE","NOTIFICATION","PHONECALL","MUSIC"};
 
 
     public EventFragment() {
