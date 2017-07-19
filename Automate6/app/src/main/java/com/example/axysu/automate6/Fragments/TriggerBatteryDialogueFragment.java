@@ -12,6 +12,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.R;
 
 /**
@@ -24,6 +25,8 @@ public class TriggerBatteryDialogueFragment extends DialogFragment{
     View view;
     SeekBar seekbar;
     TextView textView;
+    String progressValue = "50";
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class TriggerBatteryDialogueFragment extends DialogFragment{
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 textView.setText(""+(progress*10)+"%");
+                progressValue = ""+progress*10;
                 //Toast.makeText(getActivity(), ""+(progress*10)+"%", Toast.LENGTH_SHORT).show();
             }
 
@@ -63,7 +67,7 @@ public class TriggerBatteryDialogueFragment extends DialogFragment{
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), textView.getText().toString(), Toast.LENGTH_SHORT).show();
+                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(progressValue,"BATTERY");
                     }
                 });
 

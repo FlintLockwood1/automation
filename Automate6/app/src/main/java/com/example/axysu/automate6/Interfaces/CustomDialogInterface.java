@@ -6,6 +6,6 @@ package com.example.axysu.automate6.Interfaces;
 
 public interface CustomDialogInterface {
 
-    public void okButtonClicked(String whichDialogueFragment,String value);
+    public void okButtonClicked(String value,String whichFragment);
 
 }

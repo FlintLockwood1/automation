@@ -8,6 +8,8 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
+import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
+
 import java.util.ArrayList;
 
 /**
@@ -56,13 +58,7 @@ public class TriggerActivityDialogueFragment extends DialogFragment {
 
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        Toast.makeText(getActivity(), "N", Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .setNegativeButton("Cancel",null)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -75,8 +71,7 @@ public class TriggerActivityDialogueFragment extends DialogFragment {
                                 temp+=Activities[i];
                             }
                         }
-
-                        Toast.makeText(getActivity(),temp , Toast.LENGTH_SHORT).show();
+                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(temp,"ACTIVITY");
                     }
                  });
         Dialog dialog = builder.create();

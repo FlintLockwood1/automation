@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.R;
 
 import java.util.Objects;
@@ -41,18 +42,12 @@ public class TriggerTImeDialogueFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Choose Time")
                 .setView(view)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "N", Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .setNegativeButton("Cancel",null)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity()
-                                , timePicker.getHour()+":"+ timePicker.getMinute()
-                                , Toast.LENGTH_SHORT).show();
+                        ((CustomDialogInterface)getTargetFragment())
+                                .okButtonClicked(timePicker.getHour()+":"+ timePicker.getMinute()+"000","TIME");
                     }
                 });
 

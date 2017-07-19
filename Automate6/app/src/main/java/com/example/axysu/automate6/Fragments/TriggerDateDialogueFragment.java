@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
+import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.R;
 
 /**
@@ -35,18 +36,13 @@ public class TriggerDateDialogueFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Choose Date")
                 .setView(view)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "N", Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .setNegativeButton("Cancel",null)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(),
-                                datePicker.getDayOfMonth()+"/"+ (datePicker.getMonth()+1)+"/"+
-                                datePicker.getYear(), Toast.LENGTH_SHORT).show();
+                        ((CustomDialogInterface)getTargetFragment())
+                                .okButtonClicked(datePicker.getDayOfMonth()+"/"+ (datePicker.getMonth()+1)+"/"+
+                                datePicker.getYear(),"DATE");
                     }
                 });
 

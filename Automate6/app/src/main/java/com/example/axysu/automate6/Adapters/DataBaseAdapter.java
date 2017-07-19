@@ -47,6 +47,12 @@ public class DataBaseAdapter {
 
     }
 
+    public void getAllData(){
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String columns[] = {MyDbHelper.MUID};
+    }
+
 
     static class MyDbHelper extends SQLiteOpenHelper {
 
