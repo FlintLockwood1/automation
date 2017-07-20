@@ -6,6 +6,7 @@ package com.example.axysu.automate6.Adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -13,6 +14,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
 import com.example.axysu.automate6.Objects.Rules;
+
+import java.util.ArrayList;
 
 public class DataBaseAdapter {
 
@@ -47,10 +50,29 @@ public class DataBaseAdapter {
 
     }
 
-    public void getAllData(){
+    public ArrayList<Rules> getAllData(){
 
+        ArrayList<Rules> arrayList = new ArrayList<>();
         SQLiteDatabase db = helper.getWritableDatabase();
-        String columns[] = {MyDbHelper.MUID};
+        String columns[] = {MyDbHelper.MUID,MyDbHelper.MTIME,MyDbHelper.MDATE,MyDbHelper.MACTIVITY
+        ,MyDbHelper.MLOCATION,MyDbHelper.MBATTERY,MyDbHelper.MNAME,MyDbHelper.AIRPLANEMODE,MyDbHelper.WIFI
+        ,MyDbHelper.MOBILEDATA,MyDbHelper.SILENT,MyDbHelper.ALARM,MyDbHelper.NOTIFICATION,MyDbHelper.PHONECALL
+        ,MyDbHelper.MUSIC};
+        Cursor cursor = db.query("RULE",columns,null,null,null,null,null);
+        while(cursor.moveToNext()){
+
+            Rules rules = new Rules();
+            rules.id = cursor.getInt(cursor.getColumnIndex(MyDbHelper.MUID));
+            rules.time = cursor.getString(cursor.getColumnIndex(MyDbHelper.MTIME));
+            rules.date = cursor.getString(cursor.getColumnIndex(MyDbHelper.MDATE));
+            rules.activity = cursor.getString(cursor.getColumnIndex(MyDbHelper.MACTIVITY));
+            rules.location = cursor.getString(cursor.getColumnIndex(MyDbHelper.MLOCATION));
+            rules.time = cursor.getString(cursor.getColumnIndex(MyDbHelper.MTIME));
+            rules.name = cursor.getString(cursor.getColumnIndex(MyDbHelper.MNAME));
+            rules.time = cursor.get(cursor.getColumnIndex(MyDbHelper.MTIME));
+        }
+
+        return arrayList;
     }
 
 
@@ -67,8 +89,7 @@ public class DataBaseAdapter {
         private static final String WIFI = "wifi";         //2
         private static final String MOBILEDATA = "mobiledata";   //3
         private static final String SILENT = "silent";       //4
-        private static final String ALARM = "alarm";        //5
-        private static final String ALARMMESSAGE = "alarmmessage";
+        private static final String ALARM = "alarm";
         private static final String NOTIFICATION = "notification";
         private static final String PHONECALL = "phonecall";//6
         private static final String MUSIC = "music";
@@ -90,7 +111,6 @@ public class DataBaseAdapter {
                 MOBILEDATA + "VARCHAR(255)" +
                 SILENT + "VARCHAR(255)" +
                 ALARM + "VARCHAR(255)" +
-                ALARMMESSAGE + "VARCHAR(255)" +
                 NOTIFICATION + "VARCHAR(255)" +
                 PHONECALL + "VARCHAR(255)" +
                 MUSIC + "VARCHAR(255))";
