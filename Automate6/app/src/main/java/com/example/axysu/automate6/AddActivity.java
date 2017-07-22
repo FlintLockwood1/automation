@@ -1,14 +1,12 @@
 package com.example.axysu.automate6;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.transition.Fade;
-import android.transition.Slide;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -16,10 +14,8 @@ import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.Fragments.EventFragment;
 import com.example.axysu.automate6.Fragments.SaveDialogueFragment;
 import com.example.axysu.automate6.Fragments.SaveFragment;
-import com.example.axysu.automate6.Fragments.TriggerDateDialogueFragment;
 import com.example.axysu.automate6.Fragments.TriggerFragment;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
-import com.example.axysu.automate6.Interfaces.CustomFragmentInterface;
 import com.example.axysu.automate6.Objects.Rules;
 
 public class AddActivity extends AppCompatActivity implements CustomDialogInterface{
@@ -157,8 +153,11 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
                 Toast.makeText(this,rules.time, Toast.LENGTH_SHORT).show();
                 break;
             }
-            case "LOCATION":
-            {
+            case "LOCATION": {
+                if (value != null) {
+                    this.rules.location = value;
+                }
+                Toast.makeText(this,rules.location, Toast.LENGTH_SHORT).show();
                 break;
             }
             case "ACTIVITY":

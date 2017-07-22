@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
-import com.example.axysu.automate6.MapsActivity;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -110,8 +116,9 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
                 activityAlert2.show(getActivity().getSupportFragmentManager(),"TimeAlert");
                 break;
             case "LOCATION":
-                Intent intent =  new Intent(getActivity(), MapsActivity.class);
-                startActivity(intent);
+//                Intent intent =  new Intent(getActivity(), MapsActivity.class);
+//                startActivity(intent);
+                addLocation();
                 break;
             case "ACTIVITY":
                 TriggerActivityDialogueFragment activityAlert4 = new TriggerActivityDialogueFragment();
@@ -193,5 +200,32 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
         ((CustomDialogInterface) getActivity()).okButtonClicked(value,whichFragment);
 
 
+    }
+    int PLACE_PICKER_REQUEST = 1;
+    public void addLocation(){
+
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+        try {
+            startActivityForResult(builder.build(getActivity()), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, getActivity());
+                String latLong =place.getLatLng().latitude+ "," + place.getLatLng().longitude;
+                this.rules.location=latLong;
+                Log.v("TriggerFragment","latLong" + latLong);
+                ((CustomDialogInterface) getActivity()).okButtonClicked(latLong,"LOCATION");
+            }
+        }
     }
 }
