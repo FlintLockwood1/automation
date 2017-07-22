@@ -54,9 +54,9 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
 
     private void initializeEventValue() {
 
-        //rules.id = getArguments().getInt("id");
         rules = new Rules();
-        if (rules.id==-1 || true){
+        rules.id = getArguments().getInt("id");
+        if (rules.id==-1){
             rules.battery = 50;
             rules.mobileData = false;
             rules.airplaneMode = false;
@@ -146,39 +146,90 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void okButtonClicked(String value, String whichFragment) {
         switch (whichFragment){
-            case "SAVE":
+            case "AIRPLANEMODE":
             {
-                break;
+                if (value!=null){
+                    if (value.equalsIgnoreCase("true"))
+                        rules.airplaneMode = true;
+                    else
+                        rules.airplaneMode = false;
+                }
             }
-            case "TIME":
+            case "MUSIC":
             {
                 if (value!=null)
                 {
-                    this.rules.time = (value);
+                    if (value.equalsIgnoreCase("true"))
+                        rules.music = true;
+                    else
+                        rules.music = false;
                 }
                 //Toast.makeText(getActivity(),rules.time, Toast.LENGTH_SHORT).show();
                 break;
             }
-            case "LOCATION":
-            {
-                break;
-            }
-            case "ACTIVITY":
+            case "MOBILEDATA":
             {
                 if (value!=null)
                 {
-                    this.rules.activity = (value);
+                    if (value.equalsIgnoreCase("true"))
+                        rules.mobileData = true;
+                    else
+                        rules.mobileData = false;
+                }
+                break;
+            }
+            case "WIFI":
+            {
+                if (value!=null)
+                {
+                    if (value.equalsIgnoreCase("true"))
+                        rules.wifi = true;
+                    else
+                        rules.wifi = false;
                 }
                 //Toast.makeText(getActivity(),rules.activity, Toast.LENGTH_SHORT).show();
                 break;
 
             }
-            case "DATE":
+            case "SILENT":
+            {
+                if (value!=null)
+                {
+                    if (value.equalsIgnoreCase("true"))
+                        rules.silent = true;
+                    else
+                        rules.silent = false;
+                }
+                //Toast.makeText(getActivity(),rules.activity, Toast.LENGTH_SHORT).show();
+                break;
+
+            }
+            case "ALARM":
             {
 
                 if (value!=null)
                 {
-                    this.rules.date = (value);
+                    this.rules.alarm = (value);
+                }
+                //Toast.makeText(getActivity(),rules.date, Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case "NOTIFICATION":
+            {
+
+                if (value!=null)
+                {
+                    this.rules.notification = (value);
+                }
+                //Toast.makeText(getActivity(),rules.date, Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case "PHONECALL":
+            {
+
+                if (value!=null)
+                {
+                    this.rules.phonecall = (value);
                 }
                 //Toast.makeText(getActivity(),rules.date, Toast.LENGTH_SHORT).show();
                 break;

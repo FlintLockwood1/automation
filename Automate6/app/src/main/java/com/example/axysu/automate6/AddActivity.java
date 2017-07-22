@@ -181,6 +181,94 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
                 Toast.makeText(this,rules.date, Toast.LENGTH_SHORT).show();
                 break;
             }
+            case "AIRPLANEMODE":
+            {
+                if (value!=null){
+                    if (value.equalsIgnoreCase("true"))
+                        rules.airplaneMode = true;
+                    else
+                        rules.airplaneMode = false;
+                }
+            }
+            case "MUSIC":
+            {
+                if (value!=null)
+                {
+                    if (value.equalsIgnoreCase("true"))
+                        rules.music = true;
+                    else
+                        rules.music = false;
+                }
+                //Toast.makeText(getActivity(),rules.time, Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case "MOBILEDATA":
+            {
+                if (value!=null)
+                {
+                    if (value.equalsIgnoreCase("true"))
+                        rules.mobileData = true;
+                    else
+                        rules.mobileData = false;
+                }
+                break;
+            }
+            case "WIFI":
+            {
+                if (value!=null)
+                {
+                    if (value.equalsIgnoreCase("true"))
+                        rules.wifi = true;
+                    else
+                        rules.wifi = false;
+                }
+                //Toast.makeText(getActivity(),rules.activity, Toast.LENGTH_SHORT).show();
+                break;
+
+            }
+            case "SILENT":
+            {
+                if (value!=null)
+                {
+                    if (value.equalsIgnoreCase("true"))
+                        rules.silent = true;
+                    else
+                        rules.silent = false;
+                }
+                //Toast.makeText(getActivity(),rules.activity, Toast.LENGTH_SHORT).show();
+                break;
+
+            }
+            case "ALARM":
+            {
+
+                if (value!=null)
+                {
+                    this.rules.alarm = (value);
+                }
+                //Toast.makeText(getActivity(),rules.date, Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case "NOTIFICATION":
+            {
+
+                if (value!=null)
+                {
+                    this.rules.notification = (value);
+                }
+                //Toast.makeText(getActivity(),rules.date, Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case "PHONECALL":
+            {
+
+                if (value!=null)
+                {
+                    this.rules.phonecall = (value);
+                }
+                //Toast.makeText(getActivity(),rules.date, Toast.LENGTH_SHORT).show();
+                break;
+            }
             case "SAVE":
             {
                 if (value.equals("nameyourrule")) {
