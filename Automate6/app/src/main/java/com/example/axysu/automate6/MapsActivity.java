@@ -1,5 +1,7 @@
 package com.example.axysu.automate6;
 
+import android.content.Intent;
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -13,6 +15,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    int latitude = -34;
+    int longitude = 151;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +43,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
+
+        LatLng sydney = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    public void returnResult(){
+        Intent data = new Intent();
+        String result = ""+latitude+","+longitude;
+        data.putExtra("LOCATION",result);
+        setResult(RESULT_OK,data);
+        finish();
     }
 }

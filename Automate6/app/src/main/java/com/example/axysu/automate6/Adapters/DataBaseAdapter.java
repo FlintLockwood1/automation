@@ -69,7 +69,7 @@ public class DataBaseAdapter {
             rules.location = cursor.getString(cursor.getColumnIndex(MyDbHelper.MLOCATION));
             rules.time = cursor.getString(cursor.getColumnIndex(MyDbHelper.MTIME));
             rules.name = cursor.getString(cursor.getColumnIndex(MyDbHelper.MNAME));
-            rules.time = cursor.get(cursor.getColumnIndex(MyDbHelper.MTIME));
+           // rules.time = cursor.get(cursor.getColumnIndex(MyDbHelper.MTIME));
         }
 
         return arrayList;
