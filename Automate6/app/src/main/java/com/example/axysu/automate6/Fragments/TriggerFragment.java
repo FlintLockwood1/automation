@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
@@ -39,6 +40,7 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
     String time;
     int battery;
     Rules rules;
+    private static String TAG ="TriggerFragment";
 
 
     public TriggerFragment() {
@@ -73,7 +75,7 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
     private void initializeTriggerValue() {
 
         rules.id = getArguments().getInt("id");
-        if (rules.id==-1 || true){
+        if (rules.id==-1){
             rules.battery = 50;
             rules.mobileData = false;
             rules.airplaneMode = false;
@@ -89,7 +91,7 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
             rules.wifi = false;
         }
         else {
-            getRuleFromDataBasebyID(rules.id);
+            rules = getRuleFromDataBasebyID(rules.id);
         }
     }
 
@@ -142,7 +144,9 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
 
     }
 
-    private void getRuleFromDataBasebyID(int id) {
+    private Rules getRuleFromDataBasebyID(int id) {
+        Log.v(TAG,"id :" +id);
+        return (new DataBaseAdapter(getActivity()).getDataByIndex(id)).get(0);
 
     }
 

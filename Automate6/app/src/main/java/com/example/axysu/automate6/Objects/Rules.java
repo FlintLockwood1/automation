@@ -10,7 +10,7 @@ public class Rules {
     public String name;
     public int id;
 
-    public String title;
+    public String state;
 
 
     public int battery;

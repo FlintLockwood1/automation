@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
     Bundle bundle ;
     int id;
     Rules rules;
+    private static String TAG ="AddActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
 
     private void initializeTriggerValue() {
 
-        if (id==-1 || true){
+        if (id==-1){
             rules.battery = 50;
             rules.mobileData = false;
             rules.airplaneMode = false;
@@ -60,7 +62,7 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
             rules.wifi = false;
         }
         else {
-            getRuleFromDataBasebyID(rules.id);
+            rules = getRuleFromDataBasebyID(id);
         }
     }
 
@@ -82,7 +84,6 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
             public void onClick(View view) {
 
                 EventFragment eventFragment = new EventFragment();
-                SaveFragment saveFragment = new SaveFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 if(fragmentManager.findFragmentByTag("EventFragment")==null )
@@ -182,12 +183,30 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
             }
             case "SAVE":
             {
-                long success = new DataBaseAdapter().insertRule(this.rules);
-                if (success<0){
-                    Toast.makeText(this, "Failed to INsert Data", Toast.LENGTH_SHORT).show();
+                if (value.equals("nameyourrule")) {
+                    value="Rule";
                 }
-                else
-                    Toast.makeText(this, "Successfully INserted Data", Toast.LENGTH_SHORT).show();
+                    rules.name=value;
+                    rules.state="active";
+                    long success = 0;
+                    long rowsUpdated = 0;
+                    if (id == -1) {
+                        success = new DataBaseAdapter(this).insertRule(this.rules);
+                        if (success < 0) {
+                            Log.v("AddActivity", "Success");
+                            Toast.makeText(this, "Failed to INsert Data", Toast.LENGTH_SHORT).show();
+                        } else
+                            Toast.makeText(this, "Successfully INserted Data", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        rowsUpdated = new DataBaseAdapter(this).updateTable(id,rules);
+                        Toast.makeText(this, ""+rowsUpdated, Toast.LENGTH_SHORT).show();
+                    }
+
+
+
+                Intent intent = new Intent(this,MainActivity.class);
+                startActivity(intent);
                 break;
             }
             default:
@@ -197,7 +216,9 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
 
     }
 
-    private void getRuleFromDataBasebyID(int id) {
+    private Rules getRuleFromDataBasebyID(int id) {
+        Log.v(TAG,"id :" +id);
+        return (new DataBaseAdapter(this).getDataByIndex(id)).get(0);
 
     }
 }

@@ -1,5 +1,8 @@
 package com.example.axysu.automate6.Helpers;
 
+import android.content.Context;
+
+import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
 
@@ -11,57 +14,28 @@ import java.util.List;
  */
 
 public class FetchDataForRulesLists {
+    private static ArrayList<Rules> data = new ArrayList<>();
 
-    public static List<Rules> getData(String filter){
 
-        List<Rules> data = new ArrayList<>();
+    public static ArrayList<Rules> getData(Context context,String filter){
 
-        int []icons = {
-                R.drawable.ic_menu_manage,
-                R.drawable.ic_menu_send};
+        DataBaseAdapter dataBaseAdapter = new DataBaseAdapter(context);
+        data= dataBaseAdapter.getAllData();
+        ArrayList<Rules> temparrayList = new ArrayList();
 
-        String []titles = {"Active","Inactive","Active","Inactive","Active","Active","Inactive","Active",
-                "Inactive","Active","Active","Inactive","Active","Inactive","Active","Active","Inactive",
-                "Active","Inactive","Active"};
-        int [] Batteries = {10,20,30,40,50,60,10,20,30,40,50,60,10,20,30,40,50,60,10,20,30,40,50,60,10,20,30,40,50,60,
-                          10,20,30,40,50,60,10,20,30,40,50,60,10,20,30,40,50,60};
-        String []activities = {"Walking","Running","Idle","Driving","Walking","Running","Idle","Driving","Walking","Running","Idle","Driving",
-                "Walking","Running","Idle","Driving","Walking","Running","Idle","Driving","Walking","Running","Idle","Driving",
-                "Walking","Running","Idle","Driving","Walking","Running","Idle","Driving","Walking","Running","Idle","Driving",
-                "Walking","Running","Idle","Driving","Walking","Running","Idle","Driving","Walking","Running","Idle","Driving",};
+        for (int i=0;i<data.size();i++){
 
-        String []Dates = {"13/09/1991","19/08/1991","15/09/1991","09/09/1991","13/09/1991","19/08/1991","15/09/1991","09/09/1991",
-                "13/09/1991","19/08/1991","15/09/1991","09/09/1991","13/09/1991","19/08/1991","15/09/1991","09/09/1991",
-                "13/09/1991","19/08/1991","15/09/1991","09/09/1991","13/09/1991","19/08/1991","15/09/1991","09/09/1991"};
+            Rules current = data.get(i);
+            if (current.state.equalsIgnoreCase(filter) || filter.equalsIgnoreCase("all")){
 
-        String []Times = {"13:56","12:45","01:00","02:05","03:10","04:15","13:56","12:45","01:00","02:05","03:10","04:15",
-                "13:56","12:45","01:00","02:05","03:10","04:15","13:56","12:45","01:00","02:05","03:10","04:15",
-                "13:56","12:45","01:00","02:05","03:10","04:15","13:56","12:45","01:00","02:05","03:10","04:15",};
-
-        for (int i=0;i<titles.length;i++){
-
-            Rules current = new Rules();
-            current.title = titles[i];
-            current.battery = Batteries[i];
-            current.activity = activities[i];
-            current.time = Times[i];
-            current.date = Dates[i];
-            if (current.title=="Active"){
-
-                current.icon_id = icons[1];
-
-            }else{
-
-                current.icon_id = icons[0];
+                if (current.name == null)
+                    current.name = "RULE" ;
+                current.icon_id = R.drawable.ic_menu_manage;
+                temparrayList.add(current);
 
             }
-
-            if (current.title==filter || filter=="All"){
-
-                data.add(current);
-            }
-
         }
-        return data;
+        return temparrayList;
     }
+
 }

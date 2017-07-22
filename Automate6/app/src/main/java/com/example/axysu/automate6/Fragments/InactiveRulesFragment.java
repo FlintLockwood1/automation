@@ -36,7 +36,7 @@ public class InactiveRulesFragment extends Fragment {
         // Inflate the layout for this fragment
         layout = inflater.inflate(R.layout.fragment_inactive_rules, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recyclerview);
-        myAdapter = new RulesRecyclerViewAdapter(getActivity(),getData("Inactive"));
+        myAdapter = new RulesRecyclerViewAdapter(getActivity(),getData(getActivity(),"Inactive"));
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return layout;

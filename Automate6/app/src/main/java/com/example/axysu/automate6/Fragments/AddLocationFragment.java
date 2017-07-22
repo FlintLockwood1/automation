@@ -1,29 +1,21 @@
 package com.example.axysu.automate6.Fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.axysu.automate6.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SaveFragment extends Fragment {
+public class AddLocationFragment extends Fragment {
 
 
-    View layout;
-    Button save;
-    Button cancel;
-    Intent intent;
-
-
-    public SaveFragment() {
+    public AddLocationFragment() {
         // Required empty public constructor
     }
 
@@ -32,10 +24,9 @@ public class SaveFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        layout = inflater.inflate(R.layout.fragment_save, container, false);
-        return  layout;
-    }
+        return inflater.inflate(R.layout.fragment_add_location, container, false);
 
+    }
 
 
 }

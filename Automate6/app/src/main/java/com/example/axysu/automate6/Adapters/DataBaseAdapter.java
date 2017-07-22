@@ -11,8 +11,10 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.example.axysu.automate6.AddActivity;
 import com.example.axysu.automate6.Objects.Rules;
 
 import java.util.ArrayList;
@@ -20,8 +22,10 @@ import java.util.ArrayList;
 public class DataBaseAdapter {
 
     MyDbHelper helper;
+    private  static String TAG ="DataBaseAdapter";
 
-    public void DataBaseAdapter(Context context) {
+
+    public  DataBaseAdapter(Context context) {
 
         helper = new MyDbHelper(context);
     }
@@ -30,46 +34,148 @@ public class DataBaseAdapter {
     public long insertRule(Rules rule) {
 
         SQLiteDatabase db = helper.getWritableDatabase();
-        ContentValues values1 = new ContentValues();
-        values1.put(helper.MTIME, rule.time);
-        values1.put(helper.MDATE, rule.date);
-        values1.put(helper.MLOCATION, rule.location);
-        values1.put(helper.MACTIVITY, rule.activity);
-        values1.put(helper.MBATTERY, rule.battery);
-        values1.put(helper.MNAME, rule.name);
-        values1.put(helper.AIRPLANEMODE,rule.airplaneMode);
-        values1.put(helper.WIFI,rule.wifi);
-        values1.put(helper.MOBILEDATA,rule.mobileData);
-        values1.put(helper.SILENT,rule.silent);
-        values1.put(helper.ALARM,rule.alarm);
-        values1.put(helper.NOTIFICATION,rule.notification);
-        values1.put(helper.PHONECALL,rule.phonecall);
-        values1.put(helper.MUSIC,rule.music);
-        long id = db.insert("RULE", null, values1);
+        long id = db.insert("RULE", null, generateAndPopulateContentValues(rule));
         return id;
 
     }
 
     public ArrayList<Rules> getAllData(){
 
-        ArrayList<Rules> arrayList = new ArrayList<>();
+
         SQLiteDatabase db = helper.getWritableDatabase();
+
         String columns[] = {MyDbHelper.MUID,MyDbHelper.MTIME,MyDbHelper.MDATE,MyDbHelper.MACTIVITY
         ,MyDbHelper.MLOCATION,MyDbHelper.MBATTERY,MyDbHelper.MNAME,MyDbHelper.AIRPLANEMODE,MyDbHelper.WIFI
         ,MyDbHelper.MOBILEDATA,MyDbHelper.SILENT,MyDbHelper.ALARM,MyDbHelper.NOTIFICATION,MyDbHelper.PHONECALL
-        ,MyDbHelper.MUSIC};
-        Cursor cursor = db.query("RULE",columns,null,null,null,null,null);
-        while(cursor.moveToNext()){
+        ,MyDbHelper.MUSIC,MyDbHelper.STATE};
 
+        Cursor cursor = db.query("RULE",columns,null,null,null,null,null);
+        return handleCursor(cursor);
+    }
+
+    public ArrayList<Rules> getDataByIndex(int index){
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String selectionArgs [] = new String[]{String.valueOf(index)};
+
+        String columns[] = {MyDbHelper.MUID,MyDbHelper.MTIME,MyDbHelper.MDATE,MyDbHelper.MACTIVITY
+                ,MyDbHelper.MLOCATION,MyDbHelper.MBATTERY,MyDbHelper.MNAME,MyDbHelper.AIRPLANEMODE,MyDbHelper.WIFI
+                ,MyDbHelper.MOBILEDATA,MyDbHelper.SILENT,MyDbHelper.ALARM,MyDbHelper.NOTIFICATION,MyDbHelper.PHONECALL
+                ,MyDbHelper.MUSIC,MyDbHelper.STATE};
+
+      //  Cursor cursor = db.query("RULE",columns,MyDbHelper.MUID + " =?",selectionArgs,null,null,null);
+        String query = "SELECT * FROM RULE WHERE " + MyDbHelper.MUID + " = "+ index;
+        Log.v(TAG,"quey :" +query);
+        Cursor cursor1 = db.rawQuery(query,null);
+        return handleCursor(cursor1);
+
+    }
+
+    public ArrayList<Rules> getDataByTriggers (String date,String time,String location,String activity,int battery){
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String selectionArgs [] = {date,time,location,activity,String.valueOf(battery)};
+
+        String columns[] = {MyDbHelper.MUID,MyDbHelper.MTIME,MyDbHelper.MDATE,MyDbHelper.MACTIVITY
+                ,MyDbHelper.MLOCATION,MyDbHelper.MBATTERY,MyDbHelper.MNAME,MyDbHelper.AIRPLANEMODE,MyDbHelper.WIFI
+                ,MyDbHelper.MOBILEDATA,MyDbHelper.SILENT,MyDbHelper.ALARM,MyDbHelper.NOTIFICATION,MyDbHelper.PHONECALL
+                ,MyDbHelper.MUSIC};
+
+        Cursor cursor = db.query("RULE",columns,
+                MyDbHelper.MDATE + " =? AND" + MyDbHelper.MTIME + " =? AND"
+                + MyDbHelper.MLOCATION + " =? AND" + MyDbHelper.MACTIVITY + " = ? AND" + MyDbHelper.MBATTERY + " =? "
+                ,selectionArgs,null,null,null);
+        return handleCursor(cursor);
+    }
+
+    public int updateTable(int id,Rules newrules){
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String[] whereClause = {String.valueOf(id)};
+        return db.update("RULE",generateAndPopulateContentValues(newrules),MyDbHelper.MUID + " =?",whereClause);
+    }
+
+    public int delete(int id){
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String[] whereClause = new String[]{String.valueOf(id)};
+        return db.delete("RULE",MyDbHelper.MUID + " = ?",whereClause);
+    }
+
+    public ContentValues generateAndPopulateContentValues(Rules rule){
+
+        ContentValues values1 = new ContentValues();
+
+        values1.put(helper.MTIME, rule.time);
+        values1.put(helper.MDATE, rule.date);
+        values1.put(helper.MLOCATION, rule.location);
+        values1.put(helper.MACTIVITY, rule.activity);
+        values1.put(helper.MBATTERY, rule.battery);
+        values1.put(helper.MNAME, rule.name);
+        values1.put(helper.STATE,rule.state);
+
+        if (rule.airplaneMode)
+            values1.put(helper.AIRPLANEMODE,1);
+        else
+            values1.put(helper.AIRPLANEMODE,0);
+
+        if (rule.wifi)
+            values1.put(helper.WIFI,1);
+        else
+            values1.put(helper.WIFI,0);
+
+        if (rule.mobileData)
+            values1.put(helper.MOBILEDATA,1);
+        else
+            values1.put(helper.MOBILEDATA,0);
+
+        if (rule.silent)
+            values1.put(helper.SILENT,1);
+        else
+            values1.put(helper.SILENT,0);
+
+        if (rule.music)
+            values1.put(helper.MUSIC,1);
+        else
+            values1.put(helper.MUSIC,0);
+
+
+        values1.put(helper.ALARM,rule.alarm);
+        values1.put(helper.NOTIFICATION,rule.notification);
+        values1.put(helper.PHONECALL,rule.phonecall);
+
+        return  values1;
+    }
+
+    public ArrayList<Rules> handleCursor(Cursor cursor){
+        Log.v(TAG,"outside cursor");
+
+        ArrayList<Rules> arrayList = new ArrayList<>();
+        while(cursor.moveToNext()){
+            Log.v(TAG,"inside cursor");
             Rules rules = new Rules();
             rules.id = cursor.getInt(cursor.getColumnIndex(MyDbHelper.MUID));
+
             rules.time = cursor.getString(cursor.getColumnIndex(MyDbHelper.MTIME));
             rules.date = cursor.getString(cursor.getColumnIndex(MyDbHelper.MDATE));
             rules.activity = cursor.getString(cursor.getColumnIndex(MyDbHelper.MACTIVITY));
             rules.location = cursor.getString(cursor.getColumnIndex(MyDbHelper.MLOCATION));
-            rules.time = cursor.getString(cursor.getColumnIndex(MyDbHelper.MTIME));
+            rules.battery = cursor.getInt(cursor.getColumnIndex(MyDbHelper.MBATTERY));
             rules.name = cursor.getString(cursor.getColumnIndex(MyDbHelper.MNAME));
-           // rules.time = cursor.get(cursor.getColumnIndex(MyDbHelper.MTIME));
+
+            rules.alarm = cursor.getString(cursor.getColumnIndex(MyDbHelper.ALARM));
+            rules.notification = cursor.getString(cursor.getColumnIndex(MyDbHelper.NOTIFICATION));
+            rules.phonecall = cursor.getString(cursor.getColumnIndex(MyDbHelper.PHONECALL));
+
+            rules.mobileData = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.MOBILEDATA))==1)? true:false;
+            rules.airplaneMode = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.AIRPLANEMODE))==1)? true:false;
+            rules.silent = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.SILENT))==1)? true:false;
+            rules.music = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.MUSIC))==1)? true:false;
+            rules.wifi = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.WIFI))==1)? true:false;
+            rules.state=(cursor.getString(cursor.getColumnIndex(MyDbHelper.STATE)));
+
+            arrayList.add(rules);
+
         }
 
         return arrayList;
@@ -93,30 +199,32 @@ public class DataBaseAdapter {
         private static final String NOTIFICATION = "notification";
         private static final String PHONECALL = "phonecall";//6
         private static final String MUSIC = "music";
+        private static final String STATE = "state";
 
         Context context;
 
 
 
-        private static final String CREATEMASTER = "CREATE TABLE RULE (" +
+        private static final String CREATEMASTER = "CREATE TABLE RULE ( " +
                 MUID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                MNAME + "VARCHAR(255)," +
-                MLOCATION + "VARCHAR(255)," +
-                MBATTERY + "INTEGER," +
+                MNAME + " VARCHAR(255)," +
+                MLOCATION + " VARCHAR(255)," +
+                MBATTERY + " INTEGER," +
                 MTIME + " VARCHAR(255), " +
                 MDATE + " VARCHAR(255)," +
-                MACTIVITY + "VARCHAR(255)" +
-                AIRPLANEMODE + "VARCHAR(255)"+
-                WIFI + "VARCHAR(255)"+
-                MOBILEDATA + "VARCHAR(255)" +
-                SILENT + "VARCHAR(255)" +
-                ALARM + "VARCHAR(255)" +
-                NOTIFICATION + "VARCHAR(255)" +
-                PHONECALL + "VARCHAR(255)" +
-                MUSIC + "VARCHAR(255))";
+                MACTIVITY + " VARCHAR(255)," +
+                AIRPLANEMODE + " VARCHAR(255),"+
+                WIFI + " VARCHAR(255),"+
+                MOBILEDATA + " VARCHAR(255)," +
+                SILENT + " VARCHAR(255)," +
+                ALARM + " VARCHAR(255)," +
+                NOTIFICATION + " VARCHAR(255)," +
+                PHONECALL + " VARCHAR(255)," +
+                MUSIC + " VARCHAR(255)," +
+                STATE + " VARCHAR(255))";
 
         private static final String DATABASE_NAME = "myDatabase";
-        private static final int DATABASE_VERSION = 1;
+        private static final int DATABASE_VERSION = 6001;
 
 
         public MyDbHelper(Context context) {
@@ -130,6 +238,7 @@ public class DataBaseAdapter {
             try {
                 db.execSQL(CREATEMASTER);
             } catch (SQLException e) {
+                e.printStackTrace();
                 Toast.makeText(context,""+e, Toast.LENGTH_SHORT).show();
             }
 

@@ -3,6 +3,7 @@ package com.example.axysu.automate6.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,16 +55,25 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         final Rules current = data.get(position);
-        holder.textView.setText(current.title);
+        holder.textView.setText(current.name);
         holder.imageView.setImageResource(current.icon_id);
         holder.ruledate.setText("DATE IS "+current.date);
         holder.ruletime.setText("TIME IS "+current.time);
         holder.rulelocation.setText("LOCATION IS DEFAULT");
         holder.rulebattery.setText("BATTERY Level = "+current.battery+" %");
         holder.ruleactivity.setText("ACTIVITY IS "+current.activity);
+        holder.aSwitch.setChecked(true);
+
+        holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DataBaseAdapter(context).delete(current.id);
+                //notifyItemRemoved(position);
+            }
+        });
         holder.showdetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,8 +103,16 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             public void onClick(View v) {
 
                 Intent intent = new Intent(context,AddActivity.class);
+                Log.v("Recycler","id"+ current.id);
                 intent.putExtra("id",current.id);
                 context.startActivity(intent);
+            }
+        });
+
+        holder.aSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -119,6 +138,8 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         TextView rulebattery;
         TextView ruleactivity;
         Button editButton;
+        Switch aSwitch;
+        Button deleteBtn;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -134,6 +155,8 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             rulebattery= (TextView) itemView.findViewById(R.id.rulebattery);
             ruleactivity= (TextView) itemView.findViewById(R.id.ruleactivity);
             editButton = (Button) itemView.findViewById(R.id.editrule);
+            aSwitch= (Switch) itemView.findViewById(R.id.switch1);
+            deleteBtn = (Button) itemView.findViewById(R.id.delBtn);
 
         }
     }

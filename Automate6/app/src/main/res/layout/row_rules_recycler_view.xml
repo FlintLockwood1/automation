@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/details"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="match_parent"
@@ -96,23 +96,31 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/operations"
-        android:visibility="gone">
+        android:visibility="visible">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="DELETE"/>
+            android:text="DELETE"
+            android:id="@+id/delBtn"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="EDIT"
             android:id="@+id/editrule"/>
-        <Button
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="CHANGE STATUS"/>
+            android:text="STATUS"
+            android:layout_weight="0.5"
+            android:layout_marginStart="15dp" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:id="@+id/switch1" />
     </LinearLayout>
 
     

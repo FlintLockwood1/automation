@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.MapsActivity;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
@@ -20,7 +21,7 @@ import com.example.axysu.automate6.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class EventFragment extends Fragment implements AdapterView.OnItemClickListener,CustomDialogInterface{
 
 
     ListView listView;
@@ -142,4 +143,51 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
 
     }
 
+    @Override
+    public void okButtonClicked(String value, String whichFragment) {
+        switch (whichFragment){
+            case "SAVE":
+            {
+                break;
+            }
+            case "TIME":
+            {
+                if (value!=null)
+                {
+                    this.rules.time = (value);
+                }
+                //Toast.makeText(getActivity(),rules.time, Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case "LOCATION":
+            {
+                break;
+            }
+            case "ACTIVITY":
+            {
+                if (value!=null)
+                {
+                    this.rules.activity = (value);
+                }
+                //Toast.makeText(getActivity(),rules.activity, Toast.LENGTH_SHORT).show();
+                break;
+
+            }
+            case "DATE":
+            {
+
+                if (value!=null)
+                {
+                    this.rules.date = (value);
+                }
+                //Toast.makeText(getActivity(),rules.date, Toast.LENGTH_SHORT).show();
+                break;
+            }
+            default:
+                break;
+
+        }
+        ((CustomDialogInterface) getActivity()).okButtonClicked(value,whichFragment);
+
+    }
 }

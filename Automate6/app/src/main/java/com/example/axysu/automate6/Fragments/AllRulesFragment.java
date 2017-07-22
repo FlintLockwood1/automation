@@ -36,7 +36,7 @@ public class AllRulesFragment extends Fragment {
         // Inflate the layout for this fragment
         layout = inflater.inflate(R.layout.fragment_all_rules, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recyclerview);
-        myAdapter = new RulesRecyclerViewAdapter(getActivity(),getData("All"));
+        myAdapter = new RulesRecyclerViewAdapter(getActivity(),getData(getActivity(),"All"));
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return layout;
