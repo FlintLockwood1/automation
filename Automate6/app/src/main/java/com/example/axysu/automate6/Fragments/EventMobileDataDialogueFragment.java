@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
+import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
+
 /**
  * Created by axysu on 7/20/2017.
  */
@@ -22,6 +24,8 @@ public class EventMobileDataDialogueFragment extends DialogFragment {
                 .setPositiveButton("ON", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked("true","MOBILEDATA");
 
                         dismiss();
                     }

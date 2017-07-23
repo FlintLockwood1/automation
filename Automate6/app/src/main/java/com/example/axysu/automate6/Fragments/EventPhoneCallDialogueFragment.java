@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.R;
 
 /**
@@ -18,13 +19,14 @@ import com.example.axysu.automate6.R;
 
 public class EventPhoneCallDialogueFragment extends DialogFragment {
 
+    EditText editText;
     View view;
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.dialogue_fragment_event,null);
-        EditText editText  = (EditText) view.findViewById(R.id.edittext);
+        editText = (EditText) view.findViewById(R.id.edittext);
         editText.setText("0123456789");
         return new AlertDialog.Builder(getActivity()).setTitle("CALL SM1!")
                 .setView(view)
@@ -32,6 +34,8 @@ public class EventPhoneCallDialogueFragment extends DialogFragment {
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(editText.getText().toString(),"PHONECALL");
 
                     }
                 })

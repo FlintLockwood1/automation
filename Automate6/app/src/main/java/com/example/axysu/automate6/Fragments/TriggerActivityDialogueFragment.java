@@ -68,7 +68,7 @@ public class TriggerActivityDialogueFragment extends DialogFragment {
                         {
                             if (selected[i])
                             {
-                                temp+=Activities[i];
+                                temp=temp+"'"+Activities[i];
                             }
                         }
                         ((CustomDialogInterface)getTargetFragment()).okButtonClicked(temp,"ACTIVITY");

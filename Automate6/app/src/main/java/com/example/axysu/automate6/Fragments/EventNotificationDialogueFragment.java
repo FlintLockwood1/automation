@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.R;
 
 /**
@@ -19,14 +20,15 @@ import com.example.axysu.automate6.R;
 
 public class EventNotificationDialogueFragment extends DialogFragment {
 
+    EditText editText;
     View view;
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.dialogue_fragment_event,null);
-        EditText textview  = (EditText) view.findViewById(R.id.edittext);
-        textview.setText("WAKE UP");
+        editText  = (EditText) view.findViewById(R.id.edittext);
+        editText.setText("WAKE UP");
         return new AlertDialog.Builder(getActivity()).setTitle("NOTIFICATION")
                 .setView(view)
                 .setNegativeButton("Cancel",null)
@@ -34,6 +36,7 @@ public class EventNotificationDialogueFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(editText.getText().toString(),"NOTIFICATION");
                     }
                 })
                 .create();
