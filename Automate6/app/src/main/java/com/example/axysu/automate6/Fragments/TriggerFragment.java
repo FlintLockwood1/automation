@@ -76,19 +76,19 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
 
         rules.id = getArguments().getInt("id");
         if (rules.id==-1){
-            rules.battery = 50;
-            rules.mobileData = false;
-            rules.airplaneMode = false;
+            rules.battery = -10;
+            rules.mobileData = -1;
+            rules.airplaneMode = -1;
             rules.notification = "DEFAULT";
             rules.time = "DEFAULT";
             rules.activity = "DEFAULT";
             rules.alarm = "DEFAULT";
             rules.date = "DEFAULT";
             rules.location = "DEFAULT";
-            rules.music = false;
-            rules.silent = false;
+            rules.music = -1;
+            rules.silent = -1;
             rules.phonecall = "DEFAULT";
-            rules.wifi = false;
+            rules.wifi = -1;
         }
         else {
             rules = getRuleFromDataBasebyID(rules.id);

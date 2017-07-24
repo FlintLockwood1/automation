@@ -91,9 +91,8 @@ public class MyService extends Service {
             for (int i=0;i<arrayList.size();i++){
 
                 Rules current = arrayList.get(i);
-                if (current.airplaneMode){
 
-                }
+
 
             }
         }

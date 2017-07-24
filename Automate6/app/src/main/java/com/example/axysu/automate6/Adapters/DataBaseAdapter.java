@@ -113,33 +113,10 @@ public class DataBaseAdapter {
         values1.put(helper.MBATTERY, rule.battery);
         values1.put(helper.MNAME, rule.name);
         values1.put(helper.STATE,rule.state);
-
-        if (rule.airplaneMode)
-            values1.put(helper.AIRPLANEMODE,1);
-        else
-            values1.put(helper.AIRPLANEMODE,0);
-
-        if (rule.wifi)
-            values1.put(helper.WIFI,1);
-        else
-            values1.put(helper.WIFI,0);
-
-        if (rule.mobileData)
-            values1.put(helper.MOBILEDATA,1);
-        else
-            values1.put(helper.MOBILEDATA,0);
-
-        if (rule.silent)
-            values1.put(helper.SILENT,1);
-        else
-            values1.put(helper.SILENT,0);
-
-        if (rule.music)
-            values1.put(helper.MUSIC,1);
-        else
-            values1.put(helper.MUSIC,0);
-
-
+        values1.put(helper.AIRPLANEMODE, rule.airplaneMode);
+        values1.put(helper.MOBILEDATA, rule.mobileData);
+        values1.put(helper.SILENT, rule.silent);
+        values1.put(helper.MUSIC, rule.music);
         values1.put(helper.ALARM,rule.alarm);
         values1.put(helper.NOTIFICATION,rule.notification);
         values1.put(helper.PHONECALL,rule.phonecall);
@@ -167,11 +144,11 @@ public class DataBaseAdapter {
             rules.notification = cursor.getString(cursor.getColumnIndex(MyDbHelper.NOTIFICATION));
             rules.phonecall = cursor.getString(cursor.getColumnIndex(MyDbHelper.PHONECALL));
 
-            rules.mobileData = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.MOBILEDATA))==1)? true:false;
-            rules.airplaneMode = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.AIRPLANEMODE))==1)? true:false;
-            rules.silent = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.SILENT))==1)? true:false;
-            rules.music = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.MUSIC))==1)? true:false;
-            rules.wifi = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.WIFI))==1)? true:false;
+            rules.mobileData = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.MOBILEDATA)));
+            rules.airplaneMode = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.AIRPLANEMODE)));
+            rules.silent = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.SILENT)));
+            rules.music = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.MUSIC)));
+            rules.wifi = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.WIFI)));
             rules.state=(cursor.getString(cursor.getColumnIndex(MyDbHelper.STATE)));
 
             arrayList.add(rules);

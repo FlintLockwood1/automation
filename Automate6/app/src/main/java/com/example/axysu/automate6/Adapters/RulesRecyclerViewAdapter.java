@@ -65,6 +65,14 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         holder.rulelocation.setText("LOCATION IS DEFAULT");
         holder.rulebattery.setText("BATTERY Level = "+current.battery+" %");
         holder.ruleactivity.setText("ACTIVITY IS "+current.activity);
+        holder.mobiledata.setText("MOBILEDATA IS "+current.mobileData);
+        holder.alarm.setText("ALARM IS "+current.alarm);
+        holder.phonecall.setText("PHONECALL IS "+current.phonecall);
+        holder.notification.setText("NOTIFICATION IS "+current.notification);
+        holder.wifi.setText("WIFI IS "+current.wifi);
+        holder.music.setText("MUSIC IS "+current.music);
+        holder.silent.setText("SILENT IS "+current.silent);
+        holder.airplanemode.setText("AIRPLANEMODE IS "+current.airplaneMode);
         holder.aSwitch.setChecked(true);
 
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +148,14 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         Button editButton;
         Switch aSwitch;
         Button deleteBtn;
+        TextView mobiledata;
+        TextView silent;
+        TextView alarm;
+        TextView notification;
+        TextView phonecall;
+        TextView wifi;
+        TextView airplanemode;
+        TextView music;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -157,6 +173,15 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             editButton = (Button) itemView.findViewById(R.id.editrule);
             aSwitch= (Switch) itemView.findViewById(R.id.switch1);
             deleteBtn = (Button) itemView.findViewById(R.id.delBtn);
+            airplanemode = (TextView) itemView.findViewById(R.id.eventAirplanemode);
+            mobiledata = (TextView) itemView.findViewById(R.id.eventMobiledata);
+            music = (TextView) itemView.findViewById(R.id.eventMusic);
+            wifi = (TextView) itemView.findViewById(R.id.eventWifi);
+            phonecall = (TextView) itemView.findViewById(R.id.eventPhonecall);
+            alarm = (TextView) itemView.findViewById(R.id.eventAlarm);
+            silent = (TextView) itemView.findViewById(R.id.eventSilent);
+            notification = (TextView) itemView.findViewById(R.id.eventNotification);
+
 
         }
     }

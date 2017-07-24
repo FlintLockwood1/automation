@@ -88,6 +88,46 @@
             android:layout_height="wrap_content"
             android:text="Date = dummy"
             android:id="@+id/ruledate"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AirplaneMode = dummy"
+            android:id="@+id/eventAirplanemode"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Music = dummy"
+            android:id="@+id/eventMusic"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Silent = dummy"
+            android:id="@+id/eventSilent"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wifi = dummy"
+            android:id="@+id/eventWifi"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Alarm = dummy"
+            android:id="@+id/eventAlarm"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mobiledata = dummy"
+            android:id="@+id/eventMobiledata"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phonecall = dummy"
+            android:id="@+id/eventPhonecall"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Notification = dummy"
+            android:id="@+id/eventNotification"/>
 
     </LinearLayout>
 

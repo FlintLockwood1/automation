@@ -19,12 +19,12 @@ public class Rules {
     public String date;
     public String location;
 
-    public boolean airplaneMode; //1
-    public boolean wifi;         //2
-    public boolean mobileData;   //3
-    public boolean silent;        //5
+    public int airplaneMode; //1
+    public int wifi;         //2
+    public int mobileData;   //3
+    public int silent;        //5
     public String alarm;  //6
-    public boolean music;        //7
+    public int music;        //7
     public String notification;
     public String phonecall ;
 
