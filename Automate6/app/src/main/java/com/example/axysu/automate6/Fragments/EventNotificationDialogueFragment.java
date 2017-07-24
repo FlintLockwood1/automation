@@ -28,7 +28,9 @@ public class EventNotificationDialogueFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.dialogue_fragment_event,null);
         editText  = (EditText) view.findViewById(R.id.edittext);
-        editText.setText("WAKE UP");
+        editText.setText((getArguments()
+                .getString("notification")
+                .equalsIgnoreCase("DEFAULT"))?"TYPE THE MESSAGE":getArguments().getString("notification"));
         return new AlertDialog.Builder(getActivity()).setTitle("NOTIFICATION")
                 .setView(view)
                 .setNegativeButton("Cancel",null)

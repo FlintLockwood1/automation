@@ -27,7 +27,9 @@ public class EventPhoneCallDialogueFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.dialogue_fragment_event,null);
         editText = (EditText) view.findViewById(R.id.edittext);
-        editText.setText("0123456789");
+        editText.setText((getArguments()
+                .getString("phonecall")
+                .equalsIgnoreCase("DEFAULT"))?"TYPE THE NUMBER TO BE CALLED":getArguments().getString("phonecall"));
         return new AlertDialog.Builder(getActivity()).setTitle("CALL SM1!")
                 .setView(view)
                 .setNegativeButton("Cancel",null)

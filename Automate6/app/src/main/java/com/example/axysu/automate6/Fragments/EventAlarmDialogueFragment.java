@@ -27,7 +27,9 @@ public class EventAlarmDialogueFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.dialogue_fragment_event,null);
         editText  = (EditText) view.findViewById(R.id.edittext);
-        editText.setText("SET ALARM MESSAGE");
+        editText.setText((getArguments()
+                .getString("alarm")
+                .equalsIgnoreCase("DEFAULT"))?"TYPE THE MESSAGE":getArguments().getString("alarm"));
         return new AlertDialog.Builder(getActivity()).setTitle("NOTIFICATION")
                 .setView(view)
                 .setNegativeButton("Cancel",null)
