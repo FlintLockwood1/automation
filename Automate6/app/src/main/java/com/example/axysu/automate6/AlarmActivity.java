@@ -1,5 +1,6 @@
 package com.example.axysu.automate6;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +18,18 @@ public class AlarmActivity extends AppCompatActivity {
     }
 
 
-    public void end(View view) {
-        super.onBackPressed();
+    public void end(String state) {
+        Intent data = new Intent();
+        data.putExtra("state",state);
+        setResult(RESULT_OK,data);
+        finish();
+    }
+
+    public void snooze(View view) {
+        end("snooze");
+    }
+
+    public void dissmiss(View view) {
+        end("dismiss");
     }
 }

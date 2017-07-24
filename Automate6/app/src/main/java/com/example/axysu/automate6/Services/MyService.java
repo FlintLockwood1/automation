@@ -82,20 +82,37 @@ public class MyService extends Service {
 
         arrayList = new ArrayList<>();
         arrayList = new DataBaseAdapter(this).getDataByTriggers(rule.date,rule.time,rule.location,rule.activity,rule.battery);
+        if (arrayList!=null && arrayList.size()>0) {
+            onMatchFound();
+        }
     }
 
     public void onMatchFound() {
-
-        if (arrayList!=null && arrayList.size()>0){
 
             for (int i=0;i<arrayList.size();i++){
 
                 Rules current = arrayList.get(i);
 
+                if (current.airplaneMode!=-1)
+                    toggleAirplaneMode(current.airplaneMode);
+                if (current.music!=-1)
+                    toggleAirplaneMode(current.music);
+                if (current.mobileData!=-1)
+                    toggleAirplaneMode(current.mobileData);
+                if (current.wifi!=-1)
+                    toggleAirplaneMode(current.wifi);
+                if (current.silent!=-1)
+                    toggleAirplaneMode(current.silent);
+
+                if (!current.alarm.equalsIgnoreCase("DEFAULT"))
+                    startAlarm(current.alarm);
+                if (!current.notification.equalsIgnoreCase("DEFAULT"))
+                    startAlarm(current.notification);
+                if (!current.phonecall.equalsIgnoreCase("DEFAULT"))
+                    startAlarm(current.phonecall);
 
 
             }
-        }
 
     }
 
@@ -174,19 +191,19 @@ public class MyService extends Service {
         startActivity(callIntent);
     }
 
-    public void toggleAirplaneMode(boolean flag){
+    public void toggleAirplaneMode(int flag){
 
     }
-    public void toggleWifi(boolean flag){
+    public void toggleWifi(int flag){
 
     }
-    public void toggleMobileData(boolean flag){
+    public void toggleMobileData(int flag){
 
     }
-    public void toggleSilentMode(boolean flag){
+    public void toggleSilentMode(int flag){
 
     }
-    public void startMusic(){
+    public void startMusic(int flag){
 
     }
 

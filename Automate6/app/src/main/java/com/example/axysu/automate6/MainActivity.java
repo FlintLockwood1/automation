@@ -138,6 +138,9 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_gallery) {
 
+            Intent intent = new Intent(this,AlarmActivity.class);
+            startActivityForResult(intent,0);
+
             //DAsh
 
         } else if (id == R.id.nav_manage) {
@@ -153,6 +156,18 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                if (data.getStringExtra("state")!=null)
+                    Toast.makeText(this, data.getStringExtra("state"), Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void exitMainActivity(int id){

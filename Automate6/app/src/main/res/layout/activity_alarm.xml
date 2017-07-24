@@ -1,14 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.axysu.automate6.AlarmActivity">
 
-    <Button
+
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DISMISS"
-        android:onClick="end" />
-</LinearLayout>
+        android:layout_marginTop="79dp"
+        android:text="ALARM"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="109dp"
+        app:srcCompat="@mipmap/ic_launcher_round"
+        android:layout_below="@+id/textView3"
+        android:layout_alignEnd="@+id/textView3" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="41dp"
+        app:srcCompat="@mipmap/ic_launcher_round"
+        android:layout_marginTop="80dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher_round"
+        android:layout_alignTop="@+id/imageView3"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="38dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:text="SWIPE TO DISSMISS"
+        android:layout_below="@+id/imageView3"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/snooze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/imageView3"
+        android:layout_marginStart="15dp"
+        android:text="SNOOZE"
+        android:onClick="snooze"/>
+
+    <Button
+        android:id="@+id/dissmiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/imageView4"
+        android:layout_alignParentBottom="true"
+        android:text="DISSMISS"
+        android:onClick="dissmiss"/>
+</RelativeLayout>

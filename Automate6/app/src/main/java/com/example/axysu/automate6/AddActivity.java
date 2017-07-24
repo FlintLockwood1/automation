@@ -60,6 +60,7 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
             rules.silent = -1;
             rules.phonecall = "DEFAULT";
             rules.wifi = -1;
+            rules.state="active";
         }
         else {
             rules = getRuleFromDataBasebyID(id);
@@ -262,7 +263,7 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
                     value="Rule";
                 }
                     rules.name=value;
-                    rules.state="active";
+
                     long success = 0;
                     long rowsUpdated = 0;
                     if (id == -1) {
