@@ -24,11 +24,6 @@ public class DataBaseAdapter {
     MyDbHelper helper;
     private  static String TAG ="DataBaseAdapter";
 
-    public DataBaseAdapter(){
-
-    }
-
-
     public  DataBaseAdapter(Context context) {
 
         helper = new MyDbHelper(context);

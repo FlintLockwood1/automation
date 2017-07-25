@@ -22,6 +22,7 @@ import com.example.axysu.automate6.AlarmActivity;
 import com.example.axysu.automate6.BroadcastReceivers.MyReceiver;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,6 +39,7 @@ public class MyService extends Service {
     private float battery;
     private Rules rule;
     private ArrayList<Rules> arrayList;
+    DataBaseAdapter dataBaseAdapter;
 
     @Nullable
     @Override
@@ -49,6 +51,7 @@ public class MyService extends Service {
     public void onCreate() {
         super.onCreate();
         this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        dataBaseAdapter = new DataBaseAdapter(this);
     }
 
     @Override
@@ -58,8 +61,8 @@ public class MyService extends Service {
         scheduler.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                
-                checkForMatch();
+
+                checkForMatch(dataBaseAdapter.getAllData());
 
             }
         }, 10, 60, TimeUnit.SECONDS);
@@ -67,10 +70,67 @@ public class MyService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void checkForMatch() {
+    private void checkForMatch(ArrayList<Rules> arrayList) {
+        
+        for (int i=0;i<arrayList.size();i++){
+            Rules current = arrayList.get(i);
+            if (matchDate(current.date) && matchTime (current.time)&& matchLocation(current.location)
+                    && matchActivity(current.activity) && matchBattery(current.battery)){
 
+                onMatchFound(current);
+            }
+        }
 
     }
+
+    private boolean matchLocation(String location) {
+        //LatLng latlng = getLocation();
+        LatLng latlng = new LatLng(1,1);
+        String asd[] = location.split(",");
+        LatLng temp = new LatLng(Double.parseDouble(asd[0]),Double.parseDouble(asd[1]));
+        double distanceSquare = (latlng.latitude-temp.latitude)   * (latlng.latitude-temp.latitude) +
+                (latlng.longitude-temp.longitude) * (latlng.longitude-temp.longitude);
+        return((distanceSquare) <= 100);
+    }
+
+    private boolean matchBattery(int battery) {
+        return (battery==this.battery);
+    }
+
+
+    private boolean matchActivity(String activity) {
+
+        return (activity.contains(getActivity()));
+    }
+
+    private boolean matchTime(String time) {
+        Calendar c = Calendar.getInstance();
+        int currhr = c.get(Calendar.HOUR);
+        int currmin = c.get(Calendar.MINUTE);
+        if (Integer.parseInt(time.substring(0,2))== (currhr) &&
+                Integer.parseInt(time.substring(3, 5)) >= currmin-5 &&
+                Integer.parseInt(time.substring(3, 5)) <= currmin+5)
+            return true;
+        else
+            return false;
+    }
+
+    public boolean matchDate(String date){
+
+        Calendar c = Calendar.getInstance();
+        int currday = c.get(Calendar.DATE);
+        int currmonth = c.get(Calendar.MONTH)+1;
+        int curryear = c.get(Calendar.YEAR);
+        if (Integer.parseInt(date.substring(0, 2))== currday &&
+                Integer.parseInt(date.substring(3, 5))== currmonth &&
+                Integer.parseInt(date.substring(6))== curryear)
+            return true;
+        else
+            return false;
+
+    }
+
+
 
 
     public void onMatchFound(Rules current) {
@@ -96,15 +156,17 @@ public class MyService extends Service {
 
     }
 
-    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
 
-            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-            battery = level;
 
-        }
-    };
+    private String getActivity() {
+
+        return "walking";
+    }
+
+    private LatLng getLocation(){
+
+        return null;
+    }
 
     public void sendNotification(String message) {
 
@@ -158,6 +220,16 @@ public class MyService extends Service {
     public void startMusic(int flag){
 
     }
+
+    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+            battery = level;
+
+        }
+    };
 
 
 }
