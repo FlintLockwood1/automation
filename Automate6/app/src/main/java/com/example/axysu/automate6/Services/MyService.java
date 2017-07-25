@@ -58,8 +58,7 @@ public class MyService extends Service {
         scheduler.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-
-                getSystemStatus();
+                
                 checkForMatch();
 
             }
@@ -68,78 +67,32 @@ public class MyService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public void getSystemStatus() {
+    private void checkForMatch() {
 
-        rule = new Rules();
-        getLocation();
-        getDate();
-        getTime();
-        getBatteryStatus();
-        getActivity();
-    }
-
-    public void checkForMatch() {
-
-        arrayList = new ArrayList<>();
-        arrayList = new DataBaseAdapter(this).getDataByTriggers(rule.date,rule.time,rule.location,rule.activity,rule.battery);
-        if (arrayList!=null && arrayList.size()>0) {
-            onMatchFound();
-        }
-    }
-
-    public void onMatchFound() {
-
-            for (int i=0;i<arrayList.size();i++){
-
-                Rules current = arrayList.get(i);
-
-                if (current.airplaneMode!=-1)
-                    toggleAirplaneMode(current.airplaneMode);
-                if (current.music!=-1)
-                    toggleAirplaneMode(current.music);
-                if (current.mobileData!=-1)
-                    toggleAirplaneMode(current.mobileData);
-                if (current.wifi!=-1)
-                    toggleAirplaneMode(current.wifi);
-                if (current.silent!=-1)
-                    toggleAirplaneMode(current.silent);
-
-                if (!current.alarm.equalsIgnoreCase("DEFAULT"))
-                    startAlarm(current.alarm);
-                if (!current.notification.equalsIgnoreCase("DEFAULT"))
-                    startAlarm(current.notification);
-                if (!current.phonecall.equalsIgnoreCase("DEFAULT"))
-                    startAlarm(current.phonecall);
-
-
-            }
 
     }
 
-    public void getLocation() {
-        //return location;
-    }
 
-    private void getDate() {
+    public void onMatchFound(Rules current) {
 
-        Calendar c = Calendar.getInstance();
-        rule.date = String.valueOf(c.get(Calendar.DATE)) + "/" + String.valueOf(c.get(Calendar.MONTH))
-                + "/" + String.valueOf(c.get(Calendar.YEAR));
-    }
+        if (current.airplaneMode!=-1)
+            toggleAirplaneMode(current.airplaneMode);
+        if (current.music!=-1)
+            toggleAirplaneMode(current.music);
+        if (current.mobileData!=-1)
+            toggleAirplaneMode(current.mobileData);
+        if (current.wifi!=-1)
+            toggleAirplaneMode(current.wifi);
+        if (current.silent!=-1)
+            toggleAirplaneMode(current.silent);
 
-    public void getTime() {
+        if (!current.alarm.equalsIgnoreCase("DEFAULT"))
+            startAlarm(current.alarm);
+        if (!current.notification.equalsIgnoreCase("DEFAULT"))
+            startAlarm(current.notification);
+        if (!current.phonecall.equalsIgnoreCase("DEFAULT"))
+            startAlarm(current.phonecall);
 
-        Calendar c = Calendar.getInstance();
-        rule.time = String.valueOf(c.get(Calendar.HOUR)) + ":" + String.valueOf(c.get(Calendar.MINUTE));
-    }
-
-    public void getBatteryStatus() {
-
-        rule.battery = (int) this.battery;
-
-    }
-
-    public void getActivity() {
 
     }
 
@@ -168,9 +121,8 @@ public class MyService extends Service {
 
     public void startAlarm(String message) {
 
-        Intent intent = new Intent(this, AlarmActivity.class);
-        intent.putExtra("MESSAGE", message);
-        startActivity(intent);
+        Intent intent = new Intent(this,AlarmActivity.class);
+        //startActivityForResult(intent,0);
 
     }
 

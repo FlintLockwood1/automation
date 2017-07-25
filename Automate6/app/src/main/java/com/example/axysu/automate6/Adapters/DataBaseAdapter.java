@@ -24,6 +24,10 @@ public class DataBaseAdapter {
     MyDbHelper helper;
     private  static String TAG ="DataBaseAdapter";
 
+    public DataBaseAdapter(){
+
+    }
+
 
     public  DataBaseAdapter(Context context) {
 
@@ -94,6 +98,7 @@ public class DataBaseAdapter {
         String[] whereClause = {String.valueOf(id)};
         return db.update("RULE",generateAndPopulateContentValues(newrules),MyDbHelper.MUID + " =?",whereClause);
     }
+
 
     public int delete(int id){
 
