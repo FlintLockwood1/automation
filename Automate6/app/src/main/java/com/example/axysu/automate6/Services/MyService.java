@@ -84,6 +84,9 @@ public class MyService extends Service {
     }
 
     private boolean matchLocation(String location) {
+
+        if (location == "DEFAULT")
+            return true;
         //LatLng latlng = getLocation();
         LatLng latlng = new LatLng(1,1);
         String asd[] = location.split(",");
@@ -94,16 +97,23 @@ public class MyService extends Service {
     }
 
     private boolean matchBattery(int battery) {
+
+        if (battery == -10)
+            return true;
         return (battery==this.battery);
     }
 
-
     private boolean matchActivity(String activity) {
 
+        if (activity == "DEFAULT")
+            return true;
         return (activity.contains(getActivity()));
     }
 
     private boolean matchTime(String time) {
+
+        if (time == "DEFAULT")
+            return true;
         Calendar c = Calendar.getInstance();
         int currhr = c.get(Calendar.HOUR);
         int currmin = c.get(Calendar.MINUTE);
@@ -117,6 +127,8 @@ public class MyService extends Service {
 
     public boolean matchDate(String date){
 
+        if (date == "DEFAULT")
+            return true;
         Calendar c = Calendar.getInstance();
         int currday = c.get(Calendar.DATE);
         int currmonth = c.get(Calendar.MONTH)+1;
