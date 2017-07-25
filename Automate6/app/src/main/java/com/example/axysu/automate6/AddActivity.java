@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.Fragments.EventFragment;
 import com.example.axysu.automate6.Fragments.SaveDialogueFragment;
-import com.example.axysu.automate6.Fragments.SaveFragment;
 import com.example.axysu.automate6.Fragments.TriggerFragment;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.Objects.Rules;
@@ -89,8 +88,11 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 if(fragmentManager.findFragmentByTag("EventFragment")==null )
                 {
-                    transaction.remove(fragmentManager.findFragmentByTag("TriggerFragment"));
+                    Log.v(TAG,"id :" +id);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id",id);
                     eventFragment.setArguments(bundle);
+                    transaction.remove(fragmentManager.findFragmentByTag("TriggerFragment"));
                     transaction.add(R.id.addActivityRootLayout, eventFragment, "EventFragment");
                     transaction.addToBackStack("forEvent");
                 }

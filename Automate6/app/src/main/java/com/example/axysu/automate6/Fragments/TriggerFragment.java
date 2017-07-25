@@ -10,12 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.axysu.automate6.Adapters.DataBaseAdapter;
+import com.example.axysu.automate6.Interfaces.CancelClicked;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
@@ -24,12 +27,16 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TriggerFragment extends Fragment implements AdapterView.OnItemClickListener,CustomDialogInterface{
+public class TriggerFragment extends Fragment implements AdapterView.OnItemClickListener,CustomDialogInterface,CancelClicked{
 
 
     ListView listView;
@@ -41,6 +48,8 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
     int battery;
     Rules rules;
     private static String TAG ="TriggerFragment";
+    private Context mContext;
+    TriggerAdapter triggerAdapter;
 
 
     public TriggerFragment() {
@@ -62,14 +71,19 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mContext =context;
     }
+
+    ArrayList triggerList;
 
     private void initializeAndhandleListView() {
 
         listView = (ListView) layout.findViewById(R.id.listView);
-        ArrayAdapter <String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,triggers);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
+        triggerList=new ArrayList<String>(Arrays.asList(triggers));
+        triggerAdapter = new TriggerAdapter(triggerList);
+//        ArrayAdapter <String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,triggers);
+        listView.setAdapter(triggerAdapter);
+//        listView.setOnItemClickListener(this);
     }
 
     private void initializeTriggerValue() {
@@ -230,6 +244,128 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
                 Log.v("TriggerFragment","latLong" + latLong);
                 ((CustomDialogInterface) getActivity()).okButtonClicked(latLong,"LOCATION");
             }
+        }
+    }
+
+    @Override
+    public void toggleCheckState(String fromFrag) {
+        Log.v(TAG,"index" + triggerList.indexOf(fromFrag));
+        View view=listView.getChildAt(triggerList.indexOf(fromFrag));
+        CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkbox);
+        checkBox.setChecked(false);
+
+    }
+
+    public class TriggerAdapter extends BaseAdapter{
+
+        private LayoutInflater inflater = null;
+
+        List<String> mList;
+
+        public TriggerAdapter(List<String> trigger) {
+            inflater = ( LayoutInflater )mContext.
+                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mList = trigger;
+        }
+
+        @Override
+        public int getCount() {
+            return mList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            if (convertView == null){
+                convertView = inflater.inflate(R.layout.triggerlayout, null);
+            }
+
+            final TextView triggerName =(TextView) convertView.findViewById(R.id.triggerName);
+                triggerName.setText(mList.get(position));
+
+            final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
+
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        textViewClicked(triggerName.getText().toString());
+                    } else {
+                        ((CustomDialogInterface) getActivity()).okButtonClicked("-1",mList.get(position));
+                    }
+                }
+            });
+
+
+//            triggerName.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    textViewClicked(triggerName.getText().toString());
+//                }
+//            });
+            return convertView;
+        }
+    }
+
+
+    public void textViewClicked(String text) {
+        {
+            Bundle bundle;
+            switch (text) {
+                case "BATTERY":
+                    TriggerBatteryDialogueFragment activityAlert1 = new TriggerBatteryDialogueFragment();
+                    bundle = new Bundle();
+                    bundle.putInt("battery", rules.battery);
+                    activityAlert1.setArguments(bundle);
+                    activityAlert1.setTargetFragment(this, 0);
+                    activityAlert1.setCancelable(false);
+                    activityAlert1.show(getActivity().getSupportFragmentManager(), "BatteryAlert");
+                    break;
+                case "TIME":
+                    TriggerTImeDialogueFragment activityAlert2 = new TriggerTImeDialogueFragment();
+                    bundle = new Bundle();
+                    bundle.putString("time", rules.time);
+                    activityAlert2.setArguments(bundle);
+                    activityAlert2.setCancelable(false);
+                    activityAlert2.setTargetFragment(this, 1);
+                    activityAlert2.show(getActivity().getSupportFragmentManager(), "TimeAlert");
+                    break;
+                case "LOCATION":
+//                Intent intent =  new Intent(getActivity(), MapsActivity.class);
+//                startActivity(intent);
+                    addLocation();
+                    break;
+                case "ACTIVITY":
+                    TriggerActivityDialogueFragment activityAlert4 = new TriggerActivityDialogueFragment();
+                    bundle = new Bundle();
+                    bundle.putString("activity", rules.activity);
+                    activityAlert4.setArguments(bundle);
+                    activityAlert4.setTargetFragment(this, 3);
+                    activityAlert4.setCancelable(false);
+                    activityAlert4.show(getActivity().getSupportFragmentManager(), "ActivityAlert");
+                    break;
+                case "DATE":
+                    TriggerDateDialogueFragment activityAlert5 = new TriggerDateDialogueFragment();
+                    bundle = new Bundle();
+                    bundle.putString("date", rules.date);
+                    activityAlert5.setArguments(bundle);
+                    activityAlert5.setTargetFragment(this, 4);
+                    activityAlert5.setCancelable(false);
+                    activityAlert5.show(getActivity().getSupportFragmentManager(), "DateAlert");
+                    break;
+                default:
+                    Toast.makeText(getActivity(), "Click Something", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 }

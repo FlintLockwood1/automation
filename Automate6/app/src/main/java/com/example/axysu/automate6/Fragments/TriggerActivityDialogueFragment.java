@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.widget.Toast;
 
+import com.example.axysu.automate6.Interfaces.CancelClicked;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
-
-import java.util.ArrayList;
 
 /**
  * Created by axysu on 7/12/2017.
@@ -58,7 +56,12 @@ public class TriggerActivityDialogueFragment extends DialogFragment {
 
                     }
                 })
-                .setNegativeButton("Cancel",null)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((CancelClicked) getTargetFragment()).toggleCheckState("ACTIVITY");
+                    }
+                })
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

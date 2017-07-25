@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.axysu.automate6.Interfaces.CancelClicked;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.R;
 
@@ -32,7 +33,12 @@ public class EventPhoneCallDialogueFragment extends DialogFragment {
                 .equalsIgnoreCase("DEFAULT"))?"TYPE THE NUMBER TO BE CALLED":getArguments().getString("phonecall"));
         return new AlertDialog.Builder(getActivity()).setTitle("CALL SM1!")
                 .setView(view)
-                .setNegativeButton("Cancel",null)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((CancelClicked) getTargetFragment()).toggleCheckState("PHONECALL");
+                    }
+                })
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

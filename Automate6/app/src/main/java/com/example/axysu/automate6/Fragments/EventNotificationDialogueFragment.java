@@ -9,8 +9,8 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
+import com.example.axysu.automate6.Interfaces.CancelClicked;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.R;
 
@@ -33,7 +33,12 @@ public class EventNotificationDialogueFragment extends DialogFragment {
                 .equalsIgnoreCase("DEFAULT"))?"TYPE THE MESSAGE":getArguments().getString("notification"));
         return new AlertDialog.Builder(getActivity()).setTitle("NOTIFICATION")
                 .setView(view)
-                .setNegativeButton("Cancel",null)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((CancelClicked) getTargetFragment()).toggleCheckState("NOTIFICATION");
+                    }
+                })
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
