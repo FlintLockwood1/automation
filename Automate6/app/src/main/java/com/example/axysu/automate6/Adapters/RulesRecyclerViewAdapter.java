@@ -3,9 +3,6 @@ package com.example.axysu.automate6.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,14 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.axysu.automate6.AddActivity;
-import com.example.axysu.automate6.Fragments.ChangeStateDialogueFragment;
 import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
-import com.example.axysu.automate6.MainActivity;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
-
-import org.w3c.dom.Text;
 
 import java.util.Collections;
 import java.util.List;
@@ -80,6 +73,11 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         holder.silent.setText("SILENT IS "+current.silent);
         holder.airplanemode.setText("AIRPLANEMODE IS "+current.airplaneMode);
         holder.aSwitch.setChecked(true);
+
+        holder.details.setVisibility(View.GONE);
+        holder.showdetails.setVisibility(View.VISIBLE);
+        holder.hidedetails.setVisibility(View.GONE);
+        holder.operations.setVisibility(View.GONE);
 
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override

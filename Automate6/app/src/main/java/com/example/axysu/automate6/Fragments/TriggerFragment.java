@@ -90,7 +90,7 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
 
         rules.id = getArguments().getInt("id");
         if (rules.id==-1){
-            rules.battery = -10;
+            rules.battery = -1;
             rules.mobileData = -1;
             rules.airplaneMode = -1;
             rules.notification = "DEFAULT";
@@ -293,6 +293,7 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
                 triggerName.setText(mList.get(position));
 
             final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
+
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

@@ -2,6 +2,7 @@ package com.example.axysu.automate6.Services;
 
 import android.Manifest;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,7 +17,10 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.AlarmActivity;
@@ -24,6 +28,10 @@ import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.ActivityRecognition;
+import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -40,7 +48,7 @@ import java.util.concurrent.TimeUnit;
  * Created by axysu on 7/17/2017.
  */
 
-public class MyService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MyService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status> {
 
     private float sysytemCurrentBattery;
     private Rules rule;
@@ -50,6 +58,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     LocationRequest locationRequest;
     LatLng systemCurrentLatLng;
     FusedLocationProviderApi locationProviderApi = LocationServices.FusedLocationApi;
+    private static String TAG="MyService";
 
     @Nullable
     @Override
@@ -60,6 +69,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.v(TAG,"onCreate");
         this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         dataBaseAdapter = new DataBaseAdapter(this);
         systemCurrentLatLng = new LatLng(0,0);
@@ -67,6 +77,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
+                .addApi(ActivityRecognition.API)
                 .build();
 
         locationRequest = new LocationRequest();
@@ -77,11 +88,14 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         if (googleApiClient.isConnected()){
             requestLocationUpdates();
         }
+        LocalBroadcastManager.getInstance(this).registerReceiver(checkMotion, new IntentFilter("ACTIVITY_UPDATE"));
+
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        Log.v(TAG,"onStart");
+        googleApiClient.connect();
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -92,7 +106,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             }
         }, 10, 60, TimeUnit.SECONDS);
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     private void checkForMatch(ArrayList<Rules> arrayList) {
@@ -273,8 +287,9 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+        Log.v(TAG,"onConnected");
         requestLocationUpdates();
+        requestActivityUpdatesButtonHandler();
     }
 
     private void requestLocationUpdates() {
@@ -293,18 +308,83 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        googleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.v(TAG,"onConnectionFailed");
     }
 
     @Override
     public void onLocationChanged(Location location) {
 
         systemCurrentLatLng = new LatLng(location.getLatitude(),location.getLongitude());
+
+    }
+
+    public void requestActivityUpdatesButtonHandler() {
+        if (!googleApiClient.isConnected()) {
+            Toast.makeText(this, "GoogleApiClient not yet connected. Try again.",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(
+                googleApiClient,
+                0,
+                getActivityDetectionPendingIntent()
+        ).setResultCallback(this);
+    }
+
+    private PendingIntent getActivityDetectionPendingIntent() {
+        Intent intent = new Intent(this, SpeedService.class);
+
+        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
+        // requestActivityUpdates() and removeActivityUpdates().
+        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    @Override
+    public void onResult(@NonNull Status status) {
+
+    }
+
+    private BroadcastReceiver checkMotion = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+                Log.v(TAG,"inside");
+                String activity_type = getType(Integer.parseInt(intent.getStringExtra("activity")));
+                int confidence = Integer.parseInt(intent.getStringExtra("percentage"));
+
+            Log.v(TAG,activity_type);
+            Log.v(TAG,""+confidence);
+
+
+        }
+    };
+
+    String getType(int type) {
+        switch (type) {
+            case DetectedActivity.STILL:
+                return "STILL";
+            case DetectedActivity.IN_VEHICLE:
+                return "IN_VEHICLE";
+            case DetectedActivity.ON_BICYCLE:
+                return "ON_BICYCLE";
+            case DetectedActivity.ON_FOOT:
+                return "ON_FOOT";
+            case DetectedActivity.RUNNING:
+                return "RUNNING";
+            case DetectedActivity.TILTING:
+                return "TILTING";
+            case DetectedActivity.UNKNOWN:
+                return "UNKNOWN";
+            case DetectedActivity.WALKING:
+                return "WALKING";
+
+
+        }
+        return "";
 
     }
 }

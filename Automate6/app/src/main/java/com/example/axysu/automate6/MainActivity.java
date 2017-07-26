@@ -1,37 +1,28 @@
 package com.example.axysu.automate6;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.Adapters.RulesActivityPagerAdapter;
-import com.example.axysu.automate6.Adapters.RulesRecyclerViewAdapter;
-import com.example.axysu.automate6.BroadcastReceivers.MyReceiver;
-import com.example.axysu.automate6.Fragments.ChangeStateDialogueFragment;
 import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
-import com.example.axysu.automate6.Objects.Rules;
+import com.example.axysu.automate6.Services.MyService;
 
 import java.util.ArrayList;
 
@@ -66,6 +57,7 @@ public class MainActivity extends AppCompatActivity
                 FetchDataForRulesLists.inactivedata.add(FetchDataForRulesLists.data.get(i));
         }
 
+        startService();
     }
 
     private void setAnimation() {
@@ -210,6 +202,12 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+    public void startService(){
+            final Intent intent = new Intent(MainActivity.this, MyService.class);
+            startService(intent);
+
+    }
+
 }
 
 

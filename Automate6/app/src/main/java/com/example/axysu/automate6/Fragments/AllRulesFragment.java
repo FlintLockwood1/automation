@@ -6,18 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.axysu.automate6.Adapters.RulesRecyclerViewAdapter;
-import com.example.axysu.automate6.BroadcastReceivers.MyReceiver;
 import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.Objects.Rules;
@@ -55,7 +52,7 @@ public class AllRulesFragment extends Fragment implements CustomDialogInterface{
         myAdapter = new RulesRecyclerViewAdapter(getActivity(), arrayList,this);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        final BroadcastReceiver myReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 //                Toast.makeText(context, "hahahaahhaha", Toast.LENGTH_SHORT).show();
