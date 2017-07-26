@@ -18,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.axysu.automate6.AddActivity;
+import com.example.axysu.automate6.Fragments.ChangeStateDialogueFragment;
+import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
+import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.MainActivity;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
@@ -37,12 +40,15 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
     public LayoutInflater layoutInflater;
     List<Rules> data = Collections.emptyList();
     Context context;
+    CustomDialogInterface inter;
+    MyViewHolder changeholder;
 
-    public RulesRecyclerViewAdapter(Context context,List<Rules> data){
+    public RulesRecyclerViewAdapter(Context context,List<Rules> data,CustomDialogInterface refrence){
 
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.data = data;
+        inter = refrence;
     }
 
     @Override
@@ -79,7 +85,36 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             @Override
             public void onClick(View v) {
                 new DataBaseAdapter(context).delete(current.id);
-                //notifyItemRemoved(position);
+                Intent intent = new Intent();
+                for (int i =0;i<FetchDataForRulesLists.data.size();i++){
+                    if (FetchDataForRulesLists.data.get(i).id == current.id)
+                    {
+                        FetchDataForRulesLists.data.remove(i);
+                        intent.putExtra("all",i);
+                        break;
+                    }
+                }
+                for (int i =0;i<FetchDataForRulesLists.activedata.size();i++){
+                    if (FetchDataForRulesLists.activedata.get(i).id == current.id)
+                    {
+                        FetchDataForRulesLists.activedata.remove(i);
+                        intent.putExtra("active",i);
+                        break;
+                    }
+                }
+                for (int i =0;i<FetchDataForRulesLists.inactivedata.size();i++){
+                    if (FetchDataForRulesLists.inactivedata.get(i).id == current.id)
+                    {
+                        FetchDataForRulesLists.inactivedata.remove(i);
+                        intent.putExtra("inactive",i);
+                        break;
+                    }
+                }
+
+                intent.setAction("com.journaldev.CUSTOM_INTENT");
+                context.sendBroadcast(intent);
+
+               // inter.okButtonClicked(String.valueOf(position),"remove");
             }
         });
         holder.showdetails.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +156,14 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             @Override
             public void onClick(View v) {
 
+                changeholder = holder;
+
+                if (holder.aSwitch.isChecked())
+                    inter.okButtonClicked("1","recyclerViewAdapter");
+                else
+                    inter.okButtonClicked("0","recyclerViewAdapter");
+
+
             }
         });
 
@@ -130,6 +173,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
     public int getItemCount() {
         return data.size();
     }
+
 
 
     class MyViewHolder extends RecyclerView.ViewHolder{
@@ -185,5 +229,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
 
         }
     }
+
+
 
 }

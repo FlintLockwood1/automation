@@ -14,28 +14,28 @@ import java.util.List;
  */
 
 public class FetchDataForRulesLists {
-    private static ArrayList<Rules> data = new ArrayList<>();
-
-
-    public static ArrayList<Rules> getData(Context context,String filter){
-
-        DataBaseAdapter dataBaseAdapter = new DataBaseAdapter(context);
-        data= dataBaseAdapter.getAllData();
-        ArrayList<Rules> temparrayList = new ArrayList();
-
-        for (int i=0;i<data.size();i++){
-
-            Rules current = data.get(i);
-            if (current.state.equalsIgnoreCase(filter) || filter.equalsIgnoreCase("all")){
-
-                if (current.name == null)
-                    current.name = "RULE" ;
-                current.icon_id = R.drawable.ic_menu_manage;
-                temparrayList.add(current);
-
-            }
-        }
-        return temparrayList;
-    }
+    public static ArrayList<Rules> data = new ArrayList<>();
+    public static ArrayList<Rules> activedata = new ArrayList<>();
+    public static ArrayList<Rules> inactivedata = new ArrayList<>();
+//
+//    public static ArrayList<Rules> getData(Context context,String filter){
+//
+//
+//        ArrayList<Rules> temparrayList = new ArrayList();
+//
+//        for (int i=0;i<data.size();i++){
+//
+//            Rules current = data.get(i);
+//            if (current.state.equalsIgnoreCase(filter) || filter.equalsIgnoreCase("all")){
+//
+//                if (current.name == null)
+//                    current.name = "RULE" ;
+//                current.icon_id = R.drawable.ic_menu_manage;
+//                temparrayList.add(current);
+//
+//            }
+//        }
+//        return temparrayList;
+//    }
 
 }

@@ -1,11 +1,15 @@
 package com.example.axysu.automate6;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
@@ -20,12 +24,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.Adapters.RulesActivityPagerAdapter;
 import com.example.axysu.automate6.Adapters.RulesRecyclerViewAdapter;
+import com.example.axysu.automate6.BroadcastReceivers.MyReceiver;
+import com.example.axysu.automate6.Fragments.ChangeStateDialogueFragment;
+import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
+import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.Objects.Rules;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener,CustomDialogInterface{
 
     Toolbar toolbar;
     DrawerLayout drawer;
@@ -43,6 +54,18 @@ public class MainActivity extends AppCompatActivity
         handleFAB();
         handleDrawer();
         handlePager();
+        DataBaseAdapter dataBaseAdapter = new DataBaseAdapter(this);
+        FetchDataForRulesLists.data= dataBaseAdapter.getAllData();
+        FetchDataForRulesLists.activedata = new ArrayList<>();
+        FetchDataForRulesLists.inactivedata = new ArrayList<>();
+        for (int i=0;i<FetchDataForRulesLists.data.size();i++){
+
+            if (FetchDataForRulesLists.data.get(i).state.equalsIgnoreCase("Active"))
+                FetchDataForRulesLists.activedata.add(FetchDataForRulesLists.data.get(i));
+            else
+                FetchDataForRulesLists.inactivedata.add(FetchDataForRulesLists.data.get(i));
+        }
+
     }
 
     private void setAnimation() {
@@ -180,6 +203,13 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent,compat.toBundle());
     }
 
+    @Override
+    public void okButtonClicked(String value, String whichFragment) {
+
+
+
+
+    }
 }
 
 
