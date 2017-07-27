@@ -59,6 +59,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     LatLng systemCurrentLatLng;
     FusedLocationProviderApi locationProviderApi = LocationServices.FusedLocationApi;
     private static String TAG="MyService";
+    private String activity_type;
 
     @Nullable
     @Override
@@ -146,7 +147,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     private boolean matchBattery(int battery) {
 
-        if (battery == -10)
+        if (battery == -1)
             return true;
         return (battery == this.sysytemCurrentBattery);
     }
@@ -277,6 +278,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         public void onReceive(Context context, Intent intent) {
 
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+            Log.v(TAG,level+"");
             sysytemCurrentBattery = level;
 
         }
@@ -285,7 +287,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     private String getActivity() {
 
-        return "walking";
+        return activity_type;
     }
 
     private LatLng getLocation() {
@@ -367,7 +369,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         @Override
         public void onReceive(Context context, Intent intent) {
                // Log.v(TAG,"inside");
-                String activity_type = getType(Integer.parseInt(intent.getStringExtra("activity")));
+                activity_type = getType(Integer.parseInt(intent.getStringExtra("activity")));
                 int confidence = Integer.parseInt(intent.getStringExtra("percentage"));
 
            // Log.v(TAG,activity_type);
@@ -380,21 +382,21 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     String getType(int type) {
         switch (type) {
             case DetectedActivity.STILL:
-                return "STILL";
+                return "Idle";
             case DetectedActivity.IN_VEHICLE:
-                return "IN_VEHICLE";
+                return "Driving";
             case DetectedActivity.ON_BICYCLE:
-                return "ON_BICYCLE";
+                return "Driving";
             case DetectedActivity.ON_FOOT:
-                return "ON_FOOT";
+                return "Walking";
             case DetectedActivity.RUNNING:
-                return "RUNNING";
+                return "Running";
             case DetectedActivity.TILTING:
-                return "TILTING";
+                return "Tilting";
             case DetectedActivity.UNKNOWN:
-                return "UNKNOWN";
+                return "Unknown";
             case DetectedActivity.WALKING:
-                return "WALKING";
+                return "Walking";
 
 
         }

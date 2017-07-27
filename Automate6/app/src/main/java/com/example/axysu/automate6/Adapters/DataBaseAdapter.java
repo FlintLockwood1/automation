@@ -68,22 +68,6 @@ public class DataBaseAdapter {
 
     }
 
-    public ArrayList<Rules> getDataByTriggers (String date,String time,String location,String activity,int battery){
-
-        SQLiteDatabase db = helper.getWritableDatabase();
-        String selectionArgs [] = {date,time,location,activity,String.valueOf(battery)};
-
-        String columns[] = {MyDbHelper.MUID,MyDbHelper.MTIME,MyDbHelper.MDATE,MyDbHelper.MACTIVITY
-                ,MyDbHelper.MLOCATION,MyDbHelper.MBATTERY,MyDbHelper.MNAME,MyDbHelper.AIRPLANEMODE,MyDbHelper.WIFI
-                ,MyDbHelper.MOBILEDATA,MyDbHelper.SILENT,MyDbHelper.ALARM,MyDbHelper.NOTIFICATION,MyDbHelper.PHONECALL
-                ,MyDbHelper.MUSIC};
-
-        Cursor cursor = db.query("RULE",columns,
-                MyDbHelper.MDATE + " =? AND" + MyDbHelper.MTIME + " =? AND"
-                + MyDbHelper.MLOCATION + " =? AND" + MyDbHelper.MACTIVITY + " = ? AND" + MyDbHelper.MBATTERY + " =? "
-                ,selectionArgs,null,null,null);
-        return handleCursor(cursor);
-    }
 
     public int updateTable(int id,Rules newrules){
 
