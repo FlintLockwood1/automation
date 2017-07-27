@@ -55,11 +55,7 @@ public class AllRulesFragment extends Fragment implements CustomDialogInterface{
         final BroadcastReceiver myReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-//                Toast.makeText(context, "hahahaahhaha", Toast.LENGTH_SHORT).show();
-//                Log.d("aaaaaaaaaaaaaaaaaaaa", String.valueOf(intent.getIntExtra("all",-1)));
-//                count++;
-//                Log.d("eeeeeeeeeeeeee", String.valueOf(count));
-               // int index = intent.getIntExtra("all",-1);
+//
                 arrayList=FetchDataForRulesLists.data;;
                 myAdapter.notifyDataSetChanged();
             }
@@ -79,11 +75,15 @@ public class AllRulesFragment extends Fragment implements CustomDialogInterface{
             Bundle bundle = new Bundle();
             bundle.putString("value", value);
             changeStateDialogueFragment.setArguments(bundle);
+            changeStateDialogueFragment.setTargetFragment(this,0);
             changeStateDialogueFragment.show(getActivity().getSupportFragmentManager(), "changeState");
-            Toast.makeText(getActivity(), value, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), value, Toast.LENGTH_SHORT).show();
         }
 
-        if (whichFragment == "remove"){
+        if (whichFragment == "CHANGESTATE"){
+
+           // Toast.makeText(getActivity(), "received on fragment", Toast.LENGTH_SHORT).show();
+            //((CustomDialogInterface)getActivity()).okButtonClicked(value,whichFragment);
             //arrayList.remove(Integer.parseInt(value));
             //Toast.makeText(getActivity(), "allremove", Toast.LENGTH_SHORT).show();
            // myAdapter = new RulesRecyclerViewAdapter(getActivity(),arrayList,this);

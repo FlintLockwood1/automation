@@ -30,6 +30,7 @@ import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.Adapters.RulesActivityPagerAdapter;
 import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
+import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.Services.MyService;
 
 import java.util.ArrayList;
@@ -213,9 +214,8 @@ public class MainActivity extends AppCompatActivity
     public void okButtonClicked(String value, String whichFragment) {
 
 
-
-
     }
+
     public void startService(){
             final Intent intent = new Intent(MainActivity.this, MyService.class);
             startService(intent);

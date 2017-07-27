@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
 
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 
@@ -20,16 +21,18 @@ public class ChangeStateDialogueFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 
+        final String ad[] = getArguments().getString("value").split(":");
+       // Toast.makeText(getActivity(), getArguments().getString("value"), Toast.LENGTH_SHORT).show();
 
         return new AlertDialog.Builder(getActivity()).setTitle("SILENT")
-                .setTitle(getArguments().getString("value")=="1"?"TURN ACTIVE":"TURN INACTIVE")
+                .setTitle(ad[1].equalsIgnoreCase("true")?"TURN ACTIVE":"TURN INACTIVE")
                 .setNegativeButton("NO",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
 
-                        ((CustomDialogInterface)getActivity()).okButtonClicked("no","changeFragment");
-
+                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(ad[0]+":no","CHANGESTATE");
+                       // Toast.makeText(getActivity(), ad[0]+":no", Toast.LENGTH_SHORT).show();
                         dismiss();
 
                     }
@@ -38,8 +41,8 @@ public class ChangeStateDialogueFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        ((CustomDialogInterface)getActivity()).okButtonClicked("yes","changeFragment");
-
+                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(ad[1]+":yes","CHANGESTATE");
+                       // Toast.makeText(getActivity(), ad[0]+":yes", Toast.LENGTH_SHORT).show();
                         dismiss();
 
                     }

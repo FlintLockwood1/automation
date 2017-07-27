@@ -15,6 +15,7 @@ import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.Fragments.EventFragment;
 import com.example.axysu.automate6.Fragments.SaveDialogueFragment;
 import com.example.axysu.automate6.Fragments.TriggerFragment;
+import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.Objects.Rules;
 
@@ -259,6 +260,7 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
                 Toast.makeText(this,rules.phonecall+"", Toast.LENGTH_SHORT).show();
                 break;
             }
+
             case "SAVE":
             {
                 if (value.equalsIgnoreCase("nameyourrule")) {

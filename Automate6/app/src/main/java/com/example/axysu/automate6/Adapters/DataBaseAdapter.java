@@ -93,6 +93,7 @@ public class DataBaseAdapter {
     }
 
 
+
     public int delete(int id){
 
         SQLiteDatabase db = helper.getWritableDatabase();

@@ -46,14 +46,14 @@ public class ActiveRulesFragment extends Fragment implements CustomDialogInterfa
         // Inflate the layout for this fragment
         layout = inflater.inflate(R.layout.fragment_active_rules, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recyclerview);
-       // arrayList = getData(getActivity(),"Active");
-        myAdapter = new RulesRecyclerViewAdapter(getActivity(), FetchDataForRulesLists.activedata,this);
+        arrayList = FetchDataForRulesLists.activedata;
+        myAdapter = new RulesRecyclerViewAdapter(getActivity(), arrayList,this);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         BroadcastReceiver myReceiver1 = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Toast.makeText(context, "hidimba", Toast.LENGTH_SHORT).show();
+                arrayList = FetchDataForRulesLists.activedata;
                 myAdapter.notifyDataSetChanged();
             }
         };

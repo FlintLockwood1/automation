@@ -47,14 +47,14 @@ public class InactiveRulesFragment extends Fragment implements CustomDialogInter
         // Inflate the layout for this fragment
         layout = inflater.inflate(R.layout.fragment_inactive_rules, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recyclerview);
-        //arrayList = getData(getActivity(),"Inactive");
-        myAdapter = new RulesRecyclerViewAdapter(getActivity(), FetchDataForRulesLists.inactivedata,this);
+        arrayList = FetchDataForRulesLists.inactivedata;;
+        myAdapter = new RulesRecyclerViewAdapter(getActivity(), arrayList,this);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         BroadcastReceiver myReceiver2 = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Toast.makeText(context, "ghatotkach", Toast.LENGTH_SHORT).show();
+                arrayList = FetchDataForRulesLists.inactivedata;
                 myAdapter.notifyDataSetChanged();
             }
         };

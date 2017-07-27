@@ -20,6 +20,7 @@ import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         holder.music.setText("MUSIC IS "+current.music);
         holder.silent.setText("SILENT IS "+current.silent);
         holder.airplanemode.setText("AIRPLANEMODE IS "+current.airplaneMode);
-        holder.aSwitch.setChecked(true);
+        holder.aSwitch.setChecked(current.state.equalsIgnoreCase("active"));
 
         holder.details.setVisibility(View.GONE);
         holder.showdetails.setVisibility(View.VISIBLE);
@@ -154,12 +155,28 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             @Override
             public void onClick(View v) {
 
-                changeholder = holder;
+                DataBaseAdapter adapter = new DataBaseAdapter(context);
+                current.state = (current.state.equalsIgnoreCase("active"))?"inactive":"active";
+                adapter.updateTable(current.id,current);
+                FetchDataForRulesLists.data= adapter.getAllData();
+                FetchDataForRulesLists.activedata = new ArrayList<>();
+                FetchDataForRulesLists.inactivedata = new ArrayList<>();
+                for (int i=0;i<FetchDataForRulesLists.data.size();i++){
 
-                if (holder.aSwitch.isChecked())
-                    inter.okButtonClicked("1","recyclerViewAdapter");
-                else
-                    inter.okButtonClicked("0","recyclerViewAdapter");
+                    if (FetchDataForRulesLists.data.get(i).state.equalsIgnoreCase("Active"))
+                        FetchDataForRulesLists.activedata.add(FetchDataForRulesLists.data.get(i));
+                    else
+                        FetchDataForRulesLists.inactivedata.add(FetchDataForRulesLists.data.get(i));
+                }
+
+                Intent intent = new Intent();
+                intent.setAction("com.journaldev.CUSTOM_INTENT");
+                context.sendBroadcast(intent);
+
+//                if (holder.aSwitch.isChecked())
+//                    inter.okButtonClicked(current.id+":true","recyclerViewAdapter");
+//                else
+//                    inter.okButtonClicked(current.id+":false","recyclerViewAdapter");
 
 
             }
