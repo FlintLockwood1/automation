@@ -33,7 +33,7 @@ public class TriggerTImeDialogueFragment extends DialogFragment {
         timePicker = (TimePicker) view.findViewById(R.id.timePicker);
 
         String time = getArguments().getString("time");
-        if (!Objects.equals(time, "DEFAULT"))
+        if (!Objects.equals(time, "-1"))
         {
             timePicker.setHour(Integer.parseInt(time.substring(0, 2)));
             timePicker.setMinute(Integer.parseInt(time.substring(3, 5)));

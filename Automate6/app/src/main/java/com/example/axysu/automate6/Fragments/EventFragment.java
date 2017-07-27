@@ -77,18 +77,18 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
         rules.id = getArguments().getInt("id");
         if (rules.id==-1){
             Log.v(TAG,"rule id:" +rules.id);
-            rules.battery = -10;
+            rules.battery = -1;
             rules.mobileData = -1;
             rules.airplaneMode = -1;
-            rules.notification = "DEFAULT";
-            rules.time = "DEFAULT";
-            rules.activity = "DEFAULT";
-            rules.alarm = "DEFAULT";
-            rules.date = "DEFAULT";
-            rules.location = "DEFAULT";
+            rules.notification = "-1";
+            rules.time = "-1";
+            rules.activity = "-1";
+            rules.alarm = "-1";
+            rules.date = "-1";
+            rules.location = "-1";
             rules.music = -1;
             rules.silent = -1;
-            rules.phonecall = "DEFAULT";
+            rules.phonecall = "-1";
             rules.wifi = -1;
         }
         else {
@@ -396,13 +396,13 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
                 ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             case "ALARM":
-                ((CustomDialogInterface) getActivity()).okButtonClicked("DEFAULT",text);
+                ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             case "NOTIFICATION":
-                ((CustomDialogInterface) getActivity()).okButtonClicked("DEFAULT",text);
+                ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             case "PHONECALL":
-                ((CustomDialogInterface) getActivity()).okButtonClicked("DEFAULT",text);
+                ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             case "MUSIC":
                 ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);

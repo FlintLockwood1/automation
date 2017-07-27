@@ -123,11 +123,11 @@ public class DataBaseAdapter {
     }
 
     public ArrayList<Rules> handleCursor(Cursor cursor){
-        Log.v(TAG,"outside cursor");
+        //Log.v(TAG,"outside cursor");
 
         ArrayList<Rules> arrayList = new ArrayList<>();
         while(cursor.moveToNext()){
-            Log.v(TAG,"inside cursor");
+            //Log.v(TAG,"inside cursor");
             Rules rules = new Rules();
             rules.id = cursor.getInt(cursor.getColumnIndex(MyDbHelper.MUID));
 

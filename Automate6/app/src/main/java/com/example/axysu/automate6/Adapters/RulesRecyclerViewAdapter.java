@@ -61,7 +61,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         holder.imageView.setImageResource(current.icon_id);
         holder.ruledate.setText("DATE IS "+current.date);
         holder.ruletime.setText("TIME IS "+current.time);
-        holder.rulelocation.setText("LOCATION IS DEFAULT");
+        holder.rulelocation.setText("LOCATION IS" +current.location);
         holder.rulebattery.setText("BATTERY Level = "+current.battery+" %");
         holder.ruleactivity.setText("ACTIVITY IS "+current.activity);
         holder.mobiledata.setText("MOBILEDATA IS "+current.mobileData);

@@ -30,7 +30,7 @@ public class EventPhoneCallDialogueFragment extends DialogFragment {
         editText = (EditText) view.findViewById(R.id.edittext);
         editText.setText((getArguments()
                 .getString("phonecall")
-                .equalsIgnoreCase("DEFAULT"))?"TYPE THE NUMBER TO BE CALLED":getArguments().getString("phonecall"));
+                .equalsIgnoreCase("-1"))?"TYPE THE NUMBER TO BE CALLED":getArguments().getString("phonecall"));
         return new AlertDialog.Builder(getActivity()).setTitle("CALL SM1!")
                 .setView(view)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

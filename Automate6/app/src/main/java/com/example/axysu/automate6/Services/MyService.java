@@ -81,11 +81,13 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 .build();
 
         locationRequest = new LocationRequest();
-        locationRequest.setInterval(60 * 1000)
-                .setFastestInterval(15 * 1000)
-                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        locationRequest.setInterval(0)
+                .setFastestInterval(0)
+                .setSmallestDisplacement(0)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (googleApiClient.isConnected()){
+            Log.v(TAG,"googleApiClient.isConnected()OnCreate");
             requestLocationUpdates();
         }
         LocalBroadcastManager.getInstance(this).registerReceiver(checkMotion, new IntentFilter("ACTIVITY_UPDATE"));
@@ -106,6 +108,13 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             }
         }, 10, 60, TimeUnit.SECONDS);
 
+        if (googleApiClient.isConnected()){
+            Log.v(TAG,"googleApiClient.isConnected()Onstart");
+            requestLocationUpdates();
+        }
+        else{
+            Log.v(TAG,"googleApiClient.isNotConnected()Onstart");
+        }
         return START_STICKY;
     }
 
@@ -124,10 +133,10 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     private boolean matchLocation(String location) {
 
-        if (location == "DEFAULT")
+        if (location == "-1")
             return true;
-        //LatLng latlng = getLocation();
-        LatLng latlng = new LatLng(1, 1);
+        LatLng latlng = getLocation();
+       // LatLng latlng = new LatLng(1, 1);
         String asd[] = location.split(",");
         LatLng temp = new LatLng(Double.parseDouble(asd[0]), Double.parseDouble(asd[1]));
         double distanceSquare = (latlng.latitude - temp.latitude) * (latlng.latitude - temp.latitude) +
@@ -144,14 +153,14 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     private boolean matchActivity(String activity) {
 
-        if (activity == "DEFAULT")
+        if (activity == "-1")
             return true;
         return (activity.contains(getActivity()));
     }
 
     private boolean matchTime(String time) {
 
-        if (time == "DEFAULT")
+        if (time == "-1")
             return true;
         Calendar c = Calendar.getInstance();
         int currhr = c.get(Calendar.HOUR);
@@ -166,7 +175,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     public boolean matchDate(String date) {
 
-        if (date == "DEFAULT")
+        if (date == "-1")
             return true;
         Calendar c = Calendar.getInstance();
         int currday = c.get(Calendar.DATE);
@@ -195,11 +204,11 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         if (current.silent != -1)
             toggleAirplaneMode(current.silent);
 
-        if (!current.alarm.equalsIgnoreCase("DEFAULT"))
+        if (!current.alarm.equalsIgnoreCase("-1"))
             startAlarm(current.alarm);
-        if (!current.notification.equalsIgnoreCase("DEFAULT"))
+        if (!current.notification.equalsIgnoreCase("-1"))
             startAlarm(current.notification);
-        if (!current.phonecall.equalsIgnoreCase("DEFAULT"))
+        if (!current.phonecall.equalsIgnoreCase("-1"))
             startAlarm(current.phonecall);
 
 
@@ -303,7 +312,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+        Log.v(TAG,"requestlocationupdates");
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient,locationRequest,this);
     }
 
     @Override
@@ -319,7 +329,11 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     @Override
     public void onLocationChanged(Location location) {
 
+        Log.v(TAG,"LOCATION CHANGED"+location.getLatitude()+","+location.getLongitude());
         systemCurrentLatLng = new LatLng(location.getLatitude(),location.getLongitude());
+//        Intent intent = new Intent();
+//        intent.setAction("com.akshaysuman.CUSTOM_INTENT");
+//        sendBroadcast(intent);
 
     }
 
@@ -352,12 +366,12 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     private BroadcastReceiver checkMotion = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-                Log.v(TAG,"inside");
+               // Log.v(TAG,"inside");
                 String activity_type = getType(Integer.parseInt(intent.getStringExtra("activity")));
                 int confidence = Integer.parseInt(intent.getStringExtra("percentage"));
 
-            Log.v(TAG,activity_type);
-            Log.v(TAG,""+confidence);
+           // Log.v(TAG,activity_type);
+           // Log.v(TAG,""+confidence);
 
 
         }

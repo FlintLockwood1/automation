@@ -30,7 +30,7 @@ public class EventNotificationDialogueFragment extends DialogFragment {
         editText  = (EditText) view.findViewById(R.id.edittext);
         editText.setText((getArguments()
                 .getString("notification")
-                .equalsIgnoreCase("DEFAULT"))?"TYPE THE MESSAGE":getArguments().getString("notification"));
+                .equalsIgnoreCase("-1"))?"TYPE THE MESSAGE":getArguments().getString("notification"));
         return new AlertDialog.Builder(getActivity()).setTitle("NOTIFICATION")
                 .setView(view)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

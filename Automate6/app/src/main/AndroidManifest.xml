@@ -62,7 +62,11 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".BroadcastReceivers.MyReceiver" />
+        <receiver android:name=".BroadcastReceivers.MyReceiver">
+            <intent-filter>
+                <action android:name="com.akshaysuman.CUSTOM_INTENT"/>
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".Services.SpeedService"

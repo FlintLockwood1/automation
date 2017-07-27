@@ -46,18 +46,18 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
     private void initializeTriggerValue() {
 
         if (id==-1){
-            rules.battery = -10;
+            rules.battery = -1;
             rules.mobileData = -1;
             rules.airplaneMode = -1;
-            rules.notification = "DEFAULT";
-            rules.time = "DEFAULT";
-            rules.activity = "DEFAULT";
-            rules.alarm = "DEFAULT";
-            rules.date = "DEFAULT";
-            rules.location = "DEFAULT";
+            rules.notification = "-1";
+            rules.time = "-1";
+            rules.activity = "-1";
+            rules.alarm = "-1";
+            rules.date = "-1";
+            rules.location = "-1";
             rules.music = -1;
             rules.silent = -1;
-            rules.phonecall = "DEFAULT";
+            rules.phonecall = "-1";
             rules.wifi = -1;
             rules.state="active";
         }
@@ -261,7 +261,7 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
             }
             case "SAVE":
             {
-                if (value.equals("nameyourrule")) {
+                if (value.equalsIgnoreCase("nameyourrule")) {
                     value="Rule";
                 }
                     rules.name=value;
