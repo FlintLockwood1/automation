@@ -1,19 +1,27 @@
 package com.example.axysu.automate6;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -25,6 +33,9 @@ import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.Services.MyService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,CustomDialogInterface{
@@ -35,6 +46,8 @@ public class MainActivity extends AppCompatActivity
     ViewPager viewPager;
     RulesActivityPagerAdapter myAdapter;
     Intent intent;
+    public static int REQUEST_ID_MULTIPLE_PERMISSIONS = 7;
+    private static String TAG ="MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +69,9 @@ public class MainActivity extends AppCompatActivity
             else
                 FetchDataForRulesLists.inactivedata.add(FetchDataForRulesLists.data.get(i));
         }
+        checkAndRequestPermissions();
 
-        startService();
+
     }
 
     private void setAnimation() {
@@ -206,6 +220,171 @@ public class MainActivity extends AppCompatActivity
             final Intent intent = new Intent(MainActivity.this, MyService.class);
             startService(intent);
 
+    }
+
+
+    private  boolean checkAndRequestPermissions() {
+        Log.v(TAG,"checkAndRequestPermissions");
+        int permissionSendMessage = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
+        int permissionReadMessage = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_SMS);
+        int permissionRecieveMessage = ContextCompat.checkSelfPermission(this,Manifest.permission.RECEIVE_SMS);
+        int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int permisionReadContacts = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+        int permisionWriteContacts = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS);
+        int permisionReadCallLog = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG);
+        int permisionWriteCallLog = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALL_LOG);
+        int permisionCallPhone = ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
+        int permisionPhoneState = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+
+
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        HashMap<String, Integer> permissionMap = new HashMap<>();
+        permissionMap.put(Manifest.permission.SEND_SMS, permissionSendMessage);
+        permissionMap.put(Manifest.permission.READ_SMS, permissionReadMessage);
+        permissionMap.put(Manifest.permission.RECEIVE_SMS,permissionRecieveMessage);
+        permissionMap.put(Manifest.permission.ACCESS_FINE_LOCATION,locationPermission);
+        permissionMap.put(Manifest.permission.READ_CONTACTS,permisionReadContacts);
+        permissionMap.put(Manifest.permission.WRITE_CONTACTS,permisionWriteContacts);
+        permissionMap.put(Manifest.permission.READ_CALL_LOG,permisionReadCallLog);
+        permissionMap.put(Manifest.permission.WRITE_CALL_LOG,permisionWriteCallLog);
+        permissionMap.put(Manifest.permission.CALL_PHONE,permisionCallPhone);
+        permissionMap.put(Manifest.permission.READ_PHONE_STATE,permisionPhoneState);
+
+
+        if (locationPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (permissionSendMessage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
+        }
+        if (permisionReadContacts != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+        }
+        if (permisionWriteContacts != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.WRITE_CONTACTS);
+        }
+        if (permisionReadCallLog != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_CALL_LOG);
+        }
+        if (permisionWriteCallLog != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.WRITE_CALL_LOG);
+        }
+        if (permisionCallPhone != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.CALL_PHONE);
+        }
+        if (permisionPhoneState != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if (permissionReadMessage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_SMS);
+        }
+        if (permissionRecieveMessage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.RECEIVE_SMS);
+        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        }else {
+            startService();
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_ID_MULTIPLE_PERMISSIONS){
+            Log.v(TAG,"mulitple request");
+
+            Map<String, Integer> perms = new HashMap<>();
+            // Initialize the map with both permissions
+            perms.put(Manifest.permission.SEND_SMS, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.RECEIVE_SMS, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.READ_SMS, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.READ_CALL_LOG, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.WRITE_CALL_LOG, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.CALL_PHONE, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.READ_PHONE_STATE, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.READ_CONTACTS, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.WRITE_CONTACTS, PackageManager.PERMISSION_GRANTED);
+            // Fill with actual results from user
+            if (grantResults.length > 0) {
+
+                for (int i = 0; i < permissions.length; i++){
+                    perms.put(permissions[i], grantResults[i]);
+                    Log.v(TAG,"permision "+permissions[i] +" = " + grantResults[i]);
+                }
+
+                // Check for both permissions
+                if (perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.WRITE_CALL_LOG) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED){
+
+                    Log.d(TAG, "all permission granted");
+                    startService();
+
+                    // process the normal flow
+                    //else any one or both the permissions are not granted
+                } else {
+                    Log.d(TAG, "Some permissions are not granted ask again ");
+                    //permission is denied (this is the first time, when "never ask again" is not checked) so ask again explaining the usage of permission
+//                        // shouldShowRequestPermissionRationale will return true
+                    //show the dialog or snackbar saying its necessary and try again otherwise proceed with setup.
+                    if ( ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                            ||ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CALL_LOG)
+                            ||ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_CALL_LOG)
+                            ||ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)
+                            ||ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)
+                            ||ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_SMS)
+                            ||ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CALL_PHONE)
+                            ||ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)
+                            || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)
+                            ||ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_CONTACTS)) {
+                        showDialogOK("Permission required for this app to work properly",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (which) {
+                                            case DialogInterface.BUTTON_POSITIVE:
+                                                checkAndRequestPermissions();
+                                                break;
+                                            case DialogInterface.BUTTON_NEGATIVE:
+                                                // proceed with logic by disabling the related features or quit the app.
+                                                break;
+                                        }
+                                    }
+                                });
+                    }
+                    //permission is denied (and never ask again is  checked)
+                    //shouldShowRequestPermissionRationale will return false
+                    else {
+                        Toast.makeText(this, "Go to settings and enable permissions", Toast.LENGTH_LONG)
+                                .show();
+                        //                            //proceed with logic by disabling the related features or quit the app.
+                    }
+                }
+            }
+        }
+    }
+
+    private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", okListener)
+                .create()
+                .show();
     }
 
 }
