@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.axysu.automate6.Adapters.RulesRecyclerViewAdapter;
 import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
@@ -35,6 +34,7 @@ public class AllRulesFragment extends Fragment implements CustomDialogInterface{
     public ArrayList<Rules> arrayList;
     public RulesRecyclerViewAdapter myAdapter;
     static int count  = 0;
+    private static String TAG= "AllRulesFragment";
 
 
     public AllRulesFragment() {
@@ -57,7 +57,7 @@ public class AllRulesFragment extends Fragment implements CustomDialogInterface{
             public void onReceive(Context context, Intent intent) {
 //
                 arrayList=FetchDataForRulesLists.data;;
-                myAdapter.notifyDataSetChanged();
+//                myAdapter.notifyDataSetChanged();
             }
         };
         IntentFilter filter = new IntentFilter("com.journaldev.CUSTOM_INTENT");

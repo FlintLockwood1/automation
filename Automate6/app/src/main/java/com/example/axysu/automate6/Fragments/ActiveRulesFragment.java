@@ -33,6 +33,7 @@ public class ActiveRulesFragment extends Fragment implements CustomDialogInterfa
     View layout;
     RulesRecyclerViewAdapter myAdapter;
     ArrayList<Rules> arrayList;
+    private static String TAG ="ActiveRulesFragment";
 
 
     public ActiveRulesFragment() {
@@ -54,7 +55,7 @@ public class ActiveRulesFragment extends Fragment implements CustomDialogInterfa
             @Override
             public void onReceive(Context context, Intent intent) {
                 arrayList = FetchDataForRulesLists.activedata;
-                myAdapter.notifyDataSetChanged();
+//                myAdapter.notifyDataSetChanged();
             }
         };
         IntentFilter filter = new IntentFilter("com.journaldev.CUSTOM_INTENT");

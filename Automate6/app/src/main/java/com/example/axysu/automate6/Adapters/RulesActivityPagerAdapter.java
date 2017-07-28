@@ -3,12 +3,10 @@ package com.example.axysu.automate6.Adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 
 import com.example.axysu.automate6.Fragments.ActiveRulesFragment;
 import com.example.axysu.automate6.Fragments.AllRulesFragment;
 import com.example.axysu.automate6.Fragments.InactiveRulesFragment;
-import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 
 /**
  * Created by axysu on 7/11/2017.
@@ -70,5 +68,10 @@ public class RulesActivityPagerAdapter extends FragmentStatePagerAdapter{
                 string = null;
         }
         return string;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 }

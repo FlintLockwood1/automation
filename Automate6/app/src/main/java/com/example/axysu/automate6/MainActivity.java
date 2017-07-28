@@ -1,8 +1,11 @@
 package com.example.axysu.automate6;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,7 +33,6 @@ import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.Adapters.RulesActivityPagerAdapter;
 import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
-import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.Services.MyService;
 
 import java.util.ArrayList;
@@ -72,8 +74,17 @@ public class MainActivity extends AppCompatActivity
         }
         checkAndRequestPermissions();
 
-
+        IntentFilter filter = new IntentFilter("com.journaldev.CUSTOM_INTENT");
+        registerReceiver(updateReceiver,filter);
     }
+
+    private BroadcastReceiver updateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.v(TAG,"notifyDataSetChanged");
+            myAdapter.notifyDataSetChanged();
+        }
+    };
 
     private void setAnimation() {
 

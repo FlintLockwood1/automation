@@ -20,7 +20,6 @@ import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,6 +35,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
     Context context;
     CustomDialogInterface inter;
     MyViewHolder changeholder;
+    private static String TAG= "RulesRecycler";
 
     public RulesRecyclerViewAdapter(Context context,List<Rules> data,CustomDialogInterface refrence){
 
@@ -113,6 +113,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                 intent.setAction("com.journaldev.CUSTOM_INTENT");
                 context.sendBroadcast(intent);
 
+
                // inter.okButtonClicked(String.valueOf(position),"remove");
             }
         });
@@ -159,14 +160,46 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                 current.state = (current.state.equalsIgnoreCase("active"))?"inactive":"active";
                 adapter.updateTable(current.id,current);
                 FetchDataForRulesLists.data= adapter.getAllData();
-                FetchDataForRulesLists.activedata = new ArrayList<>();
-                FetchDataForRulesLists.inactivedata = new ArrayList<>();
+//                FetchDataForRulesLists.activedata = new ArrayList<>();
+//                FetchDataForRulesLists.inactivedata = new ArrayList<>();
+
+                if(holder.aSwitch.isChecked()){
+
+                    Log.v(TAG,"ischecked");
+                    Log.v(TAG,"inactivedata:"+FetchDataForRulesLists.inactivedata.size());
+                    for (int i =0;i<FetchDataForRulesLists.inactivedata.size();i++){
+                        if (FetchDataForRulesLists.inactivedata.get(i).id == current.id)
+                        {
+                            Log.v(TAG,"adding"+ i);
+                            FetchDataForRulesLists.inactivedata.remove(i);
+                            break;
+                        }
+                    }
+
+                } else {
+                    Log.v(TAG,"UNchecked");
+                    Log.v(TAG,"activedata:"+FetchDataForRulesLists.activedata.size());
+                    for (int i =0;i<FetchDataForRulesLists.activedata.size();i++){
+                        if (FetchDataForRulesLists.activedata.get(i).id == current.id)
+                        {
+                            Log.v(TAG,"removing"+ i);
+                            FetchDataForRulesLists.activedata.remove(i);
+
+                            break;
+                        }
+                    }
+                }
+
                 for (int i=0;i<FetchDataForRulesLists.data.size();i++){
 
-                    if (FetchDataForRulesLists.data.get(i).state.equalsIgnoreCase("Active"))
-                        FetchDataForRulesLists.activedata.add(FetchDataForRulesLists.data.get(i));
-                    else
-                        FetchDataForRulesLists.inactivedata.add(FetchDataForRulesLists.data.get(i));
+                    if (FetchDataForRulesLists.data.get(i).id == current.id){
+                        if (FetchDataForRulesLists.data.get(i).state.equalsIgnoreCase("Active"))
+                            FetchDataForRulesLists.activedata.add(FetchDataForRulesLists.data.get(i));
+                        else
+                            FetchDataForRulesLists.inactivedata.add(FetchDataForRulesLists.data.get(i));
+                    }
+
+
                 }
 
                 Intent intent = new Intent();

@@ -55,7 +55,7 @@ public class InactiveRulesFragment extends Fragment implements CustomDialogInter
             @Override
             public void onReceive(Context context, Intent intent) {
                 arrayList = FetchDataForRulesLists.inactivedata;
-                myAdapter.notifyDataSetChanged();
+//                myAdapter.notifyDataSetChanged();
             }
         };
         IntentFilter filter = new IntentFilter("com.journaldev.CUSTOM_INTENT");
