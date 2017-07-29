@@ -59,7 +59,7 @@ public class EventMusicDialogueFragment extends DialogFragment {
     }
 
     private void checkAvailableMusicPlayers() {
-        
+
     }
 
     private void initializeAllMusicPlayers() {
