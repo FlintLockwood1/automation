@@ -326,6 +326,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                     e.printStackTrace();
                 }
 
+                playMusiconApp(finalDefaultMusicAppPackage);
 
 
                 //  sendEvent(keyCode, finalDefaultMusicAppPackage);
