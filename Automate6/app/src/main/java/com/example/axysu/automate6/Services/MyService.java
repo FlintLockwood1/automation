@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -313,19 +312,14 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 }
 
                 launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(launchIntent);
 //                startActivityForResult(launchIntent,201);
 
-                CountDownTimer countDownTimer = new CountDownTimer(2000,3000) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        Log.v(TAG,millisUntilFinished+"");
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        playMusiconApp(finalDefaultMusicAppPackage);
-                    }
-                };
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
 
 
@@ -411,7 +405,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     @Override
     public void onLocationChanged(Location location) {
 
-        Log.v(TAG,"LOCATION CHANGED"+location.getLatitude()+","+location.getLongitude());
+//        Log.v(TAG,"LOCATION CHANGED"+location.getLatitude()+","+location.getLongitude());
         systemCurrentLatLng = new LatLng(location.getLatitude(),location.getLongitude());
 //        Intent intent = new Intent();
 //        intent.setAction("com.akshaysuman.CUSTOM_INTENT");
