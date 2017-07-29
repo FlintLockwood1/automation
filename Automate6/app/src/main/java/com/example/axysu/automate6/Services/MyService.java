@@ -183,6 +183,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         Calendar c = Calendar.getInstance();
         int currhr = c.get(Calendar.HOUR);
         int currmin = c.get(Calendar.MINUTE);
+        //Log.v(TAG,""+currhr+":")
         if (Integer.parseInt(time.substring(0, 2)) == (currhr) &&
                 Integer.parseInt(time.substring(3, 5)) >= currmin - 5 &&
                 Integer.parseInt(time.substring(3, 5)) <= currmin + 5)
@@ -193,12 +194,16 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     public boolean matchDate(String date) {
 
+        Log.v(TAG,"matchDate");
         if (date.equalsIgnoreCase("-1"))
             return true;
         Calendar c = Calendar.getInstance();
         int currday = c.get(Calendar.DATE);
         int currmonth = c.get(Calendar.MONTH) + 1;
         int curryear = c.get(Calendar.YEAR);
+        Log.v(date.substring(0, 2),"="+currday);
+        Log.v(date.substring(3, 5),"="+currmonth);
+        Log.v(date.substring(6),"="+curryear);
         if (Integer.parseInt(date.substring(0, 2)) == currday &&
                 Integer.parseInt(date.substring(3, 5)) == currmonth &&
                 Integer.parseInt(date.substring(6)) == curryear)

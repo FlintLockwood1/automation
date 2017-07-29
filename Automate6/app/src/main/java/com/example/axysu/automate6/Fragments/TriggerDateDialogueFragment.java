@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -45,9 +46,12 @@ public class TriggerDateDialogueFragment extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        String temp = (String.valueOf(datePicker.getMonth()+1));
+                        if(temp.length()==1){
+                            temp="0"+temp;
+                        }
                         ((CustomDialogInterface)getTargetFragment())
-                                .okButtonClicked(datePicker.getDayOfMonth()+"/"+ (datePicker.getMonth()+1)+"/"+
-                                datePicker.getYear(),"DATE");
+                                .okButtonClicked(datePicker.getDayOfMonth() +"/"+ temp +"/"+ datePicker.getYear(),"DATE");
                     }
                 });
 
