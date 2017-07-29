@@ -35,7 +35,7 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         rules = new Rules();
-        setAnimation();
+        //setAnimation();
         setContentView(R.layout.activity_add);
         handleCallingIntent();
         initializeAndLoadTriggerFragment();

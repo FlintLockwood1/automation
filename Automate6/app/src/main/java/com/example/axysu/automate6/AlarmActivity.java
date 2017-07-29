@@ -19,9 +19,9 @@ public class AlarmActivity extends AppCompatActivity {
 
 
     public void end(String state) {
-        Intent data = new Intent();
-        data.putExtra("state",state);
-        setResult(RESULT_OK,data);
+      //  Intent data = new Intent();
+//        data.putExtra("state",state);
+//        setResult(RESULT_OK,data);
         finish();
     }
 

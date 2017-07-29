@@ -1,5 +1,9 @@
 package com.example.axysu.automate6.Objects;
 
+import android.content.Context;
+
+import com.example.axysu.automate6.ApplicationClass;
+
 /**
  * Created by axysu on 7/11/2017.
  */
@@ -27,6 +31,5 @@ public class Rules {
     public int music;        //7
     public String notification;
     public String phonecall ;
-
 
 }

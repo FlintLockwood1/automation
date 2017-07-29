@@ -16,7 +16,7 @@ public class MyReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "location changed", Toast.LENGTH_SHORT).show();
-
+        Intent pushIntent = new Intent(context, MyService.class);
+        context.startService(pushIntent);
     }
 }

@@ -105,9 +105,9 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             public void run() {
 
                 checkForMatch(dataBaseAdapter.getAllData());
-
+        Log.v("rer","Service is running");
             }
-        }, 10, 60, TimeUnit.SECONDS);
+        }, 10, 2, TimeUnit.SECONDS);
 
         if (googleApiClient.isConnected()){
             Log.v(TAG,"googleApiClient.isConnected()Onstart");
@@ -121,8 +121,14 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     private void checkForMatch(ArrayList<Rules> arrayList) {
 
+        Log.v(TAG,"checkingForRules +"+arrayList.size() );
         for (int i = 0; i < arrayList.size(); i++) {
             Rules current = arrayList.get(i);
+//            Log.v(TAG, String.valueOf(matchDate(current.date))
+//                    +String.valueOf(matchTime(current.time))
+//                    +String.valueOf(matchLocation(current.location))
+//                    +String.valueOf(matchActivity(current.activity))
+//                    +String.valueOf(matchBattery(current.battery)));
             if (matchDate(current.date) && matchTime(current.time) && matchLocation(current.location)
                     && matchActivity(current.activity) && matchBattery(current.battery)) {
 
@@ -194,6 +200,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     public void onMatchFound(Rules current) {
 
+        Log.v(TAG,"Match");
         if (current.airplaneMode != -1)
             toggleAirplaneMode(current.airplaneMode);
         if (current.music != -1)
@@ -230,9 +237,9 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     }
 
     public void startAlarm(String message) {
-
+        Log.v(TAG,"Starting alarm");
         Intent intent = new Intent(this, AlarmActivity.class);
-        //startActivityForResult(intent,0);
+        startActivity(intent);
 
     }
 
