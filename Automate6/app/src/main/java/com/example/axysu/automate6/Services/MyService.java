@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -213,16 +214,16 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         if (current.mobileData != -1)
             toggleAirplaneMode(current.mobileData);
         if (current.wifi != -1)
-            toggleAirplaneMode(current.wifi);
+            toggleWifi(current.wifi);
         if (current.silent != -1)
             toggleAirplaneMode(current.silent);
 
         if (!current.alarm.equalsIgnoreCase("-1"))
             startAlarm(current.alarm);
         if (!current.notification.equalsIgnoreCase("-1"))
-            startAlarm(current.notification);
+            sendNotification(current.notification);
         if (!current.phonecall.equalsIgnoreCase("-1"))
-            startAlarm(current.phonecall);
+            startCall(current.phonecall);
 
 
     }
@@ -270,6 +271,13 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     }
 
     public void toggleWifi(int flag) {
+
+        WifiManager wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager.isWifiEnabled())
+            wifiManager.setWifiEnabled(false);
+        else
+            wifiManager.setWifiEnabled(false);
+
 
     }
 
