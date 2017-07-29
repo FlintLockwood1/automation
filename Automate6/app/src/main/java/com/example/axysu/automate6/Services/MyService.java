@@ -8,12 +8,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,10 +24,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.Toast;
 
 import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.AlarmActivity;
+import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -61,6 +66,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     FusedLocationProviderApi locationProviderApi = LocationServices.FusedLocationApi;
     private static String TAG="MyService";
     private String activity_type;
+    SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
@@ -210,7 +216,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         if (current.airplaneMode != -1)
             toggleAirplaneMode(current.airplaneMode);
         if (current.music != -1)
-            toggleAirplaneMode(current.music);
+            startMusic(current.music);
         if (current.mobileData != -1)
             toggleAirplaneMode(current.mobileData);
         if (current.wifi != -1)
@@ -291,6 +297,60 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     public void startMusic(int flag) {
 
+        AudioManager audioManager = (AudioManager) this.getSystemService(this.AUDIO_SERVICE);
+        sharedPreferences = getSharedPreferences("Settings",0);
+
+        if (!audioManager.isMusicActive()){
+
+            Log.v(TAG,"launch player");
+             final String finalDefaultMusicAppPackage =  sharedPreferences.getString(FetchDataForRulesLists.DEFAULTMUSICPACKAGE,"com.google.android.music");
+            if(finalDefaultMusicAppPackage != null){
+
+                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(finalDefaultMusicAppPackage);
+
+                if(launchIntent == null){
+                    return;
+                }
+
+                launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivityForResult(launchIntent,201);
+
+                CountDownTimer countDownTimer = new CountDownTimer(2000,3000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        Log.v(TAG,millisUntilFinished+"");
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        playMusiconApp(finalDefaultMusicAppPackage);
+                    }
+                };
+
+
+
+                //  sendEvent(keyCode, finalDefaultMusicAppPackage);
+
+            }
+
+        }
+
+    }
+
+    private void playMusiconApp(String defaultMusicAppPackage){
+        Log.v(TAG,"inside music player activity" + defaultMusicAppPackage);
+        Intent intent;
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        intent.setPackage(defaultMusicAppPackage);
+        intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
+        getApplicationContext().sendOrderedBroadcast(intent, null);
+
+        keyEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        intent.setPackage(defaultMusicAppPackage);
+        intent.putExtra(Intent.EXTRA_KEY_EVENT,keyEvent);
+        getApplicationContext().sendOrderedBroadcast(intent, null);
     }
 
     private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {

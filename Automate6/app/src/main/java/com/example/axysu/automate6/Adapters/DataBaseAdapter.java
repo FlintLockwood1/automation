@@ -103,6 +103,7 @@ public class DataBaseAdapter {
         values1.put(helper.ALARM,rule.alarm);
         values1.put(helper.NOTIFICATION,rule.notification);
         values1.put(helper.PHONECALL,rule.phonecall);
+        values1.put(helper.WIFI,rule.wifi);
 
         return  values1;
     }
