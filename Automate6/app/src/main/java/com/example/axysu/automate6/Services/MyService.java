@@ -124,6 +124,11 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         Log.v(TAG,"checkingForRules +"+arrayList.size() );
         for (int i = 0; i < arrayList.size(); i++) {
             Rules current = arrayList.get(i);
+//            Log.v(TAG,"activity = "+current.activity);
+//            Log.v(TAG,"date = "+current.date);
+//            Log.v(TAG,"time = "+current.time);
+//            Log.v(TAG,"location = "+current.location);
+//            Log.v(TAG,"battery = "+current.battery);
 //            Log.v(TAG, String.valueOf(matchDate(current.date))
 //                    +String.valueOf(matchTime(current.time))
 //                    +String.valueOf(matchLocation(current.location))
@@ -140,7 +145,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     private boolean matchLocation(String location) {
 
-        if (location == "-1")
+        if (location.equalsIgnoreCase("-1") )
             return true;
         LatLng latlng = getLocation();
        // LatLng latlng = new LatLng(1, 1);
@@ -160,14 +165,14 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     private boolean matchActivity(String activity) {
 
-        if (activity == "-1")
+        if (activity.equalsIgnoreCase("-1"))
             return true;
         return (activity.contains(getActivity()));
     }
 
     private boolean matchTime(String time) {
 
-        if (time == "-1")
+        if (time.equalsIgnoreCase("-1"))
             return true;
         Calendar c = Calendar.getInstance();
         int currhr = c.get(Calendar.HOUR);
@@ -182,7 +187,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     public boolean matchDate(String date) {
 
-        if (date == "-1")
+        if (date.equalsIgnoreCase("-1"))
             return true;
         Calendar c = Calendar.getInstance();
         int currday = c.get(Calendar.DATE);
