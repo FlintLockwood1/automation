@@ -9,9 +9,15 @@
         android:paddingBottom="20dp"
         android:paddingTop="10dp"
         android:gravity="center"
-        android:elevation="5sp"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:background="#DCDCDC">
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginStart="20dp"/>
 
         <TextView
             android:id="@+id/triggerName"
@@ -22,13 +28,6 @@
             android:text="Trigger"
             android:textSize="18dp"
             android:layout_weight="1"/>
-
-        <CheckBox
-            android:id="@+id/checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginEnd="20dp"/>
 
     </LinearLayout>
 

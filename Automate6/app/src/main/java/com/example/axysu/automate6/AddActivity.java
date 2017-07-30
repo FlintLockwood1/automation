@@ -93,6 +93,7 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
                     Bundle bundle = new Bundle();
                     bundle.putInt("id",id);
                     eventFragment.setArguments(bundle);
+                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
                     transaction.remove(fragmentManager.findFragmentByTag("TriggerFragment"));
                     transaction.add(R.id.addActivityRootLayout, eventFragment, "EventFragment");
                     transaction.addToBackStack("forEvent");
