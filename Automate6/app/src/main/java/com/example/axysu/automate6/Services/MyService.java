@@ -181,12 +181,18 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         if (time.equalsIgnoreCase("-1"))
             return true;
         Calendar c = Calendar.getInstance();
-        int currhr = c.get(Calendar.HOUR);
+        int currhr = c.get(Calendar.HOUR_OF_DAY);
+        //Log.v(c.get(Calendar.AM_PM));
         int currmin = c.get(Calendar.MINUTE);
-        //Log.v(TAG,""+currhr+":")
-        if (Integer.parseInt(time.substring(0, 2)) == (currhr) &&
-                Integer.parseInt(time.substring(3, 5)) >= currmin - 5 &&
-                Integer.parseInt(time.substring(3, 5)) <= currmin + 5)
+
+        int triggerHr = Integer.parseInt(time.substring(0, 2));
+        int triggerMin = Integer.parseInt(time.substring(3, 5));
+
+        Log.v(currhr+"=",""+triggerHr);
+        Log.v(currmin+"=",""+triggerMin);
+        if (triggerHr == (currhr) &&
+                triggerMin >= currmin - 5 &&
+                triggerMin <= currmin + 5)
             return true;
         else
             return false;
@@ -449,8 +455,10 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         @Override
         public void onReceive(Context context, Intent intent) {
                // Log.v(TAG,"inside");
+            int confidence = Integer.parseInt(intent.getStringExtra("percentage"));
+
+            if(confidence >80)
                 activity_type = getType(Integer.parseInt(intent.getStringExtra("activity")));
-                int confidence = Integer.parseInt(intent.getStringExtra("percentage"));
 
            // Log.v(TAG,activity_type);
            // Log.v(TAG,""+confidence);
