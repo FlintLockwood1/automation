@@ -15,7 +15,6 @@ import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.Fragments.EventFragment;
 import com.example.axysu.automate6.Fragments.SaveDialogueFragment;
 import com.example.axysu.automate6.Fragments.TriggerFragment;
-import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
 import com.example.axysu.automate6.Objects.Rules;
 
@@ -301,5 +300,10 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
         Log.v(TAG,"id :" +id);
         return (new DataBaseAdapter(this).getDataByIndex(id)).get(0);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

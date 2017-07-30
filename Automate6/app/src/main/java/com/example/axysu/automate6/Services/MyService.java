@@ -153,13 +153,27 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
         if (location.equalsIgnoreCase("-1") )
             return true;
+
         LatLng latlng = getLocation();
        // LatLng latlng = new LatLng(1, 1);
         String asd[] = location.split(",");
         LatLng temp = new LatLng(Double.parseDouble(asd[0]), Double.parseDouble(asd[1]));
-        double distanceSquare = (latlng.latitude - temp.latitude) * (latlng.latitude - temp.latitude) +
-                (latlng.longitude - temp.longitude) * (latlng.longitude - temp.longitude);
-        return ((distanceSquare) <= 100);
+
+        Location currentLocation = new Location("current");
+        currentLocation.setLongitude(latlng.longitude);
+        currentLocation.setLatitude(latlng.latitude);
+
+        Location savedLocation = new Location("saved");
+        savedLocation.setLongitude(temp.longitude);
+        savedLocation.setLatitude(temp.latitude);
+
+        if(currentLocation.distanceTo(savedLocation)<100){
+            return true;
+        } else {
+            return false;
+        }
+
+
     }
 
     private boolean matchBattery(int battery) {

@@ -50,6 +50,7 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
     private static String TAG ="TriggerFragment";
     private Context mContext;
     TriggerAdapter triggerAdapter;
+    ArrayList<Boolean> checkBoxList= new ArrayList<>();
 
 
     public TriggerFragment() {
@@ -65,6 +66,7 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
         rules = new Rules();
         initializeTriggerValue();
         initializeAndhandleListView();//yet to be coded;
+        intialiseCheckBox();
         return layout;
     }
 
@@ -107,6 +109,14 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
         else {
             rules = getRuleFromDataBasebyID(rules.id);
         }
+    }
+
+    private void intialiseCheckBox(){
+        checkBoxList.add(rules.battery==-1?false:true);
+        checkBoxList.add(rules.time.equalsIgnoreCase("-1")?false:true);
+        checkBoxList.add(rules.location.equalsIgnoreCase("-1")?false:true);
+        checkBoxList.add(rules.activity.equalsIgnoreCase("-1")?false:true);
+        checkBoxList.add(rules.date.equalsIgnoreCase("-1")?false:true);
     }
 
     @Override
@@ -243,16 +253,19 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
                 this.rules.location=latLong;
                 Log.v("TriggerFragment","latLong" + latLong);
                 ((CustomDialogInterface) getActivity()).okButtonClicked(latLong,"LOCATION");
+            } else {
+                triggerAdapter.notifyDataSetChanged();
             }
         }
     }
 
     @Override
     public void toggleCheckState(String fromFrag) {
-        Log.v(TAG,"index" + triggerList.indexOf(fromFrag));
-        View view=listView.getChildAt(triggerList.indexOf(fromFrag));
-        CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkbox);
-        checkBox.setChecked(false);
+        triggerAdapter.notifyDataSetChanged();
+//        Log.v(TAG,"index" + triggerList.indexOf(fromFrag));
+//        View view=listView.getChildAt(triggerList.indexOf(fromFrag));
+//        CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkbox);
+//        checkBox.setChecked(false);
 
     }
 
@@ -293,7 +306,7 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
                 triggerName.setText(mList.get(position));
 
             final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
-
+            checkBox.setChecked(checkBoxList.get(position));
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

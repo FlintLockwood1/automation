@@ -39,6 +39,7 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
     private Context mContext;
     EventAdapter eventAdapter;
     public static String TAG ="EventFragment";
+    ArrayList<Boolean> checkBoxList= new ArrayList<>();
 
     @Override
     public void onAttach(Context context) {
@@ -57,6 +58,7 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
         layout = inflater.inflate(R.layout.fragment_events, container, false);
         initializeEventValue();
         initializeAndhandleListView();
+        intialiseCheckBoxList();
         return layout;
     }
 
@@ -68,6 +70,20 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
 //        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,events);
         listView.setAdapter(eventAdapter);
 //        listView.setOnItemClickListener(this);
+
+    }
+
+    private void intialiseCheckBoxList(){
+        checkBoxList.add(rules.airplaneMode==-1?false:true);
+        checkBoxList.add(rules.wifi==-1?false:true);
+        checkBoxList.add(rules.mobileData==-1?false:true);
+        checkBoxList.add(rules.silent==-1?false:true);
+        checkBoxList.add(rules.alarm.equalsIgnoreCase("-1")?false:true);
+        checkBoxList.add(rules.notification.equalsIgnoreCase("-1")?false:true);
+        checkBoxList.add(rules.phonecall.equalsIgnoreCase("-1")?false:true);
+        checkBoxList.add(rules.music==-1?false:true);
+
+
 
     }
 
@@ -250,11 +266,14 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public void toggleCheckState(String fromFrag) {
-        Log.v(TAG,"index" + eventList.indexOf(fromFrag));
-        View view=listView.getChildAt(eventList.indexOf(fromFrag));
-        CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkbox);
-        checkBox.setChecked(false);
+         eventAdapter.notifyDataSetChanged();
+//        Log.v(TAG,"index" + eventList.indexOf(fromFrag));
+//        Log.v(TAG,"index" + listView.getFirstVisiblePosition());
+//        View view=listView.getChildAt(eventList.indexOf(fromFrag)-(listView.getFirstVisiblePosition()==0?1:listView.getFirstVisiblePosition()));
+//        CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkbox);
+//        checkBox.setChecked(false);
     }
+    int positionObject;
 
     public class EventAdapter extends BaseAdapter {
 
@@ -293,6 +312,8 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
             triggerName.setText(mList.get(position));
 
             final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
+
+            checkBox.setChecked(checkBoxList.get(position));
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -415,4 +436,6 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
         }
 
     }
+
+
 }
