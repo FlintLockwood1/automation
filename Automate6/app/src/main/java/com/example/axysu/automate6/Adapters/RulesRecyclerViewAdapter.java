@@ -2,6 +2,7 @@ package com.example.axysu.automate6.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -111,7 +112,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                 }
 
                 intent.setAction("com.journaldev.CUSTOM_INTENT");
-                context.sendBroadcast(intent);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
 
                // inter.okButtonClicked(String.valueOf(position),"remove");

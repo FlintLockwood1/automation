@@ -12,11 +12,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -29,6 +32,7 @@ import android.widget.Toast;
 import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.AlarmActivity;
 import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
+import com.example.axysu.automate6.MainActivity;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -66,6 +70,17 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     private static String TAG="MyService";
     private String activity_type;
     SharedPreferences sharedPreferences;
+    MediaPlayer player;
+    boolean musicActive = false;
+    boolean alarmActive = false;
+    boolean notificationActive = false;
+    boolean phonecallActive = false;
+    /// ALL Events will fire after 1 min
+
+    private static final int NOTIFICATION_ID=1;
+
+
+
 
     @Nullable
     @Override
@@ -76,7 +91,9 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     @Override
     public void onCreate() {
         super.onCreate();
+        displayForegroundNotification();
         Log.v(TAG,"onCreate");
+
         this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         dataBaseAdapter = new DataBaseAdapter(this);
         systemCurrentLatLng = new LatLng(0,0);
@@ -98,9 +115,33 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             requestLocationUpdates();
         }
         LocalBroadcastManager.getInstance(this).registerReceiver(checkMotion, new IntentFilter("ACTIVITY_UPDATE"));
-
+        LocalBroadcastManager.getInstance(this).registerReceiver(alarmReceiver,new IntentFilter("ALARMSTOPPED"));
     }
 
+    private void displayForegroundNotification() {
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_menu_send)
+                        .setContentTitle("System Cant Kill Me")
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                        .setContentText("Foreground");
+
+//        if (getFileStructure() != null) {
+//            String title = Utils.filter(getFileStructure().getTitle());
+//            if (title.length() > 45)
+//                title = title.substring(0, 44);
+//            builder.setContentText(Utils.filter(title));
+//        }
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(
+                this, 0, resultIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(resultPendingIntent);
+        builder.setAutoCancel(false);
+        NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nManager.notify(NOTIFICATION_ID, builder.build());
+        startForeground(NOTIFICATION_ID, builder.build());
+    }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.v(TAG,"onStart");
@@ -111,9 +152,26 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             public void run() {
 
                 checkForMatch(dataBaseAdapter.getAllData());
-        Log.v("rer","Service is running");
+        Log.v(TAG,"Service is running");
             }
-        }, 10, 2, TimeUnit.SECONDS);
+        }, 10, 20, TimeUnit.SECONDS);
+
+
+
+        ScheduledExecutorService scheduler1 = Executors.newSingleThreadScheduledExecutor();
+        scheduler1.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+
+                Log.v(TAG,"Events will Start Again");
+                musicActive = false;
+                alarmActive = false;
+                notificationActive = false;
+                phonecallActive = false;
+            }
+        }, 5, 60, TimeUnit.SECONDS);
+
+
 
         if (googleApiClient.isConnected()){
             Log.v(TAG,"googleApiClient.isConnected()Onstart");
@@ -130,20 +188,12 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         Log.v(TAG,"checkingForRules +"+arrayList.size() );
         for (int i = 0; i < arrayList.size(); i++) {
             Rules current = arrayList.get(i);
-//            Log.v(TAG,"activity = "+current.activity);
-//            Log.v(TAG,"date = "+current.date);
-//            Log.v(TAG,"time = "+current.time);
-//            Log.v(TAG,"location = "+current.location);
-//            Log.v(TAG,"battery = "+current.battery);
-//            Log.v(TAG, String.valueOf(matchDate(current.date))
-//                    +String.valueOf(matchTime(current.time))
-//                    +String.valueOf(matchLocation(current.location))
-//                    +String.valueOf(matchActivity(current.activity))
-//                    +String.valueOf(matchBattery(current.battery)));
-            if (matchDate(current.date) && matchTime(current.time) && matchLocation(current.location)
-                    && matchActivity(current.activity) && matchBattery(current.battery)) {
+            if(current.state.equalsIgnoreCase("active")) {
+                if (matchDate(current.date) && matchTime(current.time) && matchLocation(current.location)
+                        && matchActivity(current.activity) && matchBattery(current.battery)) {
 
-                onMatchFound(current);
+                    onMatchFound(current);
+                }
             }
         }
 
@@ -236,7 +286,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     public void onMatchFound(Rules current) {
 
-        Log.v(TAG,"Match");
+        Log.v(TAG,"OnMatchFound");
         if (current.airplaneMode != -1)
             toggleAirplaneMode(current.airplaneMode);
         if (current.music != -1)
@@ -261,25 +311,60 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     public void sendNotification(String message) {
 
+        if(notificationActive)return;
+
         NotificationCompat.Builder mBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_menu_send)
                         .setContentTitle("My notification")
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setContentText(message);
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(001, mBuilder.build());
-
+        notificationActive = true;
     }
 
     public void startAlarm(String message) {
+
+        if(alarmActive)return;
         Log.v(TAG,"Starting alarm");
         Intent intent = new Intent(this, AlarmActivity.class);
         startActivity(intent);
+        Log.v(TAG,"Started alarm");
+        alarmActive = true;
+        startSound();
 
     }
 
+    private void startSound() {
+
+        player = MediaPlayer.create(this,
+                Settings.System.DEFAULT_RINGTONE_URI);
+        Log.v(TAG,"starting sound for alarm");
+        player.start();
+    }
+
+    private BroadcastReceiver alarmReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.v(TAG,"Stopping AlarmSound");
+            if(player!=null) {
+                player.stop();
+                player.reset();
+                player.release();
+            }
+        }
+    };
+
+
+
     public void startCall(String phoneNumber) {
+
+        if(phonecallActive)return;
+
+        Log.v(TAG,"startingCall");
 
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + phoneNumber));
@@ -294,6 +379,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             return;
         }
         startActivity(callIntent);
+        phonecallActive = true;
     }
 
     public void toggleAirplaneMode(int flag) {
@@ -321,6 +407,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     public void startMusic(int flag) {
 
+        if(musicActive)return;
+
         AudioManager audioManager = (AudioManager) this.getSystemService(this.AUDIO_SERVICE);
         sharedPreferences = getSharedPreferences("Settings",0);
 
@@ -347,10 +435,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 }
 
                 playMusiconApp(finalDefaultMusicAppPackage);
-
-
-                //  sendEvent(keyCode, finalDefaultMusicAppPackage);
-
+                musicActive = true;
             }
 
         }

@@ -266,6 +266,8 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public void toggleCheckState(String fromFrag) {
+         checkBoxList.remove(eventList.indexOf(fromFrag));
+         checkBoxList.add(eventList.indexOf(fromFrag),false);
          eventAdapter.notifyDataSetChanged();
 //        Log.v(TAG,"index" + eventList.indexOf(fromFrag));
 //        Log.v(TAG,"index" + listView.getFirstVisiblePosition());

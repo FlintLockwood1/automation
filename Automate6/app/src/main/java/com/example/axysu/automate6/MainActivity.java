@@ -15,6 +15,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         checkAndRequestPermissions();
 
         IntentFilter filter = new IntentFilter("com.journaldev.CUSTOM_INTENT");
-        registerReceiver(updateReceiver,filter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateReceiver,filter);
     }
 
     private BroadcastReceiver updateReceiver = new BroadcastReceiver() {

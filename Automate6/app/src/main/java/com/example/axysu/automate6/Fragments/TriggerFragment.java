@@ -261,6 +261,8 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
 
     @Override
     public void toggleCheckState(String fromFrag) {
+        checkBoxList.remove(triggerList.indexOf(fromFrag));
+        checkBoxList.add(triggerList.indexOf(fromFrag),false);
         triggerAdapter.notifyDataSetChanged();
 //        Log.v(TAG,"index" + triggerList.indexOf(fromFrag));
 //        View view=listView.getChildAt(triggerList.indexOf(fromFrag));

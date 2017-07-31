@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -59,7 +60,7 @@ public class InactiveRulesFragment extends Fragment implements CustomDialogInter
             }
         };
         IntentFilter filter = new IntentFilter("com.journaldev.CUSTOM_INTENT");
-        getContext().registerReceiver(myReceiver2,filter);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(myReceiver2,filter);
         return layout;
     }
 
