@@ -138,7 +138,7 @@ public class DataBaseAdapter {
             arrayList.add(rules);
 
         }
-
+        cursor.close();
         return arrayList;
     }
 

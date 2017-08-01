@@ -28,6 +28,7 @@ import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.axysu.automate6.Adapters.DataBaseAdapter;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     Intent intent;
     public static int REQUEST_ID_MULTIPLE_PERMISSIONS = 7;
     private static String TAG ="MainActivity";
+    ImageView avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity
         FetchDataForRulesLists.data= dataBaseAdapter.getAllData();
         FetchDataForRulesLists.activedata = new ArrayList<>();
         FetchDataForRulesLists.inactivedata = new ArrayList<>();
+        avatar = (ImageView) findViewById(R.id.avatar);
         for (int i=0;i<FetchDataForRulesLists.data.size();i++){
 
             if (FetchDataForRulesLists.data.get(i).state.equalsIgnoreCase("Active"))
@@ -83,7 +86,8 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.v(TAG,"notifyDataSetChanged");
-            myAdapter.notifyDataSetChanged();
+            if(myAdapter!=null)
+                myAdapter.notifyDataSetChanged();
         }
     };
 
@@ -397,6 +401,11 @@ public class MainActivity extends AppCompatActivity
                 .setNegativeButton("Cancel", okListener)
                 .create()
                 .show();
+    }
+
+    public void promptUser (View view){
+
+        Toast.makeText(this, "Hold to change ur profile pic", Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -18,7 +18,7 @@ import com.google.android.gms.location.ActivityRecognitionResult;
 public class SpeedService extends IntentService {
 
     private static String TAG="SpeedService";
-    private static final int NOTIFICATION_ID=2;
+    private static final int NOTIFICATION_ID=3;
     public SpeedService() {
         super("SpeedService");
     }
@@ -33,17 +33,17 @@ public class SpeedService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        displayForegroundNotification();
+        //displayForegroundNotification();
         Log.v(TAG,"onCreate");
     }
 
-    private void displayForegroundNotification() {
-        NotificationCompat.Builder builder =
-                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_menu_manage)
-                        .setContentTitle("System Cant Kill Me")
-                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                        .setContentText("We Get All Ur Activities");
+//    private void displayForegroundNotification() {
+//        NotificationCompat.Builder builder =
+//                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+//                        .setSmallIcon(R.drawable.ic_menu_manage)
+//                        .setContentTitle("System Cant Kill Me")
+//                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+//                        .setContentText("We Get All Ur Activities");
 
 //        if (getFileStructure() != null) {
 //            String title = Utils.filter(getFileStructure().getTitle());
@@ -51,16 +51,16 @@ public class SpeedService extends IntentService {
 //                title = title.substring(0, 44);
 //            builder.setContentText(Utils.filter(title));
 //        }
-        Intent resultIntent = new Intent(this, MainActivity.class);
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(
-                this, 1, resultIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(resultPendingIntent);
-        builder.setAutoCancel(false);
-        NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        nManager.notify(NOTIFICATION_ID, builder.build());
-        startForeground(NOTIFICATION_ID, builder.build());
-    }
+//        Intent resultIntent = new Intent(this, MainActivity.class);
+//        PendingIntent resultPendingIntent = PendingIntent.getActivity(
+//                this, 1, resultIntent,
+//                PendingIntent.FLAG_CANCEL_CURRENT);
+//        builder.setContentIntent(resultPendingIntent);
+//        builder.setAutoCancel(false);
+//        NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        nManager.notify(NOTIFICATION_ID, builder.build());
+//        startForeground(NOTIFICATION_ID, builder.build());
+    //}
 
 
     @Override

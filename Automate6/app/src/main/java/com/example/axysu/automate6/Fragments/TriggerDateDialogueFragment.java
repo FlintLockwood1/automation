@@ -47,11 +47,15 @@ public class TriggerDateDialogueFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String temp = (String.valueOf(datePicker.getMonth()+1));
+                        String temp2 = (String.valueOf(datePicker.getDayOfMonth()));
+                        if(temp2.length()==1){
+                            temp2="0"+temp2;
+                        }
                         if(temp.length()==1){
                             temp="0"+temp;
                         }
                         ((CustomDialogInterface)getTargetFragment())
-                                .okButtonClicked(datePicker.getDayOfMonth() +"/"+ temp +"/"+ datePicker.getYear(),"DATE");
+                                .okButtonClicked(temp2 +"/"+ temp +"/"+ datePicker.getYear(),"DATE");
                     }
                 });
 

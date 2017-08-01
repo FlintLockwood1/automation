@@ -77,7 +77,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     boolean phonecallActive = false;
     /// ALL Events will fire after 1 min
 
-    private static final int NOTIFICATION_ID=1;
+    private static final int NOTIFICATION_ID=2;
 
 
 
@@ -121,7 +121,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     private void displayForegroundNotification() {
         NotificationCompat.Builder builder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_menu_send)
+                        .setSmallIcon(R.drawable.ic_menu_slideshow)
                         .setContentTitle("System Cant Kill Me")
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setContentText("Foreground");
@@ -134,7 +134,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 //        }
         Intent resultIntent = new Intent(this, MainActivity.class);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(
-                this, 0, resultIntent,
+
+                this, 23, resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(resultPendingIntent);
         builder.setAutoCancel(false);
@@ -330,6 +331,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         if(alarmActive)return;
         Log.v(TAG,"Starting alarm");
         Intent intent = new Intent(this, AlarmActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         Log.v(TAG,"Started alarm");
         alarmActive = true;
@@ -367,6 +369,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         Log.v(TAG,"startingCall");
 
         Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         callIntent.setData(Uri.parse("tel:" + phoneNumber));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -463,7 +466,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         public void onReceive(Context context, Intent intent) {
 
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-            Log.v(TAG,level+"");
+            //Log.v(TAG,level+"");
             sysytemCurrentBattery = level;
 
         }
@@ -532,7 +535,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         }
         ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(
                 googleApiClient,
-                0,
+                10,
                 getActivityDetectionPendingIntent()
         ).setResultCallback(this);
     }

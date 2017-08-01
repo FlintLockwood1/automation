@@ -257,6 +257,7 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
                 ((CustomDialogInterface) getActivity()).okButtonClicked(latLong,"LOCATION");
             } else {
                 triggerAdapter.notifyDataSetChanged();
+                Log.v(TAG,"failed to get location");
             }
         }
     }
