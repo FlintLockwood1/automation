@@ -315,7 +315,11 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
 
             final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
 
-            checkBox.setChecked(checkBoxList.get(position));
+            if(setUpCheckBox(mList.get(position))){
+                checkBox.setChecked(true);
+            } else {
+                checkBox.setChecked(false);
+            }
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -437,6 +441,70 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
                 Toast.makeText(getActivity(),"Click Something", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private boolean setUpCheckBox(String text){
+        Boolean checkBox=false;
+        switch(text){
+            case "AIRPLANEMODE":
+                if(rules.airplaneMode==-1){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+                break;
+            case "WIFI":
+                if(rules.wifi==-1){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+                break;
+            case "MOBILEDATA":
+                if(rules.mobileData==-1){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+                break;
+            case "ALARM":
+                if(rules.alarm.equalsIgnoreCase("-1")){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+                break;
+            case "NOTIFICATION":
+                if(rules.notification.equalsIgnoreCase("-1")){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+                break;
+            case "PHONECALL":
+                if(rules.phonecall.equalsIgnoreCase("-1")){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+                break;
+            case "MUSIC":
+                if(rules.music==-1){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+                break;
+            case "SILENT":
+                if(rules.silent==-1){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+                break;
+        }
+
+        return checkBox;
     }
 
 

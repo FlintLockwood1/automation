@@ -4,6 +4,7 @@ package com.example.axysu.automate6.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,6 +63,7 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.v(TAG,"onCreateView");
         layout = inflater.inflate(R.layout.fragment_trigger, container, false);
         rules = new Rules();
         initializeTriggerValue();
@@ -308,7 +310,12 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
                 triggerName.setText(mList.get(position));
 
             final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
-            checkBox.setChecked(checkBoxList.get(position));
+            if(setUpCheckBox(mList.get(position))){
+                checkBox.setChecked(true);
+            } else {
+                checkBox.setChecked(false);
+            }
+
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -383,5 +390,83 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
             }
 
         }
+    }
+
+    private boolean setUpCheckBox(String frag){
+
+        Boolean checkBox =false;
+        switch (frag){
+            case "BATTERY":
+                if(rules.battery==-1){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+                break;
+            case "TIME":
+                if(rules.time.equalsIgnoreCase("-1")){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+
+                break;
+            case "LOCATION":
+                if(rules.location.equalsIgnoreCase("-1")){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+
+                break;
+            case "ACTIVITY":
+
+                if(rules.activity.equalsIgnoreCase("-1")){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+
+                break;
+            case "DATE":
+
+                if(rules.date.equalsIgnoreCase("-1")){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+
+                break;
+        }
+
+        return checkBox;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.v(TAG,"onSaveInstanceState");
+        outState.putString("DATE",rules.date);
+        outState.putString("ACTIVITY",rules.activity);
+        outState.putString("LOCATION",rules.location);
+        outState.putString("TIME",rules.time);
+        outState.putInt("BATTERY",rules.battery);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.v(TAG,"onActivityCreated");
+        if(savedInstanceState!=null){
+            Log.v(TAG,"savedInstanceState not null");
+            rules.date= savedInstanceState.getString("DATE");
+            rules.activity= savedInstanceState.getString("ACTIVITY");
+            rules.location= savedInstanceState.getString("LOCATION");
+            rules.time= savedInstanceState.getString("TIME");
+            rules.battery= savedInstanceState.getInt("BATTERY");
+        } else {
+            Log.v(TAG,"avedInstanceState null");
+        }
+
     }
 }
