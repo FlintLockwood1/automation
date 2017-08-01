@@ -41,6 +41,8 @@ public class SaveDialogueFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
 
                         Intent intent = new Intent(getActivity(),MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     }
                 })
@@ -49,7 +51,10 @@ public class SaveDialogueFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
 
                         ((CustomDialogInterface) getActivity()).okButtonClicked(editText.getText().toString(),"SAVE");
-                        dismiss();
+                        Intent intent = new Intent(getActivity(),MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
 
                     }
                 });

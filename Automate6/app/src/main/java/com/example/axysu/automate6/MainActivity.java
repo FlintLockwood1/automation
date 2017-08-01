@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     public static int REQUEST_ID_MULTIPLE_PERMISSIONS = 7;
     private static String TAG ="MainActivity";
     ImageView avatar;
+    MediaPlayer mediaWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity
         handleFAB();
         handleDrawer();
         handlePager();
+        playWelcomeSound();
         DataBaseAdapter dataBaseAdapter = new DataBaseAdapter(this);
         FetchDataForRulesLists.data= dataBaseAdapter.getAllData();
         FetchDataForRulesLists.activedata = new ArrayList<>();
@@ -82,12 +85,25 @@ public class MainActivity extends AppCompatActivity
         LocalBroadcastManager.getInstance(this).registerReceiver(updateReceiver,filter);
     }
 
+    private void playWelcomeSound(){
+
+        mediaWelcome = MediaPlayer.create(this,R.raw.welcome);
+        mediaWelcome.start();
+    }
+
     private BroadcastReceiver updateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.v(TAG,"notifyDataSetChanged");
-            if(myAdapter!=null)
-                myAdapter.notifyDataSetChanged();
+            if(myAdapter==null) {
+                Log.v(TAG,"myAdapter=null");
+            }else{
+                try {
+                    myAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    Log.v(TAG,""+e);
+                }
+            }
         }
     };
 
