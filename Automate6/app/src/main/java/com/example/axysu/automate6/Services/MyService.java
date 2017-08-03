@@ -178,7 +178,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 checkForMatch(dataBaseAdapter.getAllData());
                 Log.v(TAG,"Service is running");
             }
-        }, 10, 20, TimeUnit.SECONDS);
+        }, 10, 10, TimeUnit.SECONDS);
 
 
 
@@ -232,6 +232,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         while(hashMap.get(trigger)!=null){
             tempList.add(hashMap.remove(trigger));
         }
+        Log.v(TAG,"QUEUE SIZE ="+queue.size());
+        Log.v(TAG,"HASH SIZE ="+hashMap.size());
         if (trigger.equalsIgnoreCase("BATTERY")){
 
             for (Rules disabled: tempList){
@@ -269,6 +271,9 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             }
         }
 
+        Log.v(TAG,"QUEUE SIZE ="+queue.size());
+        Log.v(TAG,"HASH SIZE ="+hashMap.size());
+
     }
 
     private void hashRule(Rules current) {
@@ -276,14 +281,21 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         if (!current.time.equalsIgnoreCase("-1")){
             if (current.battery != -1){
                 hashMap.put("BATTERY",current);
-            }else if (current.location!="-1"){
+                Log.v(TAG,"hashing rule due to BATTERY");
+            }else if (!current.location.equalsIgnoreCase("-1")){
                 hashMap.put("LOCATION",current);
-            }else if (current.activity!="-1"){
+                Log.v(TAG,"hashing rule due to LOCATION");
+            }else if (!current.activity.equalsIgnoreCase("-1")){
                 hashMap.put("ACTIVITY",current);
-            }else if (current.activity!="-1"){
+                Log.v(TAG,"hashing rule due to ACTIVITY");
+            }else if (!current.date.equalsIgnoreCase("-1")){
                 hashMap.put("DATE",current);
+                Log.v(TAG,"hashing rule due to DATE");
             }
         }
+        Log.v(TAG,"no hashing rule due to TIME");
+        Log.v(TAG,"QUEUE SIZE ="+queue.size());
+        Log.v(TAG,"HASH SIZE ="+hashMap.size());
 
     }
 
@@ -343,8 +355,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         Log.v(currhr+"=",""+triggerHr);
         Log.v(currmin+"=",""+triggerMin);
         if (triggerHr == (currhr) &&
-                triggerMin >= currmin - 5 &&
-                triggerMin <= currmin + 5)
+                triggerMin >= currmin - 1 &&
+                triggerMin <= currmin + 1)
             return true;
         else
             return false;
@@ -468,6 +480,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                     queue.add(rule);
                 }
             }
+            Log.v(TAG,"Queue.SIZE = " + queue.size()+"");
+            Log.v(TAG,"HashMap.SIZE = " + hashMap.size()+"");
         }
     };
 
@@ -480,6 +494,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             for (Rules rule : queue){
                 if (!tempList.contains(rule)){
                     queue.remove(rule);
+                    Log.v(TAG,"Queue.SIZE = " + queue.size()+"");
+                    Log.v(TAG,"HashMap.SIZE = " + hashMap.size()+"");
                     return;
                 }
             }
@@ -488,6 +504,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 for (int i=0;i<tempList.size();i++){
                     if (entry.getValue().id != rule.id && i==tempList.size()-1) {
                         hashMap.remove(entry);
+                        Log.v(TAG,"Queue.SIZE = " + queue.size()+"");
+                        Log.v(TAG,"HashMap.SIZE = " + hashMap.size()+"");
                         return;
                     }
                 }
@@ -511,6 +529,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                         String key = entry.getKey();
                         hashMap.remove(entry);
                         hashMap.put(key,newrule);
+                        Log.v(TAG,"Queue.SIZE = " + queue.size()+"");
+                        Log.v(TAG,"HashMap.SIZE = " + hashMap.size()+"");
                         return;
                     }
                 }
@@ -519,6 +539,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                     if (oldrule.id == newrule.id){
                         queue.remove(oldrule);
                         queue.add(newrule);
+                        Log.v(TAG,"Queue.SIZE = " + queue.size()+"");
+                        Log.v(TAG,"HashMap.SIZE = " + hashMap.size()+"");
                         return;
                     }
 
