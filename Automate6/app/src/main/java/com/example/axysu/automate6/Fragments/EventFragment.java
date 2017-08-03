@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventFragment extends Fragment implements AdapterView.OnItemClickListener,CustomDialogInterface,CancelClicked{
+public class EventFragment extends Fragment implements CustomDialogInterface,CancelClicked{
 
 
     ListView listView;
@@ -40,6 +40,7 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
     EventAdapter eventAdapter;
     public static String TAG ="EventFragment";
     ArrayList<Boolean> checkBoxList= new ArrayList<>();
+    private boolean open = true;
 
     @Override
     public void onAttach(Context context) {
@@ -67,10 +68,7 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
         eventList =new ArrayList<String>(Arrays.asList(events));
         eventAdapter = new EventAdapter(eventList);
         listView = (ListView) layout.findViewById(R.id.listView);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,events);
         listView.setAdapter(eventAdapter);
-//        listView.setOnItemClickListener(this);
-
     }
 
     private void intialiseCheckBoxList(){
@@ -111,69 +109,69 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
             rules=getRuleFromDataBasebyID(rules.id);
         }
     }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        TextView textview = (TextView) view;
-        Toast.makeText(getActivity(),textview.getText().toString(), Toast.LENGTH_SHORT).show();
-        Bundle bundle;
-        switch(textview.getText().toString()){
-            case "AIRPLANEMODE":
-                EventAirplaneModeDialogueFragment activityAlert1 = new EventAirplaneModeDialogueFragment();
-                activityAlert1.setTargetFragment(this,0);
-                activityAlert1.show(getActivity().getSupportFragmentManager(),"airplanemode");
-                break;
-            case "WIFI":
-                EventWiFiDialogueFragment activityAlert2 = new EventWiFiDialogueFragment();
-                activityAlert2.setTargetFragment(this,1);
-                activityAlert2.show(getActivity().getSupportFragmentManager(),"wifi");
-                break;
-            case "MOBILEDATA":
-                EventMobileDataDialogueFragment activityAlert3 = new EventMobileDataDialogueFragment();
-                activityAlert3.setTargetFragment(this,2);
-                activityAlert3.show(getActivity().getSupportFragmentManager(),"mobiledata");
-                break;
-            case "ALARM":
-                EventAlarmDialogueFragment activityAlert4 = new EventAlarmDialogueFragment();
-                bundle = new Bundle();
-                bundle.putString("alarm",rules.alarm);
-                activityAlert4.setArguments(bundle);
-                activityAlert4.setTargetFragment(this,3);
-                activityAlert4.show(getActivity().getSupportFragmentManager(),"alarm");
-                break;
-            case "NOTIFICATION":
-                EventNotificationDialogueFragment activityAlert5 = new EventNotificationDialogueFragment();
-                bundle = new Bundle();
-                bundle.putString("notification",rules.notification);
-                activityAlert5.setArguments(bundle);
-                activityAlert5.setTargetFragment(this,4);
-                activityAlert5.show(getActivity().getSupportFragmentManager(),"notification");
-                break;
-            case "PHONECALL":
-                EventPhoneCallDialogueFragment activityAlert6 = new EventPhoneCallDialogueFragment();
-                bundle = new Bundle();
-                bundle.putString("phonecall",rules.phonecall);
-                activityAlert6.setArguments(bundle);
-                activityAlert6.setTargetFragment(this,5);
-                activityAlert6.show(getActivity().getSupportFragmentManager(),"phonecall");
-                break;
-            case "MUSIC":
-                EventMusicDialogueFragment activityAlert7 = new EventMusicDialogueFragment();
-                activityAlert7.setTargetFragment(this,6);
-                activityAlert7.show(getActivity().getSupportFragmentManager(),"music");
-                break;
-            case "SILENT":
-                EventSilentDialogueFragment activityAlert8 = new EventSilentDialogueFragment();
-                activityAlert8.setTargetFragment(this,7);
-                activityAlert8.show(getActivity().getSupportFragmentManager(),"silent");
-                break;
-            default:
-                Toast.makeText(getActivity(),"Click Something", Toast.LENGTH_SHORT).show();
-        }
-
-
-    }
+//
+//    @Override
+//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//        TextView textview = (TextView) view;
+//        Toast.makeText(getActivity(),textview.getText().toString(), Toast.LENGTH_SHORT).show();
+//        Bundle bundle;
+//        switch(textview.getText().toString()){
+//            case "AIRPLANEMODE":
+//                EventAirplaneModeDialogueFragment activityAlert1 = new EventAirplaneModeDialogueFragment();
+//                activityAlert1.setTargetFragment(this,0);
+//                activityAlert1.show(getActivity().getSupportFragmentManager(),"airplanemode");
+//                break;
+//            case "WIFI":
+//                EventWiFiDialogueFragment activityAlert2 = new EventWiFiDialogueFragment();
+//                activityAlert2.setTargetFragment(this,1);
+//                activityAlert2.show(getActivity().getSupportFragmentManager(),"wifi");
+//                break;
+//            case "MOBILEDATA":
+//                EventMobileDataDialogueFragment activityAlert3 = new EventMobileDataDialogueFragment();
+//                activityAlert3.setTargetFragment(this,2);
+//                activityAlert3.show(getActivity().getSupportFragmentManager(),"mobiledata");
+//                break;
+//            case "ALARM":
+//                EventAlarmDialogueFragment activityAlert4 = new EventAlarmDialogueFragment();
+//                bundle = new Bundle();
+//                bundle.putString("alarm",rules.alarm);
+//                activityAlert4.setArguments(bundle);
+//                activityAlert4.setTargetFragment(this,3);
+//                activityAlert4.show(getActivity().getSupportFragmentManager(),"alarm");
+//                break;
+//            case "NOTIFICATION":
+//                EventNotificationDialogueFragment activityAlert5 = new EventNotificationDialogueFragment();
+//                bundle = new Bundle();
+//                bundle.putString("notification",rules.notification);
+//                activityAlert5.setArguments(bundle);
+//                activityAlert5.setTargetFragment(this,4);
+//                activityAlert5.show(getActivity().getSupportFragmentManager(),"notification");
+//                break;
+//            case "PHONECALL":
+//                EventPhoneCallDialogueFragment activityAlert6 = new EventPhoneCallDialogueFragment();
+//                bundle = new Bundle();
+//                bundle.putString("phonecall",rules.phonecall);
+//                activityAlert6.setArguments(bundle);
+//                activityAlert6.setTargetFragment(this,5);
+//                activityAlert6.show(getActivity().getSupportFragmentManager(),"phonecall");
+//                break;
+//            case "MUSIC":
+//                EventMusicDialogueFragment activityAlert7 = new EventMusicDialogueFragment();
+//                activityAlert7.setTargetFragment(this,6);
+//                activityAlert7.show(getActivity().getSupportFragmentManager(),"music");
+//                break;
+//            case "SILENT":
+//                EventSilentDialogueFragment activityAlert8 = new EventSilentDialogueFragment();
+//                activityAlert8.setTargetFragment(this,7);
+//                activityAlert8.show(getActivity().getSupportFragmentManager(),"silent");
+//                break;
+//            default:
+//                Toast.makeText(getActivity(),"Click Something", Toast.LENGTH_SHORT).show();
+//        }
+//
+//
+//    }
 
     private Rules getRuleFromDataBasebyID(int id) {
         Log.v(TAG,"id :" +id);
@@ -317,22 +315,47 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
 
             if(setUpCheckBox(mList.get(position))){
                 checkBox.setChecked(true);
+                open = false;
             } else {
                 checkBox.setChecked(false);
+                open = false;
             }
 
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                @Override
+//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//
+//                    if(isChecked){
+//                        if(true) {
+//                            Log.v(TAG, String.valueOf(open));
+//                            textViewClicked(triggerName.getText().toString());
+//                        }
+//                        open = true;
+//                    } else {
+//                        if(true) {
+//                            Log.v(TAG,String.valueOf(open));
+//                            checkboxUnchecked(triggerName.getText().toString());
+//                        }
+//                        open = true;
+//                    }
+//                }
+//            });
+
+            checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked){
+                public void onClick(View v) {
+                    CheckBox c = (CheckBox) v;
+                    if(c.isChecked()){
+                       // c.setChecked(true);
+                        Log.v(TAG,"setting checked");
                         textViewClicked(triggerName.getText().toString());
                     } else {
+                        //c.setChecked(false);
                         checkboxUnchecked(triggerName.getText().toString());
                     }
+
                 }
             });
-
-
 //            triggerName.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -357,6 +380,7 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
                     activityAlert2.setTargetFragment(this,1);
                     activityAlert2.setCancelable(false);
                     activityAlert2.show(getActivity().getSupportFragmentManager(),"wifi");
+                    Log.v(TAG,"WIFI");
                     break;
                 case "MOBILEDATA":
                     EventMobileDataDialogueFragment activityAlert3 = new EventMobileDataDialogueFragment();
@@ -414,27 +438,35 @@ public class EventFragment extends Fragment implements AdapterView.OnItemClickLi
         Bundle bundle;
         switch(text){
             case "AIRPLANEMODE":
+                this.rules.airplaneMode =-1;
                 ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             case "WIFI":
+                this.rules.wifi =-1;
                 ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             case "MOBILEDATA":
+                this.rules.mobileData =-1;
                 ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             case "ALARM":
+                this.rules.alarm ="-1";
                 ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             case "NOTIFICATION":
+                this.rules.notification ="-1";
                 ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             case "PHONECALL":
+                this.rules.phonecall ="-1";
                 ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             case "MUSIC":
+                this.rules.music =-1;
                 ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             case "SILENT":
+                this.rules.silent =-1;
                 ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             default:

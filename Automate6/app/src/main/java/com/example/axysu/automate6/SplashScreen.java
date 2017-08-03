@@ -1,6 +1,7 @@
 package com.example.axysu.automate6;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,9 @@ import android.transition.Fade;
 import android.view.View;
 
 public class SplashScreen extends AppCompatActivity {
+
+
+    MediaPlayer mediaWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,14 @@ public class SplashScreen extends AppCompatActivity {
         ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(this,null);
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent,compat.toBundle());
+        playWelcomeSound();
+
+    }
+
+    private void playWelcomeSound(){
+
+        mediaWelcome = MediaPlayer.create(this,R.raw.welcome);
+        mediaWelcome.start();
     }
 
 

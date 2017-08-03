@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity
     public static int REQUEST_ID_MULTIPLE_PERMISSIONS = 7;
     private static String TAG ="MainActivity";
     ImageView avatar;
-    MediaPlayer mediaWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         handleFAB();
         handleDrawer();
         handlePager();
-        playWelcomeSound();
+        //playWelcomeSound();
         DataBaseAdapter dataBaseAdapter = new DataBaseAdapter(this);
         FetchDataForRulesLists.data= dataBaseAdapter.getAllData();
         FetchDataForRulesLists.activedata = new ArrayList<>();
@@ -85,11 +84,6 @@ public class MainActivity extends AppCompatActivity
         LocalBroadcastManager.getInstance(this).registerReceiver(updateReceiver,filter);
     }
 
-    private void playWelcomeSound(){
-
-        mediaWelcome = MediaPlayer.create(this,R.raw.welcome);
-        mediaWelcome.start();
-    }
 
     private BroadcastReceiver updateReceiver = new BroadcastReceiver() {
         @Override
