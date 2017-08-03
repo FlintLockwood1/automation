@@ -6,10 +6,12 @@ package com.example.axysu.automate6.Adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -19,12 +21,14 @@ import java.util.ArrayList;
 
 public class DataBaseAdapter {
 
-    MyDbHelper helper;
+    private MyDbHelper helper;
     private  static String TAG ="DataBaseAdapter";
+    private Context context;
 
     public  DataBaseAdapter(Context context) {
 
         helper = new MyDbHelper(context);
+        this.context = context;
     }
 
 
@@ -32,6 +36,8 @@ public class DataBaseAdapter {
 
         SQLiteDatabase db = helper.getWritableDatabase();
         long id = db.insert("RULE", null, generateAndPopulateContentValues(rule));
+        Intent intent = new Intent("INSERTEDROW");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         return id;
 
     }
@@ -73,7 +79,10 @@ public class DataBaseAdapter {
 
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] whereClause = {String.valueOf(id)};
-        return db.update("RULE",generateAndPopulateContentValues(newrules),MyDbHelper.MUID + " =?",whereClause);
+        int rowsUpdated = db.update("RULE",generateAndPopulateContentValues(newrules),MyDbHelper.MUID + " =?",whereClause);
+        Intent intent = new Intent("UPDATEROW");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        return rowsUpdated;
     }
 
 
@@ -82,7 +91,10 @@ public class DataBaseAdapter {
 
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] whereClause = new String[]{String.valueOf(id)};
-        return db.delete("RULE",MyDbHelper.MUID + " = ?",whereClause);
+        int rowsDeleted = db.delete("RULE",MyDbHelper.MUID + " = ?",whereClause);
+        Intent intent = new Intent("DELETEROW");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        return rowsDeleted;
     }
 
     public ContentValues generateAndPopulateContentValues(Rules rule){

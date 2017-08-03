@@ -33,7 +33,6 @@ import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.AlarmActivity;
 import com.example.axysu.automate6.Helpers.FetchDataForRulesLists;
 import com.example.axysu.automate6.MainActivity;
-import com.example.axysu.automate6.Objects.HashObjectsRulesPlusTriggerValue;
 import com.example.axysu.automate6.Objects.Rules;
 import com.example.axysu.automate6.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -51,8 +50,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -82,7 +80,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     private static final int NOTIFICATION_ID=2;
     private ArrayList<Rules> arrayList = new ArrayList<>();
-    private HashMap<String,HashObjectsRulesPlusTriggerValue> hashMap = new HashMap();
+    private HashMap<String,Rules> hashMap = new HashMap();
     private ArrayList<Rules> queue = new ArrayList<>();
 
 
@@ -105,6 +103,9 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         startLocation();
         LocalBroadcastManager.getInstance(this).registerReceiver(checkMotion, new IntentFilter("ACTIVITY_UPDATE"));
         LocalBroadcastManager.getInstance(this).registerReceiver(alarmReceiver,new IntentFilter("ALARMSTOPPED"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(insertRuleReceiver,new IntentFilter("INSERTEDROW"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(deleteRuleReceiver,new IntentFilter("DELETEDROW"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateRuleReceiver,new IntentFilter("UPDATEROW"));
     }
 
     private void populateRulesArrayMapQueue() {
@@ -175,7 +176,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             public void run() {
 
                 checkForMatch(dataBaseAdapter.getAllData());
-        Log.v(TAG,"Service is running");
+                Log.v(TAG,"Service is running");
             }
         }, 10, 20, TimeUnit.SECONDS);
 
@@ -186,11 +187,9 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             @Override
             public void run() {
 
-                Log.v(TAG,"Events will Start Again");
-                musicActive = false;
-                alarmActive = false;
-                notificationActive = false;
-                phonecallActive = false;
+                Log.v(TAG,"Checking Date change");
+                enableRule("DATE");
+
             }
         }, 5, 300, TimeUnit.SECONDS);
 
@@ -215,8 +214,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 if (matchDate(current.date) && matchTime(current.time) && matchLocation(current.location)
                         && matchActivity(current.activity) && matchBattery(current.battery)) {
 
-                    if((!current.alarm.equalsIgnoreCase("-1") && alarmActive)||
-                    (!current.phonecall.equalsIgnoreCase("-1") && phonecallActive) ){
+                    if((!current.alarm.equalsIgnoreCase("-1") && !alarmActive)||
+                            (!current.phonecall.equalsIgnoreCase("-1") && !phonecallActive) ){
                         executeRule(current);
                         hashRule(current);
                         queue.remove(i);
@@ -227,15 +226,47 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     }
 
-    private void enableRule(String trigger,String value){
-        Rules current;
-        ArrayList<HashObjectsRulesPlusTriggerValue> tempList = new ArrayList<>();
+    private void enableRule(String trigger){
+
+        ArrayList<Rules> tempList = new ArrayList<>();
         while(hashMap.get(trigger)!=null){
             tempList.add(hashMap.remove(trigger));
         }
         if (trigger.equalsIgnoreCase("BATTERY")){
 
-            for (HashObjectsRulesPlusTriggerValue )
+            for (Rules disabled: tempList){
+                if (!matchBattery(disabled.battery))
+                    queue.add(disabled);
+                else
+                    hashMap.put("BATTERY",disabled);
+            }
+        }
+        if (trigger.equalsIgnoreCase("ACTIVITY")){
+
+            for (Rules disabled: tempList){
+                if (!matchActivity(disabled.activity))
+                    queue.add(disabled);
+                else
+                    hashMap.put("ACTIVITY",disabled);
+            }
+        }
+        if (trigger.equalsIgnoreCase("DATE")){
+
+            for (Rules disabled: tempList){
+                if (!matchDate(disabled.date))
+                    queue.add(disabled);
+                else
+                    hashMap.put("DATE",disabled);
+            }
+        }
+        if (trigger.equalsIgnoreCase("LOCATION")){
+
+            for (Rules disabled: tempList){
+                if (!matchLocation(disabled.location))
+                    queue.add(disabled);
+                else
+                    hashMap.put("LOCATION",disabled);
+            }
         }
 
     }
@@ -244,13 +275,13 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
         if (!current.time.equalsIgnoreCase("-1")){
             if (current.battery != -1){
-                hashMap.put("BATTERY",new HashObjectsRulesPlusTriggerValue(current,String.valueOf(current.battery)));
+                hashMap.put("BATTERY",current);
             }else if (current.location!="-1"){
-                hashMap.put("LOCATION",new HashObjectsRulesPlusTriggerValue(current,current.location));
+                hashMap.put("LOCATION",current);
             }else if (current.activity!="-1"){
-                hashMap.put("ACTIVITY",new HashObjectsRulesPlusTriggerValue(current,current.activity));
+                hashMap.put("ACTIVITY",current);
             }else if (current.activity!="-1"){
-                hashMap.put("DATE",new HashObjectsRulesPlusTriggerValue(current,current.date));
+                hashMap.put("DATE",current);
             }
         }
 
@@ -262,7 +293,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             return true;
 
         LatLng latlng = getLocation();
-       // LatLng latlng = new LatLng(1, 1);
+        // LatLng latlng = new LatLng(1, 1);
         String asd[] = location.split(",");
         LatLng temp = new LatLng(Double.parseDouble(asd[0]), Double.parseDouble(asd[1]));
 
@@ -342,7 +373,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     public void executeRule(Rules current) {
 
-        Log.v(TAG,"OnMatchFound");
+        Log.v(TAG,"executeRule");
         if (current.airplaneMode != -1)
             toggleAirplaneMode(current.airplaneMode);
         if (current.music != -1)
@@ -415,6 +446,87 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         }
     };
 
+    private BroadcastReceiver insertRuleReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.v(TAG,"InsertReceiver");
+            ArrayList<Rules> temp = dataBaseAdapter.getAllData();
+            for (Rules rule : temp){
+
+                boolean found =  false;
+                for (Map.Entry<String,Rules> entry : hashMap.entrySet()){
+
+                    if (entry.getValue().id == rule.id) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (queue.contains(rule) || found){
+                    continue;
+                }else{
+                    queue.add(rule);
+                }
+            }
+        }
+    };
+
+    private BroadcastReceiver deleteRuleReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.v(TAG,"DeleteReceiver");
+            ArrayList<Rules> tempList = dataBaseAdapter.getAllData();
+            for (Rules rule : queue){
+                if (!tempList.contains(rule)){
+                    queue.remove(rule);
+                    return;
+                }
+            }
+            for (Map.Entry<String,Rules> entry : hashMap.entrySet()){
+
+                for (int i=0;i<tempList.size();i++){
+                    if (entry.getValue().id != rule.id && i==tempList.size()-1) {
+                        hashMap.remove(entry);
+                        return;
+                    }
+                }
+            }
+
+
+        }
+    };
+
+    private BroadcastReceiver updateRuleReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.v(TAG,"UpdateRuleReceiver");
+            ArrayList<Rules> temp = dataBaseAdapter.getAllData();
+            for (Rules newrule : temp){
+
+                for (Map.Entry<String,Rules> entry : hashMap.entrySet()){
+
+                    if (entry.getValue().id == rule.id) {
+                        String key = entry.getKey();
+                        hashMap.remove(entry);
+                        hashMap.put(key,newrule);
+                        return;
+                    }
+                }
+                for (Rules oldrule : queue){
+
+                    if (oldrule.id == newrule.id){
+                        queue.remove(oldrule);
+                        queue.add(newrule);
+                        return;
+                    }
+
+                }
+            }
+        }
+    };
+
 
 
     public void startCall(String phoneNumber) {
@@ -437,7 +549,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             return;
         }
         startActivity(callIntent);
-        phonecallActive = true;
+        //phonecallActive = true;
     }
 
     public void toggleAirplaneMode(int flag) {
@@ -473,7 +585,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         if (!audioManager.isMusicActive()){
 
             Log.v(TAG,"launch player");
-             final String finalDefaultMusicAppPackage =  sharedPreferences.getString(FetchDataForRulesLists.DEFAULTMUSICPACKAGE,"com.google.android.music");
+            final String finalDefaultMusicAppPackage =  sharedPreferences.getString(FetchDataForRulesLists.DEFAULTMUSICPACKAGE,"com.google.android.music");
             if(finalDefaultMusicAppPackage != null){
 
                 Intent launchIntent = getPackageManager().getLaunchIntentForPackage(finalDefaultMusicAppPackage);
@@ -493,7 +605,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 }
 
                 playMusiconApp(finalDefaultMusicAppPackage);
-                musicActive = true;
+                //musicActive = true;
             }
 
         }
@@ -523,6 +635,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             //Log.v(TAG,level+"");
             sysytemCurrentBattery = level;
+            enableRule("BATTERY");
 
         }
     };
@@ -576,6 +689,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
 //        Log.v(TAG,"LOCATION CHANGED"+location.getLatitude()+","+location.getLongitude());
         systemCurrentLatLng = new LatLng(location.getLatitude(),location.getLongitude());
+        enableRule("LOCATION");
 //        Intent intent = new Intent();
 //        intent.setAction("com.akshaysuman.CUSTOM_INTENT");
 //        sendBroadcast(intent);
@@ -611,14 +725,17 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     private BroadcastReceiver checkMotion = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-               // Log.v(TAG,"inside");
+            // Log.v(TAG,"inside");
             int confidence = Integer.parseInt(intent.getStringExtra("percentage"));
 
             if(confidence >80)
+            {
                 activity_type = getType(Integer.parseInt(intent.getStringExtra("activity")));
+                enableRule("ACTIVITY");
+            }
 
-           // Log.v(TAG,activity_type);
-           // Log.v(TAG,""+confidence);
+            // Log.v(TAG,activity_type);
+            // Log.v(TAG,""+confidence);
 
 
         }
