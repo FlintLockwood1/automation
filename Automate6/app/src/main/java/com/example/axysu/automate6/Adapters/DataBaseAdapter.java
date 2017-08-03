@@ -80,7 +80,7 @@ public class DataBaseAdapter {
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] whereClause = {String.valueOf(id)};
         int rowsUpdated = db.update("RULE",generateAndPopulateContentValues(newrules),MyDbHelper.MUID + " =?",whereClause);
-        Intent intent = new Intent("UPDATEROW");
+        Intent intent = new Intent("UPDATEDROW");
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         return rowsUpdated;
     }
@@ -92,7 +92,7 @@ public class DataBaseAdapter {
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] whereClause = new String[]{String.valueOf(id)};
         int rowsDeleted = db.delete("RULE",MyDbHelper.MUID + " = ?",whereClause);
-        Intent intent = new Intent("DELETEROW");
+        Intent intent = new Intent("DELETEDROW");
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         return rowsDeleted;
     }

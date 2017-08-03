@@ -62,7 +62,6 @@ import java.util.concurrent.TimeUnit;
 public class MyService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status> {
 
     private float sysytemCurrentBattery;
-    private Rules rule;
     DataBaseAdapter dataBaseAdapter;
     GoogleApiClient googleApiClient;
     LocationRequest locationRequest;
@@ -95,6 +94,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     @Override
     public void onCreate() {
         super.onCreate();
+        dataBaseAdapter = new DataBaseAdapter(this);
         displayForegroundNotification();
         populateRulesArrayMapQueue();
         Log.v(TAG,"onCreate");
@@ -105,7 +105,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         LocalBroadcastManager.getInstance(this).registerReceiver(alarmReceiver,new IntentFilter("ALARMSTOPPED"));
         LocalBroadcastManager.getInstance(this).registerReceiver(insertRuleReceiver,new IntentFilter("INSERTEDROW"));
         LocalBroadcastManager.getInstance(this).registerReceiver(deleteRuleReceiver,new IntentFilter("DELETEDROW"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(updateRuleReceiver,new IntentFilter("UPDATEROW"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateRuleReceiver,new IntentFilter("UPDATEDROW"));
     }
 
     private void populateRulesArrayMapQueue() {
@@ -175,7 +175,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             @Override
             public void run() {
 
-                checkForMatch(dataBaseAdapter.getAllData());
+                checkForMatch();
                 Log.v(TAG,"Service is running");
             }
         }, 10, 10, TimeUnit.SECONDS);
@@ -205,11 +205,12 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         return START_STICKY;
     }
 
-    private void checkForMatch(ArrayList<Rules> arrayList) {
+    private void checkForMatch() {
 
-        Log.v(TAG,"checkingForRules +"+arrayList.size() );
+        Log.v(TAG,"checkingForRules +"+queue.size() );
         for (int i = 0; i < queue.size(); i++) {
             Rules current = queue.get(i);
+            Log.v(TAG,current.id + " ");
             if(current.state.equalsIgnoreCase("active")) {
                 if (matchDate(current.date) && matchTime(current.time) && matchLocation(current.location)
                         && matchActivity(current.activity) && matchBattery(current.battery)) {
@@ -232,6 +233,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         while(hashMap.get(trigger)!=null){
             tempList.add(hashMap.remove(trigger));
         }
+        Log.v(TAG,"tempListSize"+tempList.size());
         Log.v(TAG,"QUEUE SIZE ="+queue.size());
         Log.v(TAG,"HASH SIZE ="+hashMap.size());
         if (trigger.equalsIgnoreCase("BATTERY")){
@@ -278,7 +280,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     private void hashRule(Rules current) {
 
-        if (!current.time.equalsIgnoreCase("-1")){
+        if (current.time.equalsIgnoreCase("-1")){
             if (current.battery != -1){
                 hashMap.put("BATTERY",current);
                 Log.v(TAG,"hashing rule due to BATTERY");
@@ -292,8 +294,10 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 hashMap.put("DATE",current);
                 Log.v(TAG,"hashing rule due to DATE");
             }
+        }else{
+            Log.v(TAG,"no hashing rule due to TIME");
         }
-        Log.v(TAG,"no hashing rule due to TIME");
+
         Log.v(TAG,"QUEUE SIZE ="+queue.size());
         Log.v(TAG,"HASH SIZE ="+hashMap.size());
 
@@ -364,7 +368,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     public boolean matchDate(String date) {
 
-        Log.v(TAG,"matchDate");
+        //Log.v(TAG,"matchDate");
         if (date.equalsIgnoreCase("-1"))
             return true;
         Calendar c = Calendar.getInstance();
@@ -453,7 +457,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 player.stop();
                 player.reset();
                 player.release();
-                //alarmActive = false;
+                alarmActive = false;
             }
         }
     };
@@ -464,21 +468,30 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
             Log.v(TAG,"InsertReceiver");
             ArrayList<Rules> temp = dataBaseAdapter.getAllData();
+            Log.v(TAG,"tempSize = "+temp.size());
+            Log.v(TAG,"original Queue.SIZE = " + queue.size()+"");
+            Log.v(TAG,"original HashMap.SIZE = " + hashMap.size()+"");
             for (Rules rule : temp){
-
-                boolean found =  false;
+                Log.v(TAG,"looping"+rule.id);
+                boolean found1 =  false;
+                boolean found2 = false;
                 for (Map.Entry<String,Rules> entry : hashMap.entrySet()){
 
                     if (entry.getValue().id == rule.id) {
-                        found = true;
+                        found1 = true;
                         break;
                     }
                 }
-                if (queue.contains(rule) || found){
-                    continue;
-                }else{
-                    queue.add(rule);
+                for (Rules rules : queue){
+                    if(rules.id == rule.id){
+                        found2 = true;
+                        break;
+                    }
                 }
+                if (found1 || found2){
+                    Log.v(TAG,""+found1+found2);
+                }else
+                    queue.add(rule);
             }
             Log.v(TAG,"Queue.SIZE = " + queue.size()+"");
             Log.v(TAG,"HashMap.SIZE = " + hashMap.size()+"");
@@ -491,23 +504,44 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
             Log.v(TAG,"DeleteReceiver");
             ArrayList<Rules> tempList = dataBaseAdapter.getAllData();
-            for (Rules rule : queue){
-                if (!tempList.contains(rule)){
+            Log.v(TAG,"tempList Size = "+ tempList.size() );
+            for (Rules rule : queue)
+            {
+                int found =0;
+                for (int i=0;i<tempList.size();i++)
+                {
+                    if (tempList.get(i).id==rule.id)
+                    {
+                        found=1;
+                        break;
+                    }
+                }
+                if (found==0){
+
+                    //Log.v(TAG,"removing databaseID = "+tempList.get(i).id+" QUEUEID = "+rule.id+"index" + i);
                     queue.remove(rule);
                     Log.v(TAG,"Queue.SIZE = " + queue.size()+"");
                     Log.v(TAG,"HashMap.SIZE = " + hashMap.size()+"");
                     return;
                 }
-            }
-            for (Map.Entry<String,Rules> entry : hashMap.entrySet()){
 
+            }
+            for (Map.Entry<String,Rules> entry : hashMap.entrySet())
+            {
+
+                int found = 0;
                 for (int i=0;i<tempList.size();i++){
-                    if (entry.getValue().id != rule.id && i==tempList.size()-1) {
-                        hashMap.remove(entry);
-                        Log.v(TAG,"Queue.SIZE = " + queue.size()+"");
-                        Log.v(TAG,"HashMap.SIZE = " + hashMap.size()+"");
-                        return;
+                    if (entry.getValue().id == tempList.get(i).id)
+                    {
+                        found =1;
+                        break;
                     }
+                }
+                if (found==0) {
+                    hashMap.remove(entry);
+                    Log.v(TAG, "Queue.SIZE = " + queue.size() + "");
+                    Log.v(TAG, "HashMap.SIZE = " + hashMap.size() + "");
+                    return;
                 }
             }
 
@@ -525,7 +559,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
                 for (Map.Entry<String,Rules> entry : hashMap.entrySet()){
 
-                    if (entry.getValue().id == rule.id) {
+                    if (entry.getValue().id == newrule.id) {
                         String key = entry.getKey();
                         hashMap.remove(entry);
                         hashMap.put(key,newrule);

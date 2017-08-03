@@ -59,6 +59,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         final Rules current = data.get(position);
+        holder.id.setText("ID = " + current.id);
         holder.textView.setText(current.name);
         holder.imageView.setImageResource(current.icon_id);
         holder.ruledate.setText("DATE IS "+current.date);
@@ -249,9 +250,11 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         TextView wifi;
         TextView airplanemode;
         TextView music;
+        TextView id;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            id = (TextView) itemView.findViewById(R.id._id);
             textView = (TextView) itemView.findViewById(R.id.listtitle);
             imageView = (ImageView) itemView.findViewById(R.id.listIcon);
             details = (LinearLayout) itemView.findViewById(R.id.details);
