@@ -1,174 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/fab_margin"
-    android:background="#DCDCDC">
-
+    android:layout_width="match_parent"
+    android:layout_margin="5dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_margin="@dimen/fab_margin"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_menu_manage"
-            android:id="@+id/listIcon"
-            android:layout_gravity="center"
-            android:layout_weight="1"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
-            android:id="@+id/listtitle"
-            android:text="DuMMY TeXt"
-            android:layout_gravity="center"
-            android:layout_weight="5"/>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_margin"
-                android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
-                android:id="@+id/dropDown"
-                android:layout_gravity="center"/>
+                android:src="@drawable/ic_menu_manage"
+                android:id="@+id/listIcon"
+                android:layout_gravity="center"
+                android:layout_weight="1"/>
 
-            <ImageView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_margin"
-                android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
-                android:id="@+id/pullUp"
-                android:visibility="gone"
-                android:layout_gravity="center"/>
+                android:id="@+id/listtitle"
+                android:text="DuMMY TeXt"
+                android:layout_gravity="center"
+                android:layout_weight="5"/>
 
-        </FrameLayout>
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                    android:id="@+id/dropDown"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
+                    android:id="@+id/pullUp"
+                    android:visibility="gone"
+                    android:layout_gravity="center"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/details"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/_id"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Location = dummy"
+                android:id="@+id/rulelocation"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Time = dummy"
+                android:id="@+id/ruletime"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Activity = dummy"
+                android:id="@+id/ruleactivity"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Battery = dummy"
+                android:id="@+id/rulebattery"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date = dummy"
+                android:id="@+id/ruledate"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="AirplaneMode = dummy"
+                android:id="@+id/eventAirplanemode"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Music = dummy"
+                android:id="@+id/eventMusic"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Silent = dummy"
+                android:id="@+id/eventSilent"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Wifi = dummy"
+                android:id="@+id/eventWifi"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alarm = dummy"
+                android:id="@+id/eventAlarm"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mobiledata = dummy"
+                android:id="@+id/eventMobiledata"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phonecall = dummy"
+                android:id="@+id/eventPhonecall"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notification = dummy"
+                android:id="@+id/eventNotification"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/operations"
+            android:visibility="gone">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="DELETE"
+                android:id="@+id/delBtn"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="EDIT"
+                android:id="@+id/editrule"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="STATUS"
+                android:layout_weight="0.5"
+                android:layout_marginStart="15dp" />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch1" />
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/details"
-        android:visibility="gone">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/_id"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Location = dummy"
-            android:id="@+id/rulelocation"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Time = dummy"
-            android:id="@+id/ruletime"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Activity = dummy"
-            android:id="@+id/ruleactivity"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Battery = dummy"
-            android:id="@+id/rulebattery"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Date = dummy"
-            android:id="@+id/ruledate"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="AirplaneMode = dummy"
-            android:id="@+id/eventAirplanemode"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Music = dummy"
-            android:id="@+id/eventMusic"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Silent = dummy"
-            android:id="@+id/eventSilent"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Wifi = dummy"
-            android:id="@+id/eventWifi"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Alarm = dummy"
-            android:id="@+id/eventAlarm"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Mobiledata = dummy"
-            android:id="@+id/eventMobiledata"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Phonecall = dummy"
-            android:id="@+id/eventPhonecall"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Notification = dummy"
-            android:id="@+id/eventNotification"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/operations"
-        android:visibility="gone">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="DELETE"
-            android:id="@+id/delBtn"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="EDIT"
-            android:id="@+id/editrule"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="STATUS"
-            android:layout_weight="0.5"
-            android:layout_marginStart="15dp" />
-
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:id="@+id/switch1" />
-    </LinearLayout>
 
     
 
 
-</LinearLayout>
+</android.support.v7.widget.CardView>
