@@ -3,9 +3,11 @@ package com.example.axysu.automate6.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baoyachi.stepview.VerticalStepView;
 import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.Interfaces.CancelClicked;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
@@ -51,6 +54,8 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
     private static String TAG ="TriggerFragment";
     private Context mContext;
     TriggerAdapter triggerAdapter;
+    VerticalStepView verticalStepView;
+    List<String> sources = new ArrayList<>();
     ArrayList<Boolean> checkBoxList= new ArrayList<>();
 
 
@@ -66,10 +71,35 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
         Log.v(TAG,"onCreateView");
         layout = inflater.inflate(R.layout.fragment_trigger, container, false);
         rules = new Rules();
+       // setStepView();
         initializeTriggerValue();
         initializeAndhandleListView();//yet to be coded;
         intialiseCheckBox();
         return layout;
+    }
+
+    private void setStepView() {
+
+//        VerticalStepView verticalStepView = (VerticalStepView) layout.findViewById(R.id.stepView);
+//        sources = new ArrayList<>();
+//        sources.add("START");
+//        sources.add("PICK TRIGGER");
+//        sources.add("PICK FRAGMENT");
+//        sources.add("FINISH");
+//
+//        verticalStepView.setStepsViewIndicatorComplectingPosition(sources.size()-3)
+//                .reverseDraw(false)
+//                .setStepViewTexts(sources)
+//                .setLinePaddingProportion(0.85f)
+//                .setStepViewComplectedTextColor(Color.parseColor("#000000"))
+//                .setStepViewUnComplectedTextColor(Color.parseColor("#000000"))
+//                .setTextSize(8)
+//                .setStepsViewIndicatorCompletedLineColor(Color.parseColor("#000000"))
+//                .setStepsViewIndicatorUnCompletedLineColor(Color.parseColor("#000000"))
+//                .setStepsViewIndicatorDefaultIcon(ContextCompat.getDrawable(getActivity(),R.drawable.ic_menu_share))
+//                .setStepsViewIndicatorAttentionIcon(ContextCompat.getDrawable(getActivity(),R.drawable.ic_menu_send))
+//                .setStepsViewIndicatorCompleteIcon(ContextCompat.getDrawable(getActivity(),R.drawable.ic_menu_camera));
+
     }
 
     @Override
