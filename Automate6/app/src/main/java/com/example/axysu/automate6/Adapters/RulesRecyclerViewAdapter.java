@@ -203,10 +203,10 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
 
 
                 }
-
+                Log.v(TAG,"sending intent");
                 Intent intent = new Intent();
                 intent.setAction("com.journaldev.CUSTOM_INTENT");
-                context.sendBroadcast(intent);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
 //                if (holder.aSwitch.isChecked())
 //                    inter.okButtonClicked(current.id+":true","recyclerViewAdapter");
