@@ -215,8 +215,10 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 if (matchDate(current.date) && matchTime(current.time) && matchLocation(current.location)
                         && matchActivity(current.activity) && matchBattery(current.battery)) {
 
+                    Log.v(TAG,"only alarm remains and phonecall to check");
                     if((!current.alarm.equalsIgnoreCase("-1") && !alarmActive)||
-                            (!current.phonecall.equalsIgnoreCase("-1") && !phonecallActive) ){
+                            (!current.phonecall.equalsIgnoreCase("-1") && !phonecallActive) || current.alarm.equalsIgnoreCase("-1")
+                            || (!current.phonecall.equalsIgnoreCase("-1"))){
                         executeRule(current);
                         hashRule(current);
                         queue.remove(i);
@@ -233,9 +235,9 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         while(hashMap.get(trigger)!=null){
             tempList.add(hashMap.remove(trigger));
         }
-        Log.v(TAG,"tempListSize"+tempList.size());
-        Log.v(TAG,"QUEUE SIZE ="+queue.size());
-        Log.v(TAG,"HASH SIZE ="+hashMap.size());
+//        Log.v(TAG,"tempListSize"+tempList.size());
+//        Log.v(TAG,"QUEUE SIZE ="+queue.size());
+//        Log.v(TAG,"HASH SIZE ="+hashMap.size());
         if (trigger.equalsIgnoreCase("BATTERY")){
 
             for (Rules disabled: tempList){
@@ -273,8 +275,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             }
         }
 
-        Log.v(TAG,"QUEUE SIZE ="+queue.size());
-        Log.v(TAG,"HASH SIZE ="+hashMap.size());
+//        Log.v(TAG,"QUEUE SIZE ="+queue.size());
+//        Log.v(TAG,"HASH SIZE ="+hashMap.size());
 
     }
 
@@ -346,8 +348,11 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     private boolean matchTime(String time) {
 
-        if (time.equalsIgnoreCase("-1"))
+        //Log.v(TAG,"matching Time");
+        if (time.equalsIgnoreCase("-1")) {
+            Log.v(TAG,"time = "+time);
             return true;
+        }
         Calendar c = Calendar.getInstance();
         int currhr = c.get(Calendar.HOUR_OF_DAY);
         //Log.v(c.get(Calendar.AM_PM));
@@ -355,9 +360,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
         int triggerHr = Integer.parseInt(time.substring(0, 2));
         int triggerMin = Integer.parseInt(time.substring(3, 5));
-
-        Log.v(currhr+"=",""+triggerHr);
-        Log.v(currmin+"=",""+triggerMin);
+        Log.v(TAG,currhr+"="+""+triggerHr);
+        Log.v(TAG,currmin+"="+""+triggerMin);
         if (triggerHr == (currhr) &&
                 triggerMin >= currmin - 1 &&
                 triggerMin <= currmin + 1)
@@ -562,7 +566,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                     if (entry.getValue().id == newrule.id) {
                         String key = entry.getKey();
                         hashMap.remove(entry);
-                        hashMap.put(key,newrule);
+                        queue.add(newrule);
                         Log.v(TAG,"Queue.SIZE = " + queue.size()+"");
                         Log.v(TAG,"HashMap.SIZE = " + hashMap.size()+"");
                         return;
@@ -788,6 +792,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             {
                 activity_type = getType(Integer.parseInt(intent.getStringExtra("activity")));
                 enableRule("ACTIVITY");
+                Log.v(TAG,activity_type);
             }
 
             // Log.v(TAG,activity_type);
@@ -810,7 +815,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             case DetectedActivity.RUNNING:
                 return "Running";
             case DetectedActivity.TILTING:
-                return "Tilting";
+                return "Idle";
             case DetectedActivity.UNKNOWN:
                 return "Unknown";
             case DetectedActivity.WALKING:

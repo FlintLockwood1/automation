@@ -51,8 +51,12 @@ public class TriggerTImeDialogueFragment extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        String temp = String.valueOf(timePicker.getHour()) ;
+                        if (temp.length()==1){
+                            temp ="0" + temp;
+                        }
                         ((CustomDialogInterface)getTargetFragment())
-                                .okButtonClicked(timePicker.getHour()+":"+ timePicker.getMinute()+"000","TIME");
+                                .okButtonClicked(temp+":"+ timePicker.getMinute()+"000","TIME");
                     }
                 });
 
