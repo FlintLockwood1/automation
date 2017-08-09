@@ -72,14 +72,15 @@
             android:label="@string/title_activity_maps"
             android:noHistory="true" />
         <activity
-            android:name=".AddActivity"/>
+            android:name=".AddActivity"
+            android:label="AUTOMATE"/>
         <activity
             android:name=".AlarmActivity"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"
+            android:label="AUTOMATE"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SplashScreen"

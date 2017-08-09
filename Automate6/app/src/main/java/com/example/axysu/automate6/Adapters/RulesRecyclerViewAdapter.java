@@ -61,16 +61,17 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         final Rules current = data.get(position);
         holder.id.setText("ID = " + current.id);
         holder.textView.setText(current.name);
-        holder.imageView.setImageResource(current.icon_id);
+        holder.imageView.setImageResource(current.state.equalsIgnoreCase("Active")?R.mipmap.ic_check_black_24dp:
+                R.mipmap.ic_close_black_24dp);
         holder.ruledate.setText("DATE IS "+current.date);
         holder.ruletime.setText("TIME IS "+current.time);
         holder.rulelocation.setText("LOCATION IS" +current.location);
         holder.rulebattery.setText("BATTERY Level = "+current.battery+" %");
-        holder.ruleactivity.setText("ACTIVITY IS "+current.activity);
+        holder.ruleactivity.setText("ACTIVITY IS "+(current.activity.equalsIgnoreCase("-1")?"NOT SET":current.activity));
         holder.mobiledata.setText("MOBILEDATA IS "+current.mobileData);
-        holder.alarm.setText("ALARM IS "+current.alarm);
-        holder.phonecall.setText("PHONECALL IS "+current.phonecall);
-        holder.notification.setText("NOTIFICATION IS "+current.notification);
+        holder.alarm.setText("ALARM IS "+ (current.alarm.equalsIgnoreCase("-1")?"NOT SET":current.alarm));
+        holder.phonecall.setText("PHONECALL IS "+(current.phonecall.equalsIgnoreCase("-1")?"NOT SET":current.phonecall));
+        holder.notification.setText("NOTIFICATION IS "+(current.notification.equalsIgnoreCase("-1")?"NOT SET":current.notification));
         holder.wifi.setText("WIFI IS "+current.wifi);
         holder.music.setText("MUSIC IS "+current.music);
         holder.silent.setText("SILENT IS "+current.silent);
@@ -81,6 +82,25 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         holder.showdetails.setVisibility(View.VISIBLE);
         holder.hidedetails.setVisibility(View.GONE);
         holder.operations.setVisibility(View.GONE);
+
+        holder.id.setVisibility(View.GONE);
+        holder.textView.setText(current.name);
+        holder.imageView.setImageResource(current.state.equalsIgnoreCase("Active")?R.mipmap.ic_check_black_24dp:
+                R.mipmap.ic_close_black_24dp);
+        holder.ruledate.setVisibility(current.date.equalsIgnoreCase("-1")?View.GONE:View.VISIBLE);
+        holder.ruletime.setVisibility(current.time.equalsIgnoreCase("-1")?View.GONE:View.VISIBLE);
+        holder.rulelocation.setVisibility(current.location.equalsIgnoreCase("-1")?View.GONE:View.VISIBLE);
+        holder.rulebattery.setVisibility(current.battery==-1?View.GONE:View.VISIBLE);
+        holder.ruleactivity.setVisibility(current.activity.equalsIgnoreCase("-1")?View.GONE:View.VISIBLE);
+        holder.mobiledata.setVisibility(current.mobileData==-1?View.GONE:View.VISIBLE);
+        holder.alarm.setVisibility(current.alarm.equalsIgnoreCase("-1")?View.GONE:View.VISIBLE);
+        holder.phonecall.setVisibility(current.phonecall.equalsIgnoreCase("-1")?View.GONE:View.VISIBLE);
+        holder.notification.setVisibility(current.notification.equalsIgnoreCase("-1")?View.GONE:View.VISIBLE);
+        holder.wifi.setVisibility(current.wifi==-1?View.GONE:View.VISIBLE);
+        holder.music.setVisibility(current.music==-1?View.GONE:View.VISIBLE);
+        holder.silent.setVisibility(current.silent==-1?View.GONE:View.VISIBLE);
+        holder.airplanemode.setVisibility(current.airplaneMode==-1?View.GONE:View.VISIBLE);
+        holder.aSwitch.setChecked(current.state.equalsIgnoreCase("active"));
 
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
