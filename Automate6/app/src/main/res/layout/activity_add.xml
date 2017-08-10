@@ -6,7 +6,8 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:id="@+id/addActivityRootLayout"
-    tools:context="com.example.axysu.automate6.AddActivity">
+    tools:context="com.example.axysu.automate6.AddActivity"
+    android:background="@drawable/rows_recycler">
 
 
     <android.support.design.widget.FloatingActionButton
