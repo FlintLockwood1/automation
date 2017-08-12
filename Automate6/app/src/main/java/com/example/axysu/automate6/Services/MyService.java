@@ -106,6 +106,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         LocalBroadcastManager.getInstance(this).registerReceiver(insertRuleReceiver,new IntentFilter("INSERTEDROW"));
         LocalBroadcastManager.getInstance(this).registerReceiver(deleteRuleReceiver,new IntentFilter("DELETEDROW"));
         LocalBroadcastManager.getInstance(this).registerReceiver(updateRuleReceiver,new IntentFilter("UPDATEDROW"));
+
     }
 
     private void populateRulesArrayMapQueue() {
@@ -411,8 +412,13 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             sendNotification(current.notification);
         if (!current.phonecall.equalsIgnoreCase("-1"))
             startCall(current.phonecall);
+        if (!current.sms.equalsIgnoreCase("-1"))
+            sendMessage(current.sms);
 
 
+    }
+
+    private void sendMessage(String sms) {
     }
 
     public void sendNotification(String message) {
@@ -451,6 +457,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         Log.v(TAG,"starting sound for alarm");
         player.start();
     }
+
 
     private BroadcastReceiver alarmReceiver = new BroadcastReceiver() {
         @Override
@@ -564,9 +571,12 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 for (Map.Entry<String,Rules> entry : hashMap.entrySet()){
 
                     if (entry.getValue().id == newrule.id) {
-                        String key = entry.getKey();
-                        hashMap.remove(entry);
-                        queue.add(newrule);
+                        //String key = entry.getKey();
+                        hashMap.remove(entry.getKey());
+                        Log.v(TAG,"ReceivedUpdateBroadcastInServiceInHashMap");
+                        Log.v(TAG,newrule.state);
+                        if(newrule.state.equalsIgnoreCase("active"))
+                            queue.add(newrule);
                         Log.v(TAG,"Queue.SIZE = " + queue.size()+"");
                         Log.v(TAG,"HashMap.SIZE = " + hashMap.size()+"");
                         return;
@@ -576,12 +586,22 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
                     if (oldrule.id == newrule.id){
                         queue.remove(oldrule);
-                        queue.add(newrule);
+                        Log.v(TAG,"ReceivedUpdateBroadcastInServiceInQueue");
+                        Log.v(TAG,newrule.state);
+                        if(newrule.state.equalsIgnoreCase("active"))
+                            queue.add(newrule);
                         Log.v(TAG,"Queue.SIZE = " + queue.size()+"");
                         Log.v(TAG,"HashMap.SIZE = " + hashMap.size()+"");
                         return;
                     }
 
+                }
+            }
+            int ID = intent.getIntExtra("id",-1);
+            for(Rules newrule :temp){
+                if(newrule.id == ID){
+                    queue.add(newrule);
+                    return;
                 }
             }
         }

@@ -34,7 +34,7 @@ public class EventFragment extends Fragment implements CustomDialogInterface,Can
 
     ListView listView;
     View layout;
-    String[] events = {"AIRPLANEMODE","WIFI","MOBILEDATA","SILENT","ALARM","NOTIFICATION","PHONECALL","MUSIC"};
+    String[] events = {"AIRPLANEMODE","WIFI","MOBILEDATA","SILENT","ALARM","NOTIFICATION","PHONECALL","SMS","MUSIC"};
     Rules rules;
     private Context mContext;
     EventAdapter eventAdapter;
@@ -59,7 +59,7 @@ public class EventFragment extends Fragment implements CustomDialogInterface,Can
         layout = inflater.inflate(R.layout.fragment_events, container, false);
         initializeEventValue();
         initializeAndhandleListView();
-        intialiseCheckBoxList();
+        //intialiseCheckBoxList();
         return layout;
     }
 
@@ -82,7 +82,6 @@ public class EventFragment extends Fragment implements CustomDialogInterface,Can
         checkBoxList.add(rules.music==-1?false:true);
 
 
-
     }
 
     private void initializeEventValue() {
@@ -103,6 +102,7 @@ public class EventFragment extends Fragment implements CustomDialogInterface,Can
             rules.music = -1;
             rules.silent = -1;
             rules.phonecall = "-1";
+            rules.sms = "-1";
             rules.wifi = -1;
         }
         else {
@@ -250,6 +250,16 @@ public class EventFragment extends Fragment implements CustomDialogInterface,Can
                 if (value!=null)
                 {
                     this.rules.phonecall = (value);
+                }
+                //Toast.makeText(getActivity(),rules.date, Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case "SMS":
+            {
+
+                if (value!=null)
+                {
+                    this.rules.sms = (value);
                 }
                 //Toast.makeText(getActivity(),rules.date, Toast.LENGTH_SHORT).show();
                 break;
@@ -416,6 +426,15 @@ public class EventFragment extends Fragment implements CustomDialogInterface,Can
                     activityAlert6.setCancelable(false);
                     activityAlert6.show(getActivity().getSupportFragmentManager(),"phonecall");
                     break;
+                case "SMS":
+                    EventSMSDialogueFragment activityAlert9 = new EventSMSDialogueFragment();
+                    bundle = new Bundle();
+                    bundle.putString("sms",rules.sms);
+                    activityAlert9.setArguments(bundle);
+                    activityAlert9.setTargetFragment(this,9);
+                    activityAlert9.setCancelable(false);
+                    activityAlert9.show(getActivity().getSupportFragmentManager(),"sms");
+                    break;
                 case "MUSIC":
                     EventMusicDialogueFragment activityAlert7 = new EventMusicDialogueFragment();
                     activityAlert7.setTargetFragment(this,6);
@@ -459,6 +478,10 @@ public class EventFragment extends Fragment implements CustomDialogInterface,Can
                 break;
             case "PHONECALL":
                 this.rules.phonecall ="-1";
+                ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
+                break;
+            case "SMS":
+                this.rules.sms ="-1";
                 ((CustomDialogInterface) getActivity()).okButtonClicked("-1",text);
                 break;
             case "MUSIC":
@@ -515,6 +538,13 @@ public class EventFragment extends Fragment implements CustomDialogInterface,Can
                 break;
             case "PHONECALL":
                 if(rules.phonecall.equalsIgnoreCase("-1")){
+                    checkBox=false;
+                } else {
+                    checkBox=true;
+                }
+                break;
+            case "SMS":
+                if(rules.sms.equalsIgnoreCase("-1")){
                     checkBox=false;
                 } else {
                     checkBox=true;

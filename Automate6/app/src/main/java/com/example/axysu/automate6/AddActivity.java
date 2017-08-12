@@ -59,6 +59,7 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
             rules.music = -1;
             rules.silent = -1;
             rules.phonecall = "-1";
+            rules.sms = "-1";
             rules.wifi = -1;
             rules.state="active";
         }
@@ -259,6 +260,16 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
                     this.rules.phonecall = (value);
                 }
                 Toast.makeText(this,rules.phonecall+"", Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case "SMS":
+            {
+
+                if (value!=null)
+                {
+                    this.rules.sms = (value);
+                }
+                Toast.makeText(this,rules.sms+"", Toast.LENGTH_SHORT).show();
                 break;
             }
 

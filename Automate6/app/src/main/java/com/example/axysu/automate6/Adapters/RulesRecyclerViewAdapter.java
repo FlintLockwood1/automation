@@ -71,6 +71,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         holder.mobiledata.setText("MOBILEDATA IS "+current.mobileData);
         holder.alarm.setText("ALARM IS "+ (current.alarm.equalsIgnoreCase("-1")?"NOT SET":current.alarm));
         holder.phonecall.setText("PHONECALL IS "+(current.phonecall.equalsIgnoreCase("-1")?"NOT SET":current.phonecall));
+        holder.sms.setText("SMS IS "+(current.sms.equalsIgnoreCase("-1")?"NOT SET":current.sms));
         holder.notification.setText("NOTIFICATION IS "+(current.notification.equalsIgnoreCase("-1")?"NOT SET":current.notification));
         holder.wifi.setText("WIFI IS "+current.wifi);
         holder.music.setText("MUSIC IS "+current.music);
@@ -95,6 +96,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         holder.mobiledata.setVisibility(current.mobileData==-1?View.GONE:View.VISIBLE);
         holder.alarm.setVisibility(current.alarm.equalsIgnoreCase("-1")?View.GONE:View.VISIBLE);
         holder.phonecall.setVisibility(current.phonecall.equalsIgnoreCase("-1")?View.GONE:View.VISIBLE);
+        holder.sms.setVisibility(current.sms.equalsIgnoreCase("-1")?View.GONE:View.VISIBLE);
         holder.notification.setVisibility(current.notification.equalsIgnoreCase("-1")?View.GONE:View.VISIBLE);
         holder.wifi.setVisibility(current.wifi==-1?View.GONE:View.VISIBLE);
         holder.music.setVisibility(current.music==-1?View.GONE:View.VISIBLE);
@@ -232,8 +234,6 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
 //                    inter.okButtonClicked(current.id+":true","recyclerViewAdapter");
 //                else
 //                    inter.okButtonClicked(current.id+":false","recyclerViewAdapter");
-
-
             }
         });
 
@@ -267,6 +267,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         TextView alarm;
         TextView notification;
         TextView phonecall;
+        TextView sms;
         TextView wifi;
         TextView airplanemode;
         TextView music;
@@ -294,6 +295,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             music = (TextView) itemView.findViewById(R.id.eventMusic);
             wifi = (TextView) itemView.findViewById(R.id.eventWifi);
             phonecall = (TextView) itemView.findViewById(R.id.eventPhonecall);
+            sms = (TextView) itemView.findViewById(R.id.eventSMS);
             alarm = (TextView) itemView.findViewById(R.id.eventAlarm);
             silent = (TextView) itemView.findViewById(R.id.eventSilent);
             notification = (TextView) itemView.findViewById(R.id.eventNotification);

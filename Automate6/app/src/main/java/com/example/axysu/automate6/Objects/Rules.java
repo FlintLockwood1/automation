@@ -30,6 +30,7 @@ public class Rules {
     public String alarm;  //6
     public int music;        //7
     public String notification;
+    public String sms;
     public String phonecall ;
 
 }

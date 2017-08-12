@@ -50,7 +50,7 @@ public class DataBaseAdapter {
         String columns[] = {MyDbHelper.MUID,MyDbHelper.MTIME,MyDbHelper.MDATE,MyDbHelper.MACTIVITY
         ,MyDbHelper.MLOCATION,MyDbHelper.MBATTERY,MyDbHelper.MNAME,MyDbHelper.AIRPLANEMODE,MyDbHelper.WIFI
         ,MyDbHelper.MOBILEDATA,MyDbHelper.SILENT,MyDbHelper.ALARM,MyDbHelper.NOTIFICATION,MyDbHelper.PHONECALL
-        ,MyDbHelper.MUSIC,MyDbHelper.STATE};
+        ,MyDbHelper.SMS,MyDbHelper.MUSIC,MyDbHelper.STATE};
 
         Cursor cursor = db.query("RULE",columns,null,null,null,null,null);
         return handleCursor(cursor);
@@ -64,7 +64,7 @@ public class DataBaseAdapter {
         String columns[] = {MyDbHelper.MUID,MyDbHelper.MTIME,MyDbHelper.MDATE,MyDbHelper.MACTIVITY
                 ,MyDbHelper.MLOCATION,MyDbHelper.MBATTERY,MyDbHelper.MNAME,MyDbHelper.AIRPLANEMODE,MyDbHelper.WIFI
                 ,MyDbHelper.MOBILEDATA,MyDbHelper.SILENT,MyDbHelper.ALARM,MyDbHelper.NOTIFICATION,MyDbHelper.PHONECALL
-                ,MyDbHelper.MUSIC,MyDbHelper.STATE};
+                ,MyDbHelper.SMS,MyDbHelper.MUSIC,MyDbHelper.STATE};
 
       //  Cursor cursor = db.query("RULE",columns,MyDbHelper.MUID + " =?",selectionArgs,null,null,null);
         String query = "SELECT * FROM RULE WHERE " + MyDbHelper.MUID + " = "+ index;
@@ -81,6 +81,7 @@ public class DataBaseAdapter {
         String[] whereClause = {String.valueOf(id)};
         int rowsUpdated = db.update("RULE",generateAndPopulateContentValues(newrules),MyDbHelper.MUID + " =?",whereClause);
         Intent intent = new Intent("UPDATEDROW");
+        intent.putExtra("id",id);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         return rowsUpdated;
     }
@@ -115,6 +116,7 @@ public class DataBaseAdapter {
         values1.put(helper.ALARM,rule.alarm);
         values1.put(helper.NOTIFICATION,rule.notification);
         values1.put(helper.PHONECALL,rule.phonecall);
+        values1.put(helper.SMS,rule.sms);
         values1.put(helper.WIFI,rule.wifi);
 
         return  values1;
@@ -139,6 +141,7 @@ public class DataBaseAdapter {
             rules.alarm = cursor.getString(cursor.getColumnIndex(MyDbHelper.ALARM));
             rules.notification = cursor.getString(cursor.getColumnIndex(MyDbHelper.NOTIFICATION));
             rules.phonecall = cursor.getString(cursor.getColumnIndex(MyDbHelper.PHONECALL));
+            rules.sms = cursor.getString(cursor.getColumnIndex(MyDbHelper.SMS));
 
             rules.mobileData = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.MOBILEDATA)));
             rules.airplaneMode = (cursor.getInt(cursor.getColumnIndex(MyDbHelper.AIRPLANEMODE)));
@@ -171,6 +174,7 @@ public class DataBaseAdapter {
         private static final String ALARM = "alarm";
         private static final String NOTIFICATION = "notification";
         private static final String PHONECALL = "phonecall";//6
+        private static final String SMS = "sms";
         private static final String MUSIC = "music";
         private static final String STATE = "state";
 
@@ -193,11 +197,12 @@ public class DataBaseAdapter {
                 ALARM + " VARCHAR(255)," +
                 NOTIFICATION + " VARCHAR(255)," +
                 PHONECALL + " VARCHAR(255)," +
+                SMS + " VARCHAR(255)," +
                 MUSIC + " VARCHAR(255)," +
                 STATE + " VARCHAR(255))";
 
         private static final String DATABASE_NAME = "myDatabase";
-        private static final int DATABASE_VERSION = 6001;
+        private static final int DATABASE_VERSION = 6002;
 
 
         public MyDbHelper(Context context) {

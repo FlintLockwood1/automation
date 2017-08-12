@@ -137,6 +137,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Phonecall = dummy"
+                android:id="@+id/eventSMS"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Notification = dummy"
                 android:id="@+id/eventNotification"/>
 
