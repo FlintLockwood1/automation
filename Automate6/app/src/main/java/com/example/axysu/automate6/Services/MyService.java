@@ -26,6 +26,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
@@ -423,6 +424,9 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     }
 
     private void sendMessage(String sms) {
+
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(sms,null,"Hi I love You",null,null);
     }
 
     public void sendNotification(String message) {
