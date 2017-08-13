@@ -17,6 +17,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -81,6 +82,9 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     private ArrayList<Rules> arrayList = new ArrayList<>();
     private HashMap<String,Rules> hashMap = new HashMap();
     private ArrayList<Rules> queue = new ArrayList<>();
+    private int ringerMode;
+    private int ringerVolume;
+    private int dndMode;
 
 
 
@@ -404,7 +408,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         if (current.wifi != -1)
             toggleWifi(current.wifi);
         if (current.silent != -1)
-            toggleAirplaneMode(current.silent);
+            toggleSilentMode(current.silent);
 
         if (!current.alarm.equalsIgnoreCase("-1"))
             startAlarm(current.alarm);
@@ -652,7 +656,11 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     }
 
     public void toggleSilentMode(int flag) {
-
+        if(flag==1){
+            muteDevice();
+        } else {
+            unMuteDevice();
+        }
     }
 
     public void startMusic(int flag) {
@@ -844,6 +852,82 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
         }
         return "";
+
+    }
+
+    public void muteDevice() {
+
+        AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        Log.v(TAG, "Inside MuteDevice");
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                dndMode = Settings.Global.getInt(getContentResolver(), "zen_mode");
+            }else {
+                dndMode = 0;
+            }
+
+            Log.v(TAG,"DND mode mute " + dndMode);
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            dndMode = 99;
+        }
+
+        if (dndMode != 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            Log.v(TAG,"Android N");
+
+            if (dndMode == 99)
+                dndMode = 0;
+
+            return;
+        }
+
+        try {
+
+            ringerMode = audioManager.getRingerMode();
+            ringerVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
+            audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+
+            if(dndMode==99)
+                dndMode = 0;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void unMuteDevice() {
+        AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+
+        Log.v(TAG, "Inside unMuteDevice");
+//        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
+        Log.v(TAG,"DND mode umute " + dndMode);
+
+        try {
+            if (dndMode !=0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+
+                Log.v(TAG,"Android N");
+                return;
+
+            }
+
+            if (dndMode != 0) {
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                Log.v(TAG, "ringer mode" + audioManager.getRingerMode());
+                audioManager.setStreamVolume(AudioManager.STREAM_RING, ringerVolume, AudioManager.FLAG_VIBRATE);
+                return;
+            }
+
+            audioManager.setRingerMode(ringerMode);
+            audioManager.setStreamVolume(AudioManager.STREAM_RING, ringerVolume, AudioManager.FLAG_VIBRATE);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 }

@@ -3,11 +3,9 @@ package com.example.axysu.automate6.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baoyachi.stepview.VerticalStepView;
 import com.example.axysu.automate6.Adapters.DataBaseAdapter;
 import com.example.axysu.automate6.Interfaces.CancelClicked;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
@@ -54,7 +51,7 @@ public class TriggerFragment extends Fragment implements AdapterView.OnItemClick
     private static String TAG ="TriggerFragment";
     private Context mContext;
     TriggerAdapter triggerAdapter;
-    VerticalStepView verticalStepView;
+
     List<String> sources = new ArrayList<>();
     ArrayList<Boolean> checkBoxList= new ArrayList<>();
 
