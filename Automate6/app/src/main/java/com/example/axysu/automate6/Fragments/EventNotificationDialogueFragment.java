@@ -30,7 +30,8 @@ public class EventNotificationDialogueFragment extends DialogFragment {
         editText  = (EditText) view.findViewById(R.id.edittext);
         editText.setText((getArguments()
                 .getString("notification")
-                .equalsIgnoreCase("-1"))?"TYPE THE MESSAGE":getArguments().getString("notification"));
+                .equalsIgnoreCase("-1"))?"":getArguments().getString("notification"));
+        editText.setHint("Set Notification Message");
         return new AlertDialog.Builder(getActivity()).setTitle("NOTIFICATION")
                 .setView(view)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -43,7 +44,12 @@ public class EventNotificationDialogueFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(editText.getText().toString(),"NOTIFICATION");
+                        String val=editText.getText().toString();
+                        if(val.equalsIgnoreCase("")){
+                            val="TYPE THE MESSAGE";
+                        }
+
+                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(val,"NOTIFICATION");
                     }
                 })
                 .create();

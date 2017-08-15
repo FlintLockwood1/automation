@@ -8,10 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +37,6 @@ public class EventFragment extends Fragment implements CustomDialogInterface,Can
     private Context mContext;
     EventAdapter eventAdapter;
     public static String TAG ="EventFragment";
-    ArrayList<Boolean> checkBoxList= new ArrayList<>();
     private boolean open = true;
 
     @Override
@@ -71,18 +68,6 @@ public class EventFragment extends Fragment implements CustomDialogInterface,Can
         listView.setAdapter(eventAdapter);
     }
 
-    private void intialiseCheckBoxList(){
-        checkBoxList.add(rules.airplaneMode==-1?false:true);
-        checkBoxList.add(rules.wifi==-1?false:true);
-        checkBoxList.add(rules.mobileData==-1?false:true);
-        checkBoxList.add(rules.silent==-1?false:true);
-        checkBoxList.add(rules.alarm.equalsIgnoreCase("-1")?false:true);
-        checkBoxList.add(rules.notification.equalsIgnoreCase("-1")?false:true);
-        checkBoxList.add(rules.phonecall.equalsIgnoreCase("-1")?false:true);
-        checkBoxList.add(rules.music==-1?false:true);
-
-
-    }
 
     private void initializeEventValue() {
 
@@ -274,8 +259,6 @@ public class EventFragment extends Fragment implements CustomDialogInterface,Can
 
     @Override
     public void toggleCheckState(String fromFrag) {
-         checkBoxList.remove(eventList.indexOf(fromFrag));
-         checkBoxList.add(eventList.indexOf(fromFrag),false);
          eventAdapter.notifyDataSetChanged();
 //        Log.v(TAG,"index" + eventList.indexOf(fromFrag));
 //        Log.v(TAG,"index" + listView.getFirstVisiblePosition());

@@ -55,7 +55,8 @@ public class EventSMSDialogueFragment extends DialogFragment {
         });
         editText.setText((getArguments()
                 .getString("sms")
-                .equalsIgnoreCase("-1"))?"TYPE THE NUMBER TO BE CALLED":getArguments().getString("sms"));
+                .equalsIgnoreCase("-1"))?"":getArguments().getString("sms"));
+        editText.setHint("Enter the phone no");
 
         return new AlertDialog.Builder(getActivity()).setTitle("MSSG SM1!")
                 .setView(view)
@@ -68,8 +69,13 @@ public class EventSMSDialogueFragment extends DialogFragment {
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        String val=editText.getText().toString();
+                        if(val.equalsIgnoreCase("")){
+                            val="TYPE THE NUMBER TO BE CALLED";
+                        }
 
-                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(editText.getText().toString(),"SMS");
+
+                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(val,"SMS");
 
                     }
                 })

@@ -31,7 +31,8 @@ public class EventAlarmDialogueFragment extends DialogFragment {
         editText  = (EditText) view.findViewById(R.id.edittext);
         editText.setText((getArguments()
                 .getString("alarm")
-                .equalsIgnoreCase("-1"))?"TYPE THE MESSAGE":getArguments().getString("alarm"));
+                .equalsIgnoreCase("-1"))?"":getArguments().getString("alarm"));
+        editText.setHint("Enter Alarm message");
         return new AlertDialog.Builder(getActivity()).setTitle("NOTIFICATION")
                 .setView(view)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -44,7 +45,11 @@ public class EventAlarmDialogueFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(editText.getText().toString(),"ALARM");
+                        String val=editText.getText().toString();
+                        if(val.equalsIgnoreCase("")){
+                            val="TYPE THE MESSAGE";
+                        }
+                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(val,"ALARM");
 
                     }
                 })

@@ -426,7 +426,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     private void sendMessage(String sms) {
 
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(sms,null,"Hi I love You",null,null);
+        smsManager.sendTextMessage(sms,null,"Hi",null,null);
     }
 
     public void sendNotification(String message) {

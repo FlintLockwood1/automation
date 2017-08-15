@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.axysu.automate6.Interfaces.CancelClicked;
 import com.example.axysu.automate6.Interfaces.CustomDialogInterface;
@@ -55,7 +54,8 @@ public class EventPhoneCallDialogueFragment extends DialogFragment {
         });
         editText.setText((getArguments()
                 .getString("phonecall")
-                .equalsIgnoreCase("-1"))?"TYPE THE NUMBER TO BE CALLED":getArguments().getString("phonecall"));
+                .equalsIgnoreCase("-1"))?"":getArguments().getString("phonecall"));
+        editText.setHint("enter phone number");
         return new AlertDialog.Builder(getActivity()).setTitle("CALL SM1!")
                 .setView(view)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -68,7 +68,13 @@ public class EventPhoneCallDialogueFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(editText.getText().toString(),"PHONECALL");
+                        String val=editText.getText().toString();
+                        if(val.equalsIgnoreCase("")){
+                            val="TYPE THE NUMBER TO BE CALLED";
+                        }
+
+
+                        ((CustomDialogInterface)getTargetFragment()).okButtonClicked(val,"PHONECALL");
 
                     }
                 })
