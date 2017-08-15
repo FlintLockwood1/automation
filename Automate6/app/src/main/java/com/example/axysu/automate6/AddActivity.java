@@ -102,6 +102,9 @@ public class AddActivity extends AppCompatActivity implements CustomDialogInterf
                 if (fragmentManager.findFragmentByTag("EventFragment")!=null)
                 {
                     SaveDialogueFragment activityAlert5 = new SaveDialogueFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("name",rules.name);
+                    activityAlert5.setArguments(bundle);
                     activityAlert5.show(getSupportFragmentManager(),"DateAlert");
                 }
                 transaction.commit();

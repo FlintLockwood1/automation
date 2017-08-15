@@ -32,6 +32,7 @@ public class SaveDialogueFragment extends DialogFragment {
         view = inflater.inflate(R.layout.fragment_save,null);
 
         final EditText editText = (EditText) view.findViewById(R.id.nameurrule);
+        editText.setText(getArguments().getString("name"));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Save?")

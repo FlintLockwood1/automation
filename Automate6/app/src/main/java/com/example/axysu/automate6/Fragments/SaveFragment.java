@@ -33,6 +33,7 @@ public class SaveFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         layout = inflater.inflate(R.layout.fragment_save, container, false);
+        layout.findViewById(R.id.nameurrule);
         return  layout;
     }
 
